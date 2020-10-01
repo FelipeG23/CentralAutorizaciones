@@ -1,0 +1,502 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-1 offset-sm-11">
+      <!-- <mat-icon (click)="close()">close</mat-icon> -->
+    </div>
+  </div>
+</div>
+<div class="container">
+  <form novalidate (ngSubmit)="onSubmit()" [formGroup]="registrarAuto" #myform="ngForm">
+    <div class="row">
+      <mat-card>
+        <div class="row">
+          <div class="col-sm-11">
+            <h2 mat-dialog-title>Gestionar autorización</h2>
+          </div>
+          <div (click)="close()" style="cursor: default" class="col-sm-1">
+            <mat-icon>close</mat-icon>
+          </div>
+        </div>
+        <div class="col-sm-12" *ngIf="data.datoCita.ordenMedica !== null && data.datoCita.ordenMedica">
+          <h6>{{ data?.datoCita.ordenMedica.nombreCompletoPaciente }}</h6>
+          <p>{{ data?.datoCita.ordenMedica.tipTipIDav }} {{ data?.datoCita.ordenMedica.pacPacRut }}</p>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-12 mt-2" *ngIf="prestacion">
+          <mat-card class="card">
+            <div class="row">
+              <div class="col-sm-7">
+                <p class="mb-0"> <b class="text-primary f-2">Servicio:&nbsp;</b>
+                  <span>{{ prestacion?.serSerCodigo }} -
+                    {{ prestacion?.serSerDesc }}</span></p>
+                <p class="mb-0"> <b class="text-primary f-2">CUP:&nbsp;</b>
+                  <span>{{ prestacion?.prePreCodigo }} -
+                    {{ prestacion?.prePreDesc }}</span></p>
+              </div>
+              <div class="col-sm-4">
+                <span *ngIf="prestacion?.ordenMedica.eomIdCodigo >= 3">Fecha:
+                  {{ prestacion?.cgFechaProceso | date:'dd/MM/yyyy h:mm:ss a' }}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2 p-0" *ngIf="prestacion?.caTrazaGestContinuidad != null">
+                <p class="confirmadas text-success text-center">
+                  <mat-icon>beenhere</mat-icon>
+                  {{ getState(prestacion?.caTrazaGestContinuidad.gcoIdCodigoEstado) }}
+                </p>
+              </div>
+              <div class="col-sm-4 p-0" *ngIf="prestacion?.caGestionAutorizacion != null">
+                <p *ngIf="prestacion?.caGestionAutorizacion.gauAutorizaServ == 1"
+                  class="confirmadas text-success text-center">
+                  <mat-icon>thumb_up</mat-icon>
+                  Autorizada
+                </p>
+                <p *ngIf="prestacion?.caGestionAutorizacion.gauAutorizaServ == 2"
+                  class="confirmadas text-danger text-center">
+                  <mat-icon>thumb_down</mat-icon>
+                  No autorizada
+                </p>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+
+        <br>
+
+        <div class="row">
+
+          <div class="col-sm-6" *ngIf="detalleCita !== null && detalleCita">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 padding-0">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>Nombre paciente</mat-card-title>
+                      <mat-card-subtitle>{{ detalleCita.nombreCompleto }}
+                        {{ detalleCita.tipTipIDav }}: {{ detalleCita.numDocId }}</mat-card-subtitle>
+                    </mat-card-header>
+                  </mat-card>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>Teléfono</mat-card-title>
+                      <mat-card-subtitle>{{ detalleCita.telefono }}
+                      </mat-card-subtitle>
+                    </mat-card-header>
+                  </mat-card>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>Correo electrónico</mat-card-title>
+                      <mat-card-subtitle>{{ detalleCita.email }}
+                      </mat-card-subtitle>
+                    </mat-card-header>
+                  </mat-card>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>Sede</mat-card-title>
+                      <mat-card-subtitle>{{ detalleCita.nombreCentroAten }}
+                      </mat-card-subtitle>
+                    </mat-card-header>
+                  </mat-card>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>Especialidad</mat-card-title>
+                      <mat-card-subtitle>{{ detalleCita.especialidad }}
+                      </mat-card-subtitle>
+                    </mat-card-header>
+                  </mat-card>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>Sub especialidad</mat-card-title>
+                      <mat-card-subtitle>{{ detalleCita.subEspecialidad }}
+                      </mat-card-subtitle>
+                    </mat-card-header>
+                  </mat-card>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>Prestación</mat-card-title>
+                      <mat-card-subtitle>{{ detalleCita.codigoPrestacion }} -
+                        {{ detalleCita.prestacion }}
+                      </mat-card-subtitle>
+                    </mat-card-header>
+                  </mat-card>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>Profesional</mat-card-title>
+                      <mat-card-subtitle>{{ detalleCita.nombreProf }}
+                      </mat-card-subtitle>
+                    </mat-card-header>
+                  </mat-card>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>Consultorio</mat-card-title>
+                      <mat-card-subtitle>{{ detalleCita.consultorio }}
+                      </mat-card-subtitle>
+                    </mat-card-header>
+                  </mat-card>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>Usuario que asignó la cita</mat-card-title>
+                      <mat-card-subtitle>{{ detalleCita.usrCita }}
+                      </mat-card-subtitle>
+                    </mat-card-header>
+                  </mat-card>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>Fecha de asignación</mat-card-title>
+                      <mat-card-subtitle>{{ detalleCita.fechaCita }} - {{ detalleCita.horaCita }}
+                      </mat-card-subtitle>
+                    </mat-card-header>
+                  </mat-card>
+                </div>
+              </div>
+               <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 padding-0">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>Convenio</mat-card-title>
+                      <mat-card-subtitle> {{ detalleCita.convenio }}</mat-card-subtitle>
+                    </mat-card-header>
+                  </mat-card>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div [ngClass]="claseFormulario">
+
+            <div class="row">
+              <div class="col-sm-12 col-md-12 col-lg-6">
+        <!--        <mat-form-field class="w-100">
+                  <input matInput placeholder="Autorizó / no autorizó desde convenio" type="text"
+                    formControlName="gauNombreAutorizador">
+                  <mat-error *ngIf="registrarAuto.get('gauNombreAutorizador').hasError('required')">
+                    Este campo es obligatorio.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauNombreAutorizador').hasError('minlength')">
+                    La longitud del texto excede el mínimo permitido.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauNombreAutorizador').hasError('pattern')">
+                    No se permite caracteres especiales o ha ingresado el mismo dígito más de 5 veces.
+                  </mat-error>
+                </mat-form-field>    -->
+                <mat-form-field class="w-100">
+                  <mat-label>Autorizó / no autorizó desde convenio</mat-label>
+                  <mat-select (selectionChange)="selectionChangeAutoriza($event)" formControlName="gauNombreAutorizador">
+                    <mat-option value="1">
+                      Pagina
+                    </mat-option>
+                    <mat-option value="2">
+                      No autorizado
+                    </mat-option>
+                    <mat-option value="3">
+                      Usuario
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="registrarAuto.get('gauNombreAutorizador').hasError('required')">
+                    Este campo es obligatorio.
+                  </mat-error>
+                </mat-form-field>
+
+
+
+              </div>
+              <div class="col-sm-12 col-md-12 col-lg-6 pt-1">
+                <mat-form-field class="w-100">
+                  <input matInput placeholder="Número de contacto" type="number"
+                    formControlName="gauTelefonoAutorizador">
+                  <mat-error *ngIf="registrarAuto.get('gauTelefonoAutorizador').hasError('required')">
+                    Este campo es obligatorio.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauTelefonoAutorizador').hasError('minlength')">
+                    La longitud del texto excede el mínimo permitido.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauTelefonoAutorizador').hasError('maxlength')">
+                    La longitud del texto excede el máximo permitido.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauTelefonoAutorizador').hasError('pattern')">
+                    No se permite caracteres especiales o ha ingresado el mismo dígito más de 5 veces.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-12 col-lg-4">
+                <mat-form-field class="w-100">
+                  <mat-label>Se autoriza servicio</mat-label>
+                  <mat-select (selectionChange)="selectionChangeAutoriza($event)" formControlName="gauAutorizaServ">
+                    <mat-option value="1">
+                      Si
+                    </mat-option>
+                    <mat-option value="2">
+                      No
+                    </mat-option>
+                    <mat-option value="3">
+                      En Proceso
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="registrarAuto.get('gauAutorizaServ').hasError('required')">
+                    Este campo es obligatorio.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-12 col-lg-8">
+                <mat-form-field class="w-100">
+                  <mat-label>Motivo no autoriza</mat-label>
+                  <mat-select formControlName="mnaIdcodigo" (selectionChange)="selectionChangemotivoNo($event)"  [errorStateMatcher]="errorMatcherMotivo">
+                    <mat-option *ngFor="let motivo of motivosNoAutoriza"  [value]="motivo.id">
+                      {{motivo.descripcion}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="registrarAuto.hasError('requiredMotivo')">
+                    Este campo es obligatorio.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-12 col-md-12 col-lg-12">
+                <mat-form-field class="w-100">
+                  <mat-label>¿Otro motivo?</mat-label>
+                  <textarea matInput [errorStateMatcher]="errorMatcherOtroMotivo" formControlName="omnDesc"
+                   ></textarea>
+                  <mat-error *ngIf="registrarAuto.hasError('requiredOtroMotivo')">
+                    Este campo es obligatorio.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauAutorizaServ').hasError('minlength')">
+                    La longitud del texto excede el mínimo permitido.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauAutorizaServ').hasError('maxlength')">
+                    La longitud del texto excede el máximo permitido.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauAutorizaServ').hasError('pattern')">
+                    No se permite caracteres especiales o ha ingresado el mismo dígito más de 5 veces.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-12 col-lg-6">
+                <mat-form-field class="w-100">
+                  <input matInput [errorStateMatcher]="errorMatcher" placeholder="Número de autorización" type="text"
+                    formControlName="gauCodigoAutorizacion">
+                  <mat-error *ngIf="registrarAuto.hasError('requiredAut')">
+                    Este campo es obligatorio.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauCodigoAutorizacion').hasError('minlength')">
+                    La longitud del texto excede el mínimo permitido.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauCodigoAutorizacion').hasError('maxlength')">
+                    La longitud del texto excede el máximo permitido.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauCodigoAutorizacion').hasError('pattern')">
+                    Solo puede ser númerico.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-12 col-lg-6">
+                <mat-form-field class="w-100">
+                  <input matInput placeholder="Número de póliza" type="text" formControlName="numeroPoliza">
+         <!--         <mat-error *ngIf="registrarAuto.get('numeroPoliza').hasError('required')">
+                    Este campo es obligatorio.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('numeroPoliza').hasError('minlength')">
+                    La longitud del texto excede el mínimo permitido.
+                  </mat-error>  -->
+                </mat-form-field> 
+                <!--
+                <mat-form-field class="w-70">
+                  <mat-label>
+                    <mat-icon>check_circle_outline</mat-icon> Estados
+                  </mat-label>
+                  <mat-select formControlName="estado">
+                    <mat-option [value]="1">
+                      Asignada
+                    </mat-option>
+                    <mat-option [value]="2">
+                      Confirmada
+                    </mat-option>
+                    <mat-option [value]="3">
+                      Autorizada
+                    </mat-option>
+                    <mat-option [value]="4">
+                      Cancelada por paciente
+                    </mat-option>
+                    <mat-option [value]="5">
+                      Cancelada por médico
+                    </mat-option>
+                    <mat-option [value]="6">
+                      Reprogramada
+                    </mat-option>
+                    <mat-option [value]="7">
+                      No autorizada
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>  -->
+              </div>
+              <div class="col-sm-12 col-md-12 col-lg-4">
+                <mat-form-field class="w-100">
+                  <input matInput [errorStateMatcher]="errorMatcherFechaAut" class="date-picker-form"
+                    [matDatepicker]="picker" placeholder="Fecha autorización" [min]="minDate" [max]="maxDateAuto"
+                    formControlName="gauFechaAutorizacion" (dateChange)="updateCalcs()">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker touchUi #picker></mat-datepicker>
+                  <mat-error *ngIf="registrarAuto.hasError('requiredFechaAut')">
+                    Este campo es obligatorio.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-12 col-lg-4">
+                <mat-form-field class="w-100">
+                  <input matInput [errorStateMatcher]="errorMatcherFechaVencimiento" class="date-picker-form"
+                    [matDatepicker]="pickers" placeholder="Fecha vencimiento" [min]="minDate" [max]="maxDateAuto"
+                    formControlName="gauFechaVencAutorizacion" (dateChange)="updateCalcs()">
+                  <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
+                  <mat-datepicker touchUi #pickers></mat-datepicker>
+                  <mat-error *ngIf="registrarAuto.hasError('requiredFechaVencimiento')">
+                    Este campo es obligatorio.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-12 col-lg-4">
+                <mat-form-field class="w-100">
+                  <input matInput class="date-picker-form" placeholder="Vigencia autorización (días)"
+                    formControlName="gauVigenciaAutorizacion" type="number">
+                  <mat-error *ngIf="registrarAuto.get('gauVigenciaAutorizacion').hasError('required')">
+                    Este campo es obligatorio.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-12 col-lg-4">
+                <mat-form-field class="w-100">
+                  <input matInput placeholder="Valor procedimiento" type="text" formControlName="gauValorPrestacion"
+                  currencyMask>
+                  <mat-error *ngIf="registrarAuto.get('gauValorPrestacion').hasError('required')">
+                    Este campo es obligatorio.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauValorPrestacion').hasError('maxlength')">
+                    La longitud del texto excede el máximo permitido.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauValorPrestacion').hasError('pattern')">
+                    El campo solo permite números.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauValorPrestacion').hasError('min')">
+                    El valor mínimo es 0.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-12 col-lg-4">
+                <mat-form-field class="w-100">
+                  <input matInput [errorStateMatcher]="errorMatcherCostoConvenio" placeholder="Costo convenio"
+                    type="number" formControlName="gauCostoConvenio">
+                  <mat-error *ngIf="registrarAuto.hasError('requiredCostoConvenio')">
+                    Este campo es obligatorio.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauCostoConvenio').hasError('pattern')">
+                    No se permite caracteres especiales o ha ingresado el mismo dígito más de 5 veces.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauCostoConvenio').hasError('maxlength')">
+                    La longitud del texto excede el máximo permitido.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauCostoConvenio').hasError('min')">
+                    El valor mínimo es 0.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-12 col-lg-4">
+                <mat-form-field class="w-100">
+                  <input matInput [errorStateMatcher]="errorMatcherCostoPaciente" placeholder="Costo paciente"
+                    type="number" formControlName="gauCostoPac">
+                  <mat-error *ngIf="registrarAuto.hasError('requiredCostoPaciente')">
+                    Este campo es obligatorio.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauCostoPac').hasError('pattern')">
+                    No se permite caracteres especiales o ha ingresado el mismo dígito más de 5 veces.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauCostoPac').hasError('maxlength')">
+                    La longitud del texto excede el máximo permitido.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauCostoPac').hasError('min')">
+                    El valor mínimo es 0.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-12 col-lg-10">
+                <mat-form-field class="w-100">
+                  <mat-label>Observaciones</mat-label>
+                  <!-- <textarea [errorStateMatcher]="errorMatcherObservacion" matInput
+                    formControlName="gauObservaciones"></textarea> -->
+
+                    <textarea matInput #messages
+                    formControlName="gauObservaciones"
+                    [errorStateMatcher]="errorMatcherObservacion"
+                    cdkTextareaAutosize
+                    cdkAutosizeMinRows="1"
+                    cdkAutosizeMaxRows="5"></textarea>
+
+                    <mat-hint align="end">{{messages.value.length}} / 600</mat-hint>
+                  <mat-error *ngIf="registrarAuto.hasError('requiredObservacion')">
+                    Este campo es obligatorio.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauObservaciones').hasError('minlength')">
+                    La longitud del texto excede el mínimo permitido.
+                  </mat-error>
+                  <mat-error *ngIf="registrarAuto.get('gauObservaciones').hasError('maxlength')">
+                    La longitud del texto excede el máximo permitido.
+                  </mat-error>
+                  <!--
+                  <mat-error *ngIf="registrarAuto.get('gauObservaciones').hasError('pattern')">
+                    No se permite caracteres especiales o ha ingresado el mismo dígito más de 5 veces.
+                  </mat-error> -->
+                </mat-form-field>
+              </div>
+            </div>
+
+
+          </div>
+
+        </div>
+        <div class="row justify-content-center text-center mb-4">
+          <div class="col-sm-4 col-md-12 col-lg-3">
+            <button mat-raised-button class="buttonCA-second mr-4" type="button" (click)="close()">VOLVER</button>
+          </div>
+          <div class="col-sm-4 col-md-12 col-lg-3">
+            <button mat-raised-button class="buttonCA-second mr-4" type="button" (click)="limpiar()">LIMPIAR</button>
+          </div>
+          <div class="col-sm-4 col-md-12 col-lg-3">
+            <button mat-raised-button class="buttonCA-second" type="button"
+              (click)="openDialogInfoConvenio()">CONVENIOS</button>
+          </div>
+          <div class="col-sm-4 col-md-12 col-lg-3">
+            <button mat-raised-button class="buttonCA primary ml-3" [disabled]="registrarAuto.invalid">GUARDAR</button>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+  </form>
+</div>

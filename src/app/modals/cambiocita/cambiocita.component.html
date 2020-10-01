@@ -1,0 +1,203 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-11">
+      <h2 mat-dialog-title>Cambio de estado a cita de paciente</h2>
+    </div>
+    <div class="col-sm-1 padding-0 text-right">
+      <mat-icon class="cursor" (click)="close()">close</mat-icon>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-6">
+    <div class="container">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12 padding-0">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Nombre paciente</mat-card-title>
+                <mat-card-subtitle>{{ datosCambio.myVar.data.nombreCompleto }} {{ datosCambio.myVar.data.tipTipIDav }}: {{ datosCambio.myVar.data.numDocId }}</mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Teléfono</mat-card-title>
+                <mat-card-subtitle>{{ datosCambio.myVar.data.telefono }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Correo electrónico</mat-card-title>
+                <mat-card-subtitle>{{ datosCambio.myVar.data.email }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Sede</mat-card-title>
+                <mat-card-subtitle>{{ datosCambio.myVar.data.nombreCentroAten }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Especialidad</mat-card-title>
+                <mat-card-subtitle>{{ datosCambio.myVar.data.especialidad }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Sub especialidad</mat-card-title>
+                <mat-card-subtitle>{{ datosCambio.myVar.data.subEspecialidad }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Prestación</mat-card-title>
+                <mat-card-subtitle>{{ datosCambio.myVar.data.codigoPrestacion }} - {{ datosCambio.myVar.data.prestacion }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Profesional</mat-card-title>
+                <mat-card-subtitle>{{ datosCambio.myVar.data.nombreProf }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Consultorio</mat-card-title>
+                <mat-card-subtitle>{{ datosCambio.myVar.data.consultorio }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Usuario que asignó la cita</mat-card-title>
+                <mat-card-subtitle>{{ datosCambio.myVar.data.usrCita }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Fecha de asignación</mat-card-title>
+                <mat-card-subtitle>{{ datosCambio.myVar.data.fechaCita }} - {{ datosCambio.myVar.data.horaCita }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="col-sm-6">
+    <form novalidate (ngSubmit)="onSubmit()" [formGroup]="cambioCitas" #myform="ngForm">
+      <div class="col-sm-12">
+        <mat-form-field class="w-100">
+          <mat-label>Seleccione el estado</mat-label>
+          <mat-select formControlName="estado">
+            <mat-option disabled value="Seleccione">
+              Seleccione un estado para la cita.
+            </mat-option>
+            <mat-option value="2">
+              Confirmada
+            </mat-option>
+            <mat-option value="4">
+              Cancelada por paciente
+            </mat-option>
+            <mat-option value="5">
+              Cancelada por médico
+            </mat-option>
+            <mat-option value="6">
+              Reprogramada
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="cambioCitas.get('estado').hasError('required') && myform.submitted">
+            Este campo es obligatorio
+          </mat-error>
+          <mat-error *ngIf="cambioCitas.get('estado').hasError('checkState')">
+            No se puede cambiar al mismo estado de la cita
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-12">
+        <mat-form-field class="w-100">
+          <mat-label>Observación</mat-label>
+
+          <textarea matInput #messages
+                    formControlName="observacion"
+                    cdkTextareaAutosize
+                    cdkAutosizeMinRows="1"
+                    cdkAutosizeMaxRows="5"></textarea>
+
+          <mat-hint align="end">{{messages.value.length}} / 600</mat-hint>
+          <mat-error *ngIf="cambioCitas.get('observacion').hasError('pattern')">
+            Este campo no permite caracteres especiales o valores repetidos
+          </mat-error>
+          <mat-error *ngIf="cambioCitas.get('observacion').hasError('maxlength')">
+            Este campo solo acepta maximo 600 caracteres
+          </mat-error>
+          <mat-error *ngIf="cambioCitas.get('observacion').hasError('minlength')">
+            Este campo solo acepta minimo 1 caracteres
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-12">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="Número de póliza" type="text" formControlName="numeroPoliza">
+        </mat-form-field>
+      </div>
+      <!-- <div class="col-sm-12 mt-2 mb-2">
+        <section class="example-section">
+          <mat-checkbox formControlName="sendEmail" value="true" class="example-margin" >
+            Enviar correo electrónico al paciente?
+          </mat-checkbox>
+        </section>
+      </div> -->
+      <div class="row">
+        <div class="col-sm-4">
+          <button mat-raised-button class="buttonCA-second" type="button" (click)="close()">CANCELAR</button>
+        </div>
+        <div class="col-sm-4">
+          <button mat-raised-button class="buttonCA-second" type="button" (click)="openDialogInfoConvenio()">CONVENIOS</button>
+        </div>
+        <div class="col-sm-4">
+          <button mat-raised-button class="buttonCA primary" type="submit" [disabled]="cambioCitas.invalid">GUARDAR</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

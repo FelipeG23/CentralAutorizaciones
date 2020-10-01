@@ -1,0 +1,467 @@
+<app-navbar></app-navbar>
+<div class="bgbody"></div>
+<mat-sidenav-container class="container-side-nav" *ngIf="ordenMedica && ordenMedica.ormFilename">
+  <mat-sidenav #sidenav [mode]="'side'" [position]="'end'">
+    <mat-card *ngIf="orden">
+      <img [src]="orden" alt="derivación" height="300" width="400">
+    </mat-card>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div *ngIf="progress" style="padding-right: 15%">
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </div>
+    <button mat-flat-button color="primary" (click)="sidenav.toggle()" *ngIf="!progress">
+      <mat-icon aria-hidden="false">find_in_page</mat-icon>
+    </button>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+<div class="container">
+  <div class="row">
+    <mat-card class="mt-5 mb-5" *ngIf="ordenMedica">
+      <div class="col-sm-12 col-md-12 col-lg-12 mt-2">
+        <span>GESTIONAR</span>
+        <h2>Derivación</h2>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-12 mt-5">
+
+        <mat-vertical-stepper class="bg-transparent" [linear]="isLinear" #stepper>
+          <mat-step>
+            <!-- <form [formGroup]="firstFormGroup"> -->
+            <ng-template matStepLabel>Paciente</ng-template>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-7 offset-lg-5">
+                  <div class="card">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm-12 mt-3">
+                          <h3>Datos del paciente</h3>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-6 mb-3">
+                          <p class="m-2"> <b class="text-primary f-2">{{ ordenMedica.nombreCompletoPaciente }}</b></p>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-6 mb-3">
+                          <p class="m-2"><span>No. de Órden:
+                              {{ ordenMedica.ormIdOrdmNumero }}</span></p>
+                          <p class="m-2"><span>{{ ordenMedica.tipTipIDav }}:
+                              {{ ordenMedica.pacPacRut }}</span></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-2 offset-lg-7 mt-3">
+                  <button mat-raised-button class="buttonCA primary" matStepperNext>SIGUIENTE</button>
+                </div>
+              </div>
+            </div>
+            <!-- </form> -->
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel>Derivaciones</ng-template>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 ">
+                  <div class="card card-padding">
+                    <div>
+                      <div>
+                        <h3>Radicar</h3>
+                        <form novalidate (ngSubmit)="onSubmit()" [formGroup]="fbRadicar" #myform="ngForm">
+                          <div class="container">
+                            <div class="row">
+                              <div class="col-sm-12 col-md-12 col-lg-6">
+                                <mat-form-field class="w-100">
+                                  <mat-label>Especialidad</mat-label>
+                                  <input type="text" matInput formControlName="serEspCodigo" [matAutocomplete]="auto1"
+                                    (blur)="changeSubs()" [ngModel]="ordenMedica.caDetalleOrdenesMedicas.serEspCodigo">
+                                  <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayFn1.bind(this)">
+                                    <mat-option *ngFor="let especialidad of filteredEspList | async"
+                                      [value]="especialidad.id">
+                                      {{ especialidad.descripcion }}</mat-option>
+                                  </mat-autocomplete>
+                                  <mat-error *ngIf="fbRadicar.get('serEspCodigo').hasError('required')">
+                                    La especialidad es un campo obligatorio.
+                                  </mat-error>
+                                  <mat-error *ngIf="fbRadicar.get('serEspCodigo').hasError('matchList')">
+                                    El valor no coincide con ninguno de la lista
+                                  </mat-error>
+                                </mat-form-field>
+                              </div>
+                              <!-- <div class="col-sm-12 col-md-12 col-lg-6">
+                                <mat-form-field class="w-100">
+                                  <mat-label>Sub especialidad que remite</mat-label>
+                                  <input type="text" matInput formControlName="serSerCodSubEspe"
+                                    [matAutocomplete]="auto2"
+                                    [ngModel]="ordenMedica.caDetalleOrdenesMedicas.serSerCodSubEspe">
+                                  <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn2.bind(this)">
+                                    <mat-option *ngFor="let subEspecialidad of filteredSubEspList | async"
+                                      [value]="subEspecialidad.id">
+                                      {{ subEspecialidad.descripcion }}
+                                    </mat-option>
+                                  </mat-autocomplete>
+                                  <mat-error *ngIf="fbRadicar.get('serSerCodSubEspe').hasError('required')">
+                                    La sub especialidad es un campo obligatorio.
+                                  </mat-error>
+                                  <mat-error *ngIf="fbRadicar.get('serSerCodSubEspe').hasError('matchList')">
+                                    El valor no coincide con ninguno de la lista
+                                  </mat-error>
+                                </mat-form-field>
+                              </div> -->
+
+                              <div class="col-sm-12 col-md-12 col-lg-6">
+                                <mat-form-field class="w-100">
+                                  <mat-label>Sub especialidad que remite</mat-label>
+                                  <input type="text" matInput formControlName="serSerCodSubEspe"
+                                    [matAutocomplete]="auto2" (blur)="changeServs()"
+                                    [ngModel]="ordenMedica.caDetalleOrdenesMedicas.serSerCodSubEspe">
+                                  <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn2.bind(this)">
+                                    <mat-option *ngFor="let subEspecialidad of filteredSubEspList | async"
+                                      [value]="subEspecialidad.id">
+                                      {{ subEspecialidad.descripcion }}
+                                    </mat-option>
+                                  </mat-autocomplete>
+                                  <mat-error *ngIf="fbRadicar.get('serSerCodSubEspe').hasError('required')">
+                                    La sub especialidad es un campo obligatorio.
+                                  </mat-error>
+                                  <mat-error *ngIf="fbRadicar.get('serSerCodSubEspe').hasError('matchList')">
+                                    El valor no coincide con ninguno de la lista
+                                  </mat-error>
+                                </mat-form-field>
+                              </div>
+
+
+                              <div class="col-sm-12 col-md-12 col-lg-6">
+                                <mat-form-field class="w-100">
+                                  <mat-label>Servicio</mat-label>
+                                  <input type="text" matInput formControlName="serSerCodigo" [matAutocomplete]="auto3"
+                                   [ngModel]="ordenMedica.caDetalleOrdenesMedicas.serSerCodigo">
+                                  <mat-autocomplete #auto3="matAutocomplete" [displayWith]="displayFn3.bind(this)">
+                                    <mat-option *ngFor="let servicio of filteredServList | async" [value]="servicio.id">
+                                      {{ servicio.descripcion }}
+                                    </mat-option>
+                                  </mat-autocomplete>
+                                  <mat-error *ngIf="fbRadicar.get('serSerCodigo').hasError('required')">
+                                    El servicio consulta es un campo obligatorio.
+                                  </mat-error>
+                                  <mat-error *ngIf="fbRadicar.get('serSerCodigo').hasError('matchList')">
+                                    El valor no coincide con ninguno de la lista
+                                  </mat-error>
+                                </mat-form-field>
+                              </div>
+                              <div class="col-sm-12 col-md-12 col-lg-6">
+                                <mat-form-field class="w-100">
+                                  <mat-label>Todas las sedes</mat-label>
+                                  <input type="text" matInput formControlName="pcaAgeLugar" [matAutocomplete]="auto4"
+                                    [ngModel]="ordenMedica.caDetalleOrdenesMedicas.pcaAgeLugar">
+                                  <mat-autocomplete #auto4="matAutocomplete" [displayWith]="displayFn4.bind(this)">
+                                    <mat-option *ngFor="let sede of filteredSedeList | async " [value]="sede.otro">
+                                      {{sede.descripcion}}
+                                    </mat-option>
+                                  </mat-autocomplete>
+                                  <mat-error *ngIf="fbRadicar.get('pcaAgeLugar').hasError('required')">
+                                    La sede es un campo obligatorio.
+                                  </mat-error>
+                                  <mat-error *ngIf="fbRadicar.get('pcaAgeLugar').hasError('matchList')">
+                                    El valor no coincide con ninguno de la lista
+                                  </mat-error>
+                                </mat-form-field>
+                              </div>
+                              <div class="col-sm-12 col-md-12 col-lg-6">
+                                <mat-form-field class="w-100">
+                                  <mat-label>Médico tratante</mat-label>
+                                  <input type="text" matInput formControlName="pcaAgeCodigProfe"
+                                    [matAutocomplete]="auto6"
+                                    [ngModel]="ordenMedica.caDetalleOrdenesMedicas.pcaAgeCodigProfe">
+                                  <mat-autocomplete #auto6="matAutocomplete" [displayWith]="displayFn6.bind(this)">
+                                    <mat-option *ngFor="let medico of filteredMedList | async" [value]="medico.id">
+                                      {{medico.descripcion}}
+                                    </mat-option>
+                                  </mat-autocomplete>
+                                  <mat-error *ngIf="fbRadicar.get('pcaAgeCodigProfe').hasError('required')">
+                                    El medico es un campo obligatorio.
+                                  </mat-error>
+                                  <mat-error *ngIf="fbRadicar.get('pcaAgeCodigProfe').hasError('matchList')">
+                                    El valor no coincide con ninguno de la lista
+                                  </mat-error>
+                                </mat-form-field>
+                              </div>
+                              <div class="col-sm-12 col-md-12 col-lg-6">
+                                <mat-form-field class="w-100">
+                                  <mat-label>Todos los convenios</mat-label>
+                                  <input type="text" matInput formControlName="conConCodigo"
+                                    [ngModel]="ordenMedica.caDetalleOrdenesMedicas.conConCodigo"
+                                    [matAutocomplete]="auto5">
+                                  <mat-autocomplete #auto5="matAutocomplete" [displayWith]="displayFn5.bind(this)">
+                                    <mat-option *ngFor="let convenio of filteredConvList | async" [value]="convenio.id">
+                                      {{convenio.descripcion}}
+                                    </mat-option>
+                                  </mat-autocomplete>
+                                  <mat-error *ngIf="fbRadicar.get('conConCodigo').hasError('required')">
+                                    El convenio es un campo obligatorio.
+                                  </mat-error>
+                                  <mat-error *ngIf="fbRadicar.get('conConCodigo').hasError('matchList')">
+                                    El valor no coincide con ninguno de la lista
+                                  </mat-error>
+                                </mat-form-field>
+                              </div>
+                              <div class="col-sm-12 col-md-12 col-lg-6">
+                                <mat-form-field class="w-100">
+                                  <input matInput placeholder="Numero póliza" formControlName="ecPolizaNumero" required
+                                    #message minlength="1"
+                                    [ngModel]="ordenMedica.caDetalleOrdenesMedicas.ecPolizaNumero">
+                                  <mat-error *ngIf="fbRadicar.get('ecPolizaNumero').hasError('pattern')">
+                                    Este campo no permite caracteres consecutivos!
+                                  </mat-error>
+                                  <mat-error *ngIf="fbRadicar.get('ecPolizaNumero').hasError('required')">
+                                    El numero de póliza es un campo obligatorio.
+                                  </mat-error>
+                                </mat-form-field>
+                              </div>
+                              <div class="col-sm-12 col-md-12 col-lg-6">
+                                <mat-form-field class="w-100">
+                                  <input class="date-picker-form" matInput [matDatepicker]="pickers"
+                                    placeholder="Fecha derivación" formControlName="dorFechaOrdenmString" required
+                                    [min]="minDate" [max]="maxDate"
+                                    [ngModel]="ordenMedica.caDetalleOrdenesMedicas.dorFechaOrdenm">
+                                  <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
+                                  <mat-datepicker #pickers touchUi [disabled]="'false'" startView="year">
+                                  </mat-datepicker>
+                                  <mat-error *ngIf="fbRadicar.get('dorFechaOrdenmString').hasError('required')">
+                                    La fecha de la derivación es un campo obligatorio.
+                                  </mat-error>
+                                </mat-form-field>
+                              </div>
+                              <div class="col-sm-12 col-md-12 col-lg-6">
+                                <mat-form-field class="w-100">
+                                  <mat-label>
+                                    <mat-icon>alarm</mat-icon> Diagnóstico
+                                  </mat-label>
+                                  <input type="text" matInput formControlName="diaAgrCodigo"
+                                     [matAutocomplete]="auto">
+                                  <mat-autocomplete [displayWith]="displayFnDiag" #auto="matAutocomplete">
+                                    <mat-option *ngFor="let cie of filteredDiagnostico | async" [value]="cie">
+                                      {{ cie.diaDiaDescripcion }}
+                                    </mat-option>
+                                  </mat-autocomplete>
+
+                                  <!-- <mat-select formControlName="diaAgrCodigo"
+                                    [ngModel]="ordenMedica.caDetalleOrdenesMedicas.diaAgrCodigo">
+                                    <mat-option *ngFor="let cie of cies" [value]="cie.codPrestacion">
+                                      {{ cie.prestacion }}
+                                    </mat-option>
+                                  </mat-select> -->
+                                  <mat-error *ngIf="fbRadicar.get('diaAgrCodigo').hasError('required')">
+                                    El diagnóstico es un campo obligatorio.
+                                  </mat-error>
+                                </mat-form-field>
+                              </div>
+                              <div class="col-sm-12 col-md-12 col-lg-6">
+                                <mat-form-field class="w-100">
+                                  <input matInput placeholder="Otro Diagnóstico" formControlName="diaOtroAgr"
+                                    [ngModel]="ordenMedica.caDetalleOrdenesMedicas.diaOtroAgr"
+                                    [ngModel]="ordenMedica.caDetalleOrdenesMedicas.diaOtroAgr">
+                                </mat-form-field>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-12 col-md-12 col-lg-6 offset-lg-7 mt-3">
+                            <button mat-raised-button class="buttonCA primary mr-1" (click)="unlockFirebase()"
+                              routerLink="/autorizacion">
+                              CANCELAR
+                            </button>
+                            <button mat-raised-button class="buttonCA primary"
+                              [disabled]="fbRadicar.invalid || this.fbRadicar.get('dorFechaOrdenmString').value === null"
+                              *ngIf="ordenMedica.eomIdCodigo == 1">GUARDAR</button>
+                            <button type="button" mat-raised-button class="buttonCA primary"
+                              *ngIf="ordenMedica.eomIdCodigo != 1" matStepperNext>SIGUIENTE</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel>Lista de solicitudes</ng-template>
+            <div class="col-sm-12 col-md-12 col-lg-12 mt-3">
+              <div class="card">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm-12 mt-3">
+                      <h3>Derivaciones</h3>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-3 mb-3">
+                      <p class="m-2"> <b class="text-primary f-2">Id Órden: </b> <br>
+                        <span>{{ ordenMedica.ormIdOrdmNumero }}</span>
+                      </p>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-3 mb-3">
+                      <p class="m-2"><b class="text-primary f-2">Paciente: </b> <br>
+                        <span>{{ ordenMedica.nombreCompletoPaciente }}</span>
+                      </p>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-3 mb-3">
+                      <p class="m-2"><b class="text-primary f-2">Número de documento: </b> <br>
+                        <span>{{ ordenMedica.pacPacRut }}</span>
+                      </p>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-3 mb-3">
+                      <p class="m-2"><b class="text-primary f-2">Número de póliza: </b> <br>
+                        <span>{{ fbRadicar.controls['ecPolizaNumero'].value }}</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-12 mt-3">
+              <div class="card">
+                <div class="container">
+                  <div class="row" *ngIf="ordenMedica.eomIdCodigo == 2">
+                    <div class="col-sm-12 mt-3 mb-3">
+                      <h3>Buscar prestaciones</h3>
+                      <h6>Ingrese los datos de servicio (código / descripción) o CUP que desea asociar a la orden
+                        médica</h6>
+                      <form novalidate (ngSubmit)="onSubmitPrestacion()" [formGroup]="fbOrdenMedica" #myform="ngForm">
+                        <div class="row">
+                          <div class="col-sm-12 col-md-12 col-lg-6">
+                            <mat-form-field class="w-100">
+                              <mat-label>Código de servicio</mat-label>
+                              <input matInput placeholder="Ingrese un código de servicio"
+                                formControlName="serSerCodigo">
+                              <mat-error *ngIf="fbOrdenMedica.get('serSerCodigo').hasError('minlength')">
+                                Mínimo ingrese 3 carácteres.
+                              </mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-sm-12 col-md-12 col-lg-6">
+                            <mat-form-field class="w-100">
+                              <mat-label>Descripción de servicio</mat-label>
+                              <input matInput placeholder="Ingrese una descripción de servicio"
+                                formControlName="serSerDesc">
+                              <mat-error *ngIf="fbOrdenMedica.get('serSerDesc').hasError('minlength')">
+                                Mínimo ingrese 3 carácteres.
+                              </mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-sm-12 col-md-12 col-lg-6">
+                            <mat-form-field class="w-100">
+                              <mat-label>Código prestación / CUP</mat-label>
+                              <input matInput placeholder="Ingrese un código de prestación / CUP"
+                                formControlName="prePreCodigo">
+                              <mat-error *ngIf="fbOrdenMedica.get('prePreCodigo').hasError('minlength')">
+                                Mínimo ingrese 3 carácteres.
+                              </mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-sm-12 col-md-12 col-lg-6">
+                            <mat-form-field class="w-100">
+                              <mat-label>Descripción prestación / CUP</mat-label>
+                              <input matInput placeholder="Ingrese una descripción de prestación / CUP"
+                                formControlName="prePreDesc">
+                              <mat-error *ngIf="fbOrdenMedica.get('prePreDesc').hasError('minlength')">
+                                Mínimo ingrese 3 carácteres.
+                              </mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-sm-12 col-md-12 col-lg-6">
+                            <button mat-raised-button type="button" class="buttonCA-second"
+                              (click)="clear()">LIMPIAR</button>
+                            <button mat-raised-button class="buttonCA primary ml-1"
+                              [disabled]="this.fbOrdenMedica.invalid">BUSCAR</button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-6 col-md-6 col-lg-6 mt-2"
+                  *ngFor="let prestacion of ordenMedica.caPrestacionesOrdMed">
+                  <mat-card class="card">
+                    <div class="row">
+                      <div class="col-sm-7">
+                        <p class="mb-0"> <b class="text-primary f-2">Servicio:&nbsp;</b>
+                          <span>{{ prestacion.serSerCodigo }} -
+                            {{ prestacion.serSerDesc }}</span></p>
+                        <p class="mb-0"> <b class="text-primary f-2">CUP:&nbsp;</b>
+                          <span>{{ prestacion.prePreCodigo }} -
+                            {{ prestacion.prePreDesc }}</span></p>
+                      </div>
+                      <div class="col-sm-4">
+                        <span *ngIf="ordenMedica.eomIdCodigo >= 3">Fecha:
+                          {{ prestacion.cgFechaProceso | date:'short' }}</span>
+                        <p class="confirmadas text-danger mt-4 pointer-cursor" *ngIf="ordenMedica.eomIdCodigo == 2"
+                          (click)="eliminarPrestacion(prestacion)">
+                          <mat-icon>remove_circle_outline</mat-icon> Eliminar
+                        </p>
+                      </div>
+                      <div class="col-sm-1 p-0" *ngIf="ordenMedica.eomIdCodigo == 3
+                          && (prestacion.caTrazaGestContinuidad == null || (prestacion.caTrazaGestContinuidad.gcoIdCodigoEstado != 2 && !prestacion.caTrazaGestContinuidad.gcoRealizoAgendamiento))
+                          && prestacion.caGestionAutorizacion == null">
+                        <button mat-icon-button [matMenuTriggerFor]="menus">
+                          <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menus="matMenu">
+                          <button *ngIf="prestacion.caTrazaGestContinuidad == null" mat-menu-item
+                            (click)="openDialogGestion(prestacion.pomIdPrestOrdm)">
+                            <span>Gestion de continuidad</span>
+                          </button>
+                          <button *ngIf="prestacion.caTrazaGestContinuidad != null" mat-menu-item
+                            (click)="openDialogAutorizacion(prestacion.pomIdPrestOrdm)">
+                            <span>Gestionar autorización</span>
+                          </button>
+                        </mat-menu>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-4 p-0" *ngIf="prestacion.caTrazaGestContinuidad != null">
+                        <p class="confirmadas text-success text-center">
+                          <mat-icon>beenhere</mat-icon>
+                          {{ getState(prestacion.caTrazaGestContinuidad.gcoIdCodigoEstado) }}
+                        </p>
+                      </div>
+                      <div class="col-sm-4 p-0" *ngIf="prestacion.caGestionAutorizacion != null">
+                        <p *ngIf="prestacion.caGestionAutorizacion.gauAutorizaServ == 1"
+                          class="confirmadas text-success text-center">
+                          <mat-icon>thumb_up</mat-icon>
+                          Autorizada
+                        </p>
+                        <p *ngIf="prestacion.caGestionAutorizacion.gauAutorizaServ == 2"
+                          class="confirmadas text-danger text-center">
+                          <mat-icon>thumb_down</mat-icon>
+                          No autorizada
+                        </p>
+                      </div>
+                    </div>
+                  </mat-card>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-3 mt-3">
+              <button mat-raised-button class="buttonCA primary"
+                [disabled]="ordenMedica.caPrestacionesOrdMed.length == 0" *ngIf="ordenMedica.eomIdCodigo == 2"
+                (click)="createPrestacion()" (click)="unlockFirebase()">GUARDAR</button>
+              <button mat-raised-button class="buttonCA primary" [disabled]="validFinalStep()"
+                *ngIf="ordenMedica.eomIdCodigo == 3" (click)="finalizarOrden()">FINALIZAR</button>
+              <button mat-raised-button class="buttonCA primary" (click)="unlockFirebase()" *ngIf="ordenMedica.eomIdCodigo == 4"
+                matStepperNext>SIGUIENTE</button>
+            </div>
+          </mat-step>
+          <mat-step>
+            <ng-template matStepLabel>Guardar</ng-template>
+            Ya has terminado.
+            <div>
+              <button mat-raised-button class="buttonCA primary" [routerLink]="['/ordenes']"
+                [disabled]="ordenMedica.eomIdCodigo != 4" (click)="unlockFirebase()">TERMINAR</button>
+            </div>
+          </mat-step>
+        </mat-vertical-stepper>
+      </div>
+    </mat-card>
+  </div>
+</div>

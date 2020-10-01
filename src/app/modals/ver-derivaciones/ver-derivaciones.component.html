@@ -1,0 +1,221 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-sm-11">
+          <h3>Gestionar autorización </h3>
+        </div>
+        <div class="col-sm-1">
+          <mat-icon (click)="close()" style="cursor: default">close</mat-icon>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-6 mt-2">
+
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12 padding-0">
+            <mat-card class="mt-1">
+              <mat-card-header>
+                <mat-card-title>Especialidad</mat-card-title><br>
+                <mat-card-subtitle *ngFor="let esp of especialidades">
+                  {{ esp.descripcion }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card class="mt-1">
+              <mat-card-header>
+                <mat-card-title>Sub especialidad que remite</mat-card-title><br>
+                <mat-card-subtitle *ngFor="let subesp of subEspecialidades; let i = index">
+                  <div *ngIf="i<1">
+                    {{ subesp.descripcion }}
+                  </div>
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card class="mt-1">
+              <mat-card-header>
+                <mat-card-title>Servicio</mat-card-title><br>
+                <mat-card-subtitle *ngFor="let serv of servicios">
+                  {{ serv.descripcion }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card class="mt-1">
+              <mat-card-header>
+                <mat-card-title>Sedes</mat-card-title><br>
+                <mat-card-subtitle *ngFor="let sed of sedes">
+                  {{ sed.descripcion }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card class="mt-1">
+              <mat-card-header>
+                <mat-card-title>Médico tratante</mat-card-title><br>
+                <mat-card-subtitle *ngFor="let med of medicos">
+                  {{ med.descripcion }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card class="mt-1">
+              <mat-card-header>
+                <mat-card-title>Convenios</mat-card-title><br>
+                <mat-card-subtitle *ngFor="let conv of convenios">
+                  {{ conv.descripcion }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card class="mt-1">
+              <mat-card-header>
+                <mat-card-title>Numero póliza</mat-card-title><br>
+                <mat-card-subtitle>
+                  {{ ordenMedica?.caDetalleOrdenesMedicas.ecPolizaNumero }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card class="mt-1">
+              <mat-card-header>
+                <mat-card-title>Fecha derivación</mat-card-title><br>
+                <mat-card-subtitle>
+                  {{ ordenMedica?.caDetalleOrdenesMedicas.domShaFechaProceso }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card class="mt-1">
+              <mat-card-header>
+                <mat-card-title>Diagnóstico</mat-card-title><br>
+                <mat-card-subtitle *ngFor="let cs of cies">
+                  {{ cs.prestacion }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12 padding-0">
+            <mat-card class="mt-1">
+              <mat-card-header>
+                <mat-card-title>Otro Diagnóstico</mat-card-title><br>
+                <mat-card-subtitle>
+                  {{ ordenMedica?.caDetalleOrdenesMedicas.diaOtroAgr }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-12 col-lg-6 mt-2">
+      <h3>{{nombreCompleto}}</h3>
+      <p>{{ tipoDoc }} {{ numeroDoc }}</p>
+      <!-- <div *ngIf="!verCard">
+          <h5>No se encontraron Servicios asociados!</h5>
+        </div> -->
+      <!-- <div *ngIf="verCard"> -->
+      <div class="col-sm-12 col-md-12 col-lg-12 mt-2" *ngFor="let prestacion of ordenMedica?.caPrestacionesOrdMed">
+        <mat-card class="card">
+          <div class="row">
+            <div class="col-sm-7">
+              <p class="mb-0"> <b class="text-primary f-2">Servicio:&nbsp;</b>
+                <span>{{ prestacion?.serSerCodigo }} -
+                  {{ prestacion?.serSerDesc }}</span></p>
+              <p class="mb-0"> <b class="text-primary f-2">CUP:&nbsp;</b>
+                <span>{{ prestacion?.prePreCodigo }} -
+                  {{ prestacion?.prePreDesc }}</span></p>
+            </div>
+            <div class="col-sm-4">
+              <span *ngIf="ordenMedica.eomIdCodigo >= 3">Fecha:
+                {{ prestacion?.cgFechaProceso | date:'dd/MM/yyyy HH:mm:SS' }}</span>
+              <p class="confirmadas text-danger mt-4 pointer-cursor" *ngIf="ordenMedica.eomIdCodigo == 2"
+                (click)="eliminarPrestacion(prestacion)">
+                <mat-icon>remove_circle_outline</mat-icon> Eliminar
+              </p>
+            </div>
+            <!-- <div class="col-sm-1 p-0" *ngIf="ordenMedica.eomIdCodigo == 3
+                      && (prestacion?.caTrazaGestContinuidad == null || (prestacion?.caTrazaGestContinuidad.gcoIdCodigoEstado != 2 && !prestacion?.caTrazaGestContinuidad.gcoRealizoAgendamiento))
+                      && prestacion?.caGestionAutorizacion == null">
+                  <button mat-icon-button [matMenuTriggerFor]="menus">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menus="matMenu">
+                    <button *ngIf="prestacion?.caTrazaGestContinuidad == null" mat-menu-item
+                      (click)="openDialogGestion(prestacion?.pomIdPrestOrdm)">
+                      <span>Gestion de continuidad</span>
+                    </button>
+                    <button *ngIf="prestacion?.caTrazaGestContinuidad != null" mat-menu-item
+                      (click)="openDialogAutorizacion(prestacion?.pomIdPrestOrdm)">
+                      <span>Gestionar autorización</span>
+                    </button>
+                  </mat-menu>
+                </div> -->
+          </div>
+          <div class="row">
+            <div class="col-sm-4 p-0" *ngIf="prestacion?.caTrazaGestContinuidad != null">
+              <p class="confirmadas text-success text-center">
+                <mat-icon>beenhere</mat-icon>
+                {{ getState(prestacion?.caTrazaGestContinuidad.gcoIdCodigoEstado) }}
+              </p>
+            </div>
+            <div class="col-sm-4 p-0" *ngIf="prestacion?.caGestionAutorizacion != null">
+              <p *ngIf="prestacion?.caGestionAutorizacion.gauAutorizaServ == 1"
+                class="confirmadas text-success text-center">
+                <mat-icon>thumb_up</mat-icon>
+                Autorizada
+              </p>
+              <p *ngIf="prestacion?.caGestionAutorizacion.gauAutorizaServ == 2"
+                class="confirmadas text-danger text-center">
+                <mat-icon>thumb_down</mat-icon>
+                No autorizada
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 d-flex justify-content-center" *ngIf="prestacion?.caTrazaGestContinuidad.gcoIdCodigoEstado !== 2 && prestacion?.caTrazaGestContinuidad.gcoIdCodigoEstado !== 3 ">
+              <button *ngIf="!prestacion?.caTrazaGestContinuidad.gcoRealizoAgendamiento" mat-raised-button
+                class="buttonCA primary" (click)="openDialogAutorizacion(prestacion, 'derivacion', sedes)">
+                Autorización
+              </button>
+              <span style="color: red" *ngIf="prestacion?.caTrazaGestContinuidad.gcoRealizoAgendamiento === true">
+                Debe realizar la autorización por citas
+              </span>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+      <!-- </div> -->
+      <div class="row justify-content-center text-center mb-4">
+        <div class="col-sm-4 col-md-12 col-lg-3">
+          <button mat-raised-button class="buttonCA-second mr-4" type="button" (click)="close()">VOLVER</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

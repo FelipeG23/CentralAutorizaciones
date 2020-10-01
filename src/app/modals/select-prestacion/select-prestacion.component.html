@@ -1,0 +1,49 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-1 offset-sm-11">
+      <mat-icon (click)="close()">close</mat-icon>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h2 class="m-15" mat-dialog-title>Resultado de búsqueda de prestaciones</h2>
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+        <ng-container matColumnDef="codServicio">
+          <th mat-header-cell *matHeaderCellDef> Código de servicio </th>
+          <td mat-cell *matCellDef="let element"> {{element.serSerCodigo}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="descServicio">
+          <th mat-header-cell *matHeaderCellDef> Descripción servicio </th>
+          <td mat-cell *matCellDef="let element"> {{element.serSerDesc}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="codCUP">
+          <th mat-header-cell *matHeaderCellDef> Código CUP </th>
+          <td mat-cell *matCellDef="let element"> {{element.prePreCodigo}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="descCUP">
+          <th mat-header-cell *matHeaderCellDef> Descripción CUP </th>
+          <td mat-cell *matCellDef="let element"> {{element.prePreDesc}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Sel">
+          <th mat-header-cell *matHeaderCellDef> Seleccione para adicionar a la derivación </th>
+          <td mat-cell *matCellDef="let element" (click)="select(element)"><button mat-raised-button color="primary">
+              <mat-icon>add_circle</mat-icon>
+          </button></td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+</div>

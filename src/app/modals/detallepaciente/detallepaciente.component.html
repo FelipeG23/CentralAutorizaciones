@@ -1,0 +1,125 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-2">
+      <p class="cursor" (click)="close()">
+        <mat-icon>keyboard_backspace</mat-icon> Regresar
+      </p>
+    </div>
+    <div class="col-sm-1 offset-sm-9">
+      <mat-icon class="cursor" (click)="close()">close</mat-icon>
+    </div>
+  </div>
+</div>
+<h2 class="m-15" mat-dialog-title>Detalle cita</h2>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 padding-0">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Nombre paciente</mat-card-title>
+          <mat-card-subtitle>{{ detalle.myVar.data.nombreCompleto }} {{ detalle.myVar.data.tipTipIDav }}: {{ detalle.myVar.data.numDocId }}</mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Teléfono</mat-card-title>
+          <mat-card-subtitle>{{ detalle.myVar.data.telefono }}
+          </mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Correo electrónico</mat-card-title>
+          <mat-card-subtitle>{{ detalle.myVar.data.email }}
+          </mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Sede</mat-card-title>
+          <mat-card-subtitle>{{ detalle.myVar.data.nombreCentroAten }}
+          </mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Especialidad</mat-card-title>
+          <mat-card-subtitle>{{ detalle.myVar.data.especialidad }}
+          </mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Sub especialidad</mat-card-title>
+          <mat-card-subtitle>{{ detalle.myVar.data.subEspecialidad }}
+          </mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Prestación</mat-card-title>
+          <mat-card-subtitle>{{ detalle.myVar.data.codigoPrestacion }} - {{ detalle.myVar.data.prestacion }}
+          </mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Profesional</mat-card-title>
+          <mat-card-subtitle>{{ detalle.myVar.data.nombreProf }}
+          </mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Consultorio</mat-card-title>
+          <mat-card-subtitle>{{ detalle.myVar.data.consultorio }}
+          </mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Usuario que asignó la cita</mat-card-title>
+          <mat-card-subtitle>{{ detalle.myVar.data.usrCita }}
+          </mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Fecha de asignación</mat-card-title>
+          <mat-card-subtitle>{{ detalle.myVar.data.fechaCita }} - {{ detalle.myVar.data.horaCita }}
+          </mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+    </div>
+  </div>
+</div>

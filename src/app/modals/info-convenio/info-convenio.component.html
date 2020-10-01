@@ -1,0 +1,97 @@
+<div class="container" *ngIf="preloader">
+  <div class="row">
+    <div class="col-12">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      <p>Estamos obteniendo los datos...</p>
+    </div>
+  </div>
+</div>
+
+<div class="container" *ngIf="errorData">
+  <div class="row">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-2">
+          <p class="cursor" (click)="close()">
+            <mat-icon>keyboard_backspace</mat-icon> Volver
+          </p>
+        </div>
+        <div class="col-sm-1 offset-sm-9">
+          <mat-icon class="cursor" (click)="close()">close</mat-icon>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <p>Lo sentimos en este momento no podemos obtener los datos consultados.</p>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!preloader && !errorData">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-2">
+        <p class="cursor" (click)="close()">
+          <mat-icon>keyboard_backspace</mat-icon> Volver
+        </p>
+      </div>
+      <div class="col-sm-1 offset-sm-9">
+        <mat-icon class="cursor" (click)="close()">close</mat-icon>
+      </div>
+    </div>
+  </div>
+  <h2 class="m-0" mat-dialog-title>Información del convenio</h2>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-4">
+        <h5>Consulta primera vez medicina</h5>
+        <p>
+          <span> NO. CUP {{ convenio?.data.service.cup }}</span>
+        </p>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-4">
+        <h5>Convenio</h5>
+        <p>
+          <span>{{ convenio?.data.service.description }}</span>
+        </p>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-4">
+        <h5>Tarifa pago particular</h5>
+        <p>
+          <span>$0</span>
+        </p>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-6">
+        <h5>Condiciones</h5>
+        <p class="m-0" *ngFor="let condiciones of convenio?.data.conditions; let i = index">
+          <span><b>{{ i }}</b> {{ condiciones.name }}</span>
+        </p>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-6">
+        <h5>Empresa</h5>
+        <p *ngFor="let empresa of convenio?.data.entities; let i = index">
+          <span>{{ empresa.name }}</span>
+        </p>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-6">
+        <h5>Preparaciones</h5>
+        <p class="m-0" *ngFor="let preparaciones of convenio?.data.preparations; let i = index">
+          <span><b>{{ i }}</b> {{ preparaciones.name }}</span>
+        </p>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-6">
+        <h5>Alertas</h5>
+        <p class="m-0" *ngFor="let alertas of convenio?.data.alerts; let i = index">
+          <span><b>{{ i }}</b> {{ alertas.name }}</span>
+        </p>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <h5>Medicos</h5>
+        <p class="m-0" *ngFor="let doctores of convenio?.data.doctors; let i = index">
+          <span><b>{{ i }}</b> {{ doctores.name }}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div>

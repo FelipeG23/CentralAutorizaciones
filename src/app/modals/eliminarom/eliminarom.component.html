@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-11">
+      <h2 mat-dialog-title>Eliminar orden </h2>
+    </div>
+    <div class="col-sm-1 padding-0 text-right">
+      <mat-icon class="cursor" (click)="close()">close</mat-icon>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-6">
+          <div class="col-sm-10">
+          <mat-form-field>
+              <mat-label>Motivo eliminacion</mat-label>
+              <mat-select  [(ngModel)]="razon">
+                <mat-option *ngFor="let motivo of motivosEliminacion" [value]="motivo.momIdCodigo">
+                  {{motivo.momDescripcion}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+            <div class="col-sm-10">
+              <button  class="buttonCA primary" type="button" (click)="eliminar()" >ELIMINAR</button>
+            </div>
+  </div>
+</div>
+

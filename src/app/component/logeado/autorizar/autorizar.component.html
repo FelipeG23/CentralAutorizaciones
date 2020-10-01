@@ -1,0 +1,503 @@
+<app-navbar></app-navbar>
+<div class="bgbody"></div>
+<div class="container">
+    <mat-accordion>
+        <mat-expansion-panel #expansionPanel class="accordion-filter-aut mt-lg-5">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <mat-icon>filter_list</mat-icon>
+                </mat-panel-title>
+                <mat-panel-description>
+                    FILTROS
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <form novalidate (ngSubmit)="filterNative()" [formGroup]="filtroOrdenes" #myform="ngForm">
+                <div class="row text-center mt-lg-1">
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <mat-form-field class="w-3">
+                                    <input class="date-picker-form" matInput [matDatepicker]="pickers" placeholder="Fecha Inicial" formControlName="fecha" required
+                                           [min]="minDate" [max]="maxDate">
+                                    <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
+                                    <mat-datepicker #pickers touchUi [disabled]="'false'" startView="year"></mat-datepicker>
+                                    <mat-error *ngIf="filtroOrdenes.get('fecha').hasError('pattern')">
+                                        El formato ingresado no es permitido. Ej: 4/1/2019 - d/m/yyyy
+                                    </mat-error>
+                                    <mat-error *ngIf="filtroOrdenes.get('fecha').hasError('required')">
+                                        La fecha inicial es requerida!
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-12">
+                                <mat-form-field class="w-3">
+                                    <input class="date-picker-form" matInput [matDatepicker]="picker" placeholder="Fecha Final" formControlName="fechaFinal" required
+                                           [min]="minDate" [max]="maxDateFin">
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker touchUi [disabled]="'false'" startView="year"></mat-datepicker>
+                                    <mat-error *ngIf="filtroOrdenes.get('fechaFinal').hasError('pattern')">
+                                        El formato ingresado no es permitido. Ej: 4/1/2019 - d/m/yyyy
+                                    </mat-error>
+                                    <mat-error *ngIf="filtroOrdenes.get('fechaFinal').hasError('required')">
+                                        Este campo es obligatorio!
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-12">
+                                <mat-form-field class="w-3">
+                                    <input type="number" matInput placeholder="Número de derivación"
+                                           formControlName="numeroDerivacion">
+                                    <mat-error *ngIf="filtroOrdenes.get('numeroDerivacion').hasError('minlength')">
+                                        Este campo solo acepta minimo 1 caracteres
+                                    </mat-error>
+                                    <mat-error *ngIf="filtroOrdenes.get('numeroDerivacion').hasError('maxlength')">
+                                        Este campo solo acepta maximo 10 caracteres
+                                    </mat-error>
+                                    <mat-error *ngIf="filtroOrdenes.get('numeroDerivacion').hasError('pattern')">
+                                        Este campo no permite caracteres consecutivos!
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-12">
+                                <mat-form-field class="w-3">
+                                    <input class="date-picker-form" matInput [matDatepicker]="pickers2" placeholder="Fecha de abordaje" formControlName="fechaAbordaje"
+                                           [max]="maxDate">
+                                    <mat-datepicker-toggle matSuffix [for]="pickers2"></mat-datepicker-toggle>
+                                    <mat-datepicker #pickers2 touchUi [disabled]="'false'" startView="year"></mat-datepicker>
+                                    <mat-error *ngIf="filtroOrdenes.get('fechaAbordaje').hasError('pattern')">
+                                        El formato ingresado no es permitido. Ej: 4/1/2019 - d/m/yyyy
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-12">
+                                <mat-form-field class="w-3">
+                                    <mat-label>Estado autorización</mat-label>
+                                    <mat-select formControlName="estadoAutorizacion">
+                                        <mat-option [value]="1">POR GESTIONAR</mat-option>
+                                        <mat-option [value]="2">EN PROCESO</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <mat-form-field class="w-3">
+                                    <mat-label>Tipo documento</mat-label>
+                                    <mat-select formControlName="tipoDocumento" [required]="validarName" (ngModelChange)='validateTypeDocument()'>
+                                        <mat-option *ngFor="let option of options | async" [value]="option.strTipIdeCod">
+                                            {{option.strTipIdeGlosa}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="filtroOrdenes.get('tipoDocumento').hasError('required')">
+                                        Este campo es obligatorio!
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-12">
+                                <mat-form-field class="w-3">
+                                    <input type="text" matInput placeholder="Número de documento"
+                                           formControlName="numeroDocumento" [required]="validarName" (ngModelChange)='validateTypeDocument()'>
+                                    <mat-icon matSuffix class="iconsCA">credit_card</mat-icon>
+                                    <mat-error *ngIf="filtroOrdenes.get('numeroDocumento').hasError('pattern')">
+                                        Este campo no permite caracteres consecutivos!
+                                    </mat-error>
+                                    <mat-error *ngIf="filtroOrdenes.get('numeroDocumento').hasError('required')">
+                                        Este campo es obligatorio!
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-12">
+                                <mat-form-field class="w-3">
+                                    <input type="text" onblur="this.value = this.value.toUpperCase()" [required]="!validar" (keyup)="validateName($event)" matInput placeholder="Nombre" class="input-uppercase"
+                                           formControlName="nombre">
+                                    <mat-icon matSuffix class="iconsCA">person</mat-icon>
+                                    <mat-error *ngIf="filtroOrdenes.get('nombre').hasError('pattern')">
+                                        Este campo no permite caracteres consecutivos!
+                                    </mat-error>
+                                    <mat-error *ngIf="filtroOrdenes.get('nombre').hasError('required')">
+                                        Este campo es obligatorio!
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-12">
+                                <mat-form-field class="w-3">
+                                    <input type="text" onblur="this.value = this.value.toUpperCase()" [required]="!validar || nameRequired" matInput placeholder="Primer apellido" class="input-uppercase"
+                                           formControlName="primerApellido">
+                                    <mat-icon matSuffix class="iconsCA">person</mat-icon>
+                                    <mat-error *ngIf="filtroOrdenes.get('primerApellido').hasError('pattern')">
+                                        Este campo no permite caracteres consecutivos!
+                                    </mat-error>
+                                    <mat-error *ngIf="filtroOrdenes.get('primerApellido').hasError('required')">
+                                        Este campo es obligatorio!
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-12">
+                                <mat-form-field class="w-3">
+                                    <input type="text" onblur="this.value = this.value.toUpperCase()" matInput placeholder="Segundo apellido" class="input-uppercase" formControlName="segundoApellido">
+                                    <mat-icon matSuffix class="iconsCA">person</mat-icon>
+                                    <mat-error *ngIf="filtroOrdenes.get('segundoApellido').hasError('pattern')">
+                                        Este campo no permite caracteres consecutivos!
+                                    </mat-error>
+                                    <mat-error *ngIf="filtroOrdenes.get('primerApellido').hasError('required')">
+                                        Este campo es obligatorio!
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row text-center mb-4">
+                    <div class="offset-4 col-sm-2">
+                        <button mat-raised-button type="button" class="buttonCA-second" (click)="clear()">LIMPIAR</button>
+                    </div>
+                    <div class="col-sm-2">
+                        <button mat-raised-button class="buttonCA primary" (click)="validateNumber()" >FILTRAR</button>
+                    </div>
+                </div>
+            </form>
+        </mat-expansion-panel>
+    </mat-accordion>
+
+    
+    <div class="col-sm-12 col-md-12 col-lg-12 mt-5">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Citas por autorizar</h3>
+            </div>
+            <div class="col-sm-12">
+                <ng-container *ngIf="!citasPorAutorizar">
+                    <br>
+                    <mat-spinner style="margin: auto" [diameter]="60"></mat-spinner>
+                    <br>
+                </ng-container>
+                <ng-container *ngIf="citasPorAutorizar">
+                    <table mat-table [dataSource]="dataSourceCitas" class="mat-elevation-z8">
+                        <ng-container matColumnDef="cgFechaProceso">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+                            <td class="text-center" mat-cell *matCellDef="let element">
+                                <ng-container *ngIf="getNumberHours(element.fechaCitaCA) <= 3">
+                                    <span class="color-time-green">{{element.fechaCitaCA }}</span>
+                                </ng-container>
+                                <ng-container *ngIf="getNumberHours(element.fechaCitaCA) > 3 && getNumberHours(element.fechaCitaCA) <= 6">
+                                    <span class="color-time-yellow">{{element.fechaCitaCA }}</span>
+                                </ng-container>
+                                <ng-container *ngIf="getNumberHours(element.fechaCitaCA) > 6">
+                                    <span class="color-time-red">{{element.fechaCitaCA }}</span>
+                                </ng-container>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tipTipIDav">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Tipo documento</th>
+                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.tipTipIDav}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="documento">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Número documento</th>
+                            <td mat-cell *matCellDef="let element"> {{element.numDocId}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="nombreCompleto">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre paciente</th>
+                            <td mat-cell *matCellDef="let element"> {{element.nombreCompleto}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="valorProcedimiento">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor procedimiento</th>
+                            <td mat-cell *matCellDef="let element"> {{element.nombreCompleto}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="enProceso">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Autorización en proceso</th>
+                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.codEstadoCita === '3'?'SI':'NO'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="autorizar">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Autorizar</th>
+                            <td class="text-center" class="text-center" mat-cell *matCellDef="let element">
+                                <button type="button" (click)="openDialogAutorizacion(element, 'lockAutorizacion')" mat-raised-button class="buttonCA-table primary">
+                                    AUTORIZAR
+                                </button></td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsCitas"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsCitas;"></tr>
+                    </table>
+                </ng-container>
+                <ng-container *ngIf="citasPorAutorizar == null || citasPorAutorizar.length === 0">
+                    <br>
+                    <p class="text-center">No se encontraron citas por autorizar</p>
+                </ng-container>
+                <mat-paginator #paginatorCitas [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                <br>
+            </div>
+
+
+            <!-- Citas autorizadas -->
+            <div class="col-sm-12 mt-4">
+                <h3>Citas autorizadas</h3>
+            </div>
+            <div class="col-sm-12">
+                <ng-container *ngIf="!citasAutorizadas">
+                    <br>
+                    <mat-spinner style="margin: auto" [diameter]="60"></mat-spinner>
+                    <br>
+                </ng-container>
+                <ng-container *ngIf="citasAutorizadas">
+                    <table mat-table [dataSource]="dataSourceCitasAutorizadas" class="mat-elevation-z8">
+                        <ng-container matColumnDef="cgFechaProceso">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+                            <td class="text-center" mat-cell *matCellDef="let element">
+                                <ng-container *ngIf="getNumberHours(element.fechaCitaCA) <= 3">
+                                    <span class="color-time-green">{{element.fechaCitaCA }}</span>
+                                </ng-container>
+                                <ng-container *ngIf="getNumberHours(element.fechaCitaCA) > 3 && getNumberHours(element.fechaCitaCA) <= 6">
+                                    <span class="color-time-yellow">{{element.fechaCitaCA }}</span>
+                                </ng-container>
+                                <ng-container *ngIf="getNumberHours(element.fechaCitaCA) > 6">
+                                    <span class="color-time-red">{{element.fechaCitaCA }}</span>
+                                </ng-container>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tipTipIDav">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Tipo documento</th>
+                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.tipTipIDav}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="documento">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Número documento</th>
+                            <td mat-cell *matCellDef="let element"> {{element.numDocId}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="nombreCompleto">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre paciente</th>
+                            <td mat-cell *matCellDef="let element"> {{element.nombreCompleto}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="valorProcedimiento">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor procedimiento</th>
+                            <td mat-cell *matCellDef="let element"> {{element.nombreCompleto}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="enProceso">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Autorizado</th>
+                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.codEstadoCita === '3'?'SI':'NO'}} </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsCitasAutorizadas"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsCitasAutorizadas;"></tr>
+                    </table>
+                </ng-container>
+                <ng-container *ngIf="citasAutorizadas == null || citasAutorizadas.length === 0">
+                    <br>
+                    <p class="text-center">No se encontraron citas por autorizar</p>
+                </ng-container>
+                <mat-paginator #paginatorCitasAutorizadas [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                <br>
+            </div>
+
+
+
+          <!--   
+
+            <div class="col-sm-12">
+                <h3>Derivaciones por radicar</h3>
+            </div>
+            <div class="col-sm-12">
+                <ng-container *ngIf="!ordenesMedicas">
+                    <br>
+                    <mat-spinner style="margin: auto" [diameter]="60"></mat-spinner>
+                    <br>
+                </ng-container>
+                <ng-container *ngIf="ordenesMedicas">
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+                        <ng-container matColumnDef="cgFechaProceso">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha y hora abordaje derivación</th> -->
+                            <!-- <td mat-cell *matCellDef="let element"> {{element.cgFechaProceso | date:'yyyy/MM/dd HH:mm:ss'}} </td> -->
+                            
+               <!--               <td class="text-center" mat-cell *matCellDef="let element">
+                                <ng-container *ngIf="getNumberHours(element.cgFechaProceso) <= 3">
+                                    <span class="color-time-green">{{element.cgFechaProceso | date:'yyyy/MM/dd HH:mm:ss'}}</span>
+                                </ng-container>
+                                <ng-container *ngIf="getNumberHours(element.cgFechaProceso) > 3 && getNumberHours(element.cgFechaProceso) <= 6">
+                                    <span class="color-time-yellow">{{element.cgFechaProceso | date:'yyyy/MM/dd HH:mm:ss'}}</span>
+                                </ng-container>
+                                <ng-container *ngIf="getNumberHours(element.cgFechaProceso) > 6">
+                                    <span class="color-time-red">{{element.cgFechaProceso | date:'yyyy/MM/dd HH:mm:ss'}}</span>
+                                </ng-container>
+                            </td>
+                            
+                        </ng-container>
+
+                        <ng-container matColumnDef="tipTipIDav">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Tipo docuemnto</th>
+                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.tipTipIDav}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="documento">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Documento paciente</th>
+                            <td mat-cell *matCellDef="let element"> {{element.documento}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="nombreCompleto">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre paciente</th>
+                            <td mat-cell *matCellDef="let element"> {{element.nombreCompleto}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="radicar">
+                            <th class="text-center" class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Radicar</th>
+                            <td class="text-center" mat-cell *matCellDef="let element">
+                                <button type="button"  (click)="radicar(element)" mat-raised-button class="buttonCA-table primary">
+                                    RADICAR
+                                </button></td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </ng-container>
+                <ng-container *ngIf="ordenesMedicas != null && ordenesMedicas.length === 0">
+                    <br>
+                    <p class="text-center">No se encontraron derivaciones por radicar</p>
+                </ng-container>
+                <mat-paginator #paginatorPorRadicadar [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
+                <!-- <ng-container *ngFor="let ordenMedica of ordenesMedicas">
+                  <mat-card class="card mt-2 pt-2 pb-0 pl-1 pr-3">
+                    <div class="row">
+                      <div class="col-sm-2 fix-button">
+                        <button mat-fab *ngIf="getNumberHours(ordenMedica.cgFechaProceso) <= 3" class="color-time-green">
+                          {{ ordenMedica.nombreCompleto.substring(0,2).toUpperCase() }}
+                        </button>
+                        <button mat-fab *ngIf="getNumberHours(ordenMedica.cgFechaProceso) > 3 && getNumberHours(ordenMedica.cgFechaProceso) <= 6" class="color-time-yellow">
+                          {{ ordenMedica.nombreCompleto.substring(0,2).toUpperCase() }}
+                        </button>
+                        <button mat-fab *ngIf="getNumberHours(ordenMedica.cgFechaProceso) > 6" class="color-time-red">
+                          {{ ordenMedica.nombreCompleto.substring(0,2).toUpperCase() }}
+                        </button>
+                      </div>
+                      <div class="col-sm-6">
+                        <p class="mb-0"> <b class="text-primary f-2">{{ ordenMedica.nombreCompleto }}</b></p>
+                        <p class="mb-0"><span>No. de Órden: {{ ordenMedica.ormIdOrdmNumero }}</span>
+                        </p>
+                        <p class="mb-0"><span>{{ ordenMedica.tipTipIDav }}: {{ ordenMedica.documento }}</span>
+                        </p>
+                        <p class="mb-0"><span>{{ getTime(ordenMedica.cgFechaProceso) }}</span>
+                        </p>
+                      </div>
+                      <div class="col-sm-1 mt-n3">
+                        <button mat-icon-button [matMenuTriggerFor]="menus">
+                          <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menus="matMenu">
+                          <button mat-menu-item (click)="openDialogTraza(ordenMedica)">
+                            <span>Trazabilidad órden</span>
+                          </button>
+                        </mat-menu>
+                      </div>
+                    </div>
+                    <br>
+                  </mat-card>
+                </ng-container> -->
+   <!--             <br>
+            </div> -->
+
+            
+    <!--        <div class="col-sm-12">
+                <h3>Derivaciones por autorizar</h3>
+            </div>
+            <div class="col-sm-12">
+                <ng-container *ngIf="!ordenesMedicasRadicadas">
+                    <br>
+                    <mat-spinner style="margin: auto" [diameter]="60"></mat-spinner>
+                    <br>
+                </ng-container>
+                <ng-container *ngIf="ordenesMedicasRadicadas">
+                    <table mat-table [dataSource]="dataSourceRadicadas" class="mat-elevation-z8" >
+
+                        <ng-container matColumnDef="estado">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+                            <td class="text-center" mat-cell *matCellDef="let element">
+                                <ng-container *ngIf="getNumberHours(element.cgFechaProceso) <= 3">
+                                    <span class="color-time-green">EN PROCESO</span>
+                                </ng-container>
+                                <ng-container *ngIf="getNumberHours(element.cgFechaProceso) > 3 && getNumberHours(element.cgFechaProceso) <= 6">
+                                    <span class="color-time-yellow">EN PROCESO</span>
+                                </ng-container>
+                                <ng-container *ngIf="getNumberHours(element.cgFechaProceso) > 6">
+                                    <span class="color-time-red">EN PROCESO</span>
+                                </ng-container>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ormIdOrdmNumero">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Derivación</th>
+                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.ormIdOrdmNumero}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="cgFechaProceso">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha y hora reg derivación</th>
+                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.cgFechaProceso | date:'yyyy/MM/dd HH:mm:ss'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tipTipIDav">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Tipo documento</th>
+                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.tipTipIDav}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="documento">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Documento paciente</th>
+                            <td mat-cell *matCellDef="let element"> {{element.documento}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="nombreCompleto">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Nombre paciente</th>
+                            <td mat-cell *matCellDef="let element"> {{element.nombreCompleto}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="cita">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Cita agendada</th>
+                            <td class="text-center" mat-cell *matCellDef="let element">{{element?.agendamiento ? 'SI' : 'NO'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="enProceso">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>En proceso</th>
+                            <td class="text-center" mat-cell *matCellDef="let element">{{element.enProceso !== '0' ? 'SI' : 'NO'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="continuidad">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Continuidad</th>
+                            <td class="text-center" mat-cell *matCellDef="let element"><button type="button" (click)="openDialogView(element)" mat-raised-button class="buttonCA-table primary">
+                                VER
+                            </button></td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="autorizacion">
+                            <th class="text-center" class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Autorizar</th>
+                            <td class="text-center" mat-cell *matCellDef="let element"><button type="button" (click)="openDialogAuto(element)" mat-raised-button class="buttonCA-table primary">
+                                AUTORIZAR
+                            </button></td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsRadicadas"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsRadicadas;"></tr>
+                    </table>
+                </ng-container>
+                <ng-container *ngIf="ordenesMedicasRadicadas != null && ordenesMedicasRadicadas.length === 0">
+                    <br>
+                    <p class="text-center">No encontraron derivaciones radicadas</p>
+                </ng-container>
+                <mat-paginator #paginatorRadicadas [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+
+-->
+
+<br> <br>

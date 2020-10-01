@@ -1,0 +1,191 @@
+<app-navbar></app-navbar>
+<div class="bgbody"></div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-6 mt-5">
+      <form novalidate (ngSubmit)="onSubmit()" [formGroup]="filtroOrdenes" #myform="ngForm">
+        <div class="row justify-content-end">
+          <div class="col-sm-10">
+            <mat-form-field class="w-3">
+              <mat-label>Tipo documento</mat-label>
+              <mat-select formControlName="tipoDocumento" [required]="validar" (ngModelChange)='validateTypeDocument()'>
+                <mat-option *ngFor="let option of options | async" [value]="option.strTipIdeCod">
+                  {{option.strTipIdeGlosa}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="filtroOrdenes.get('tipoDocumento').hasError('required')">
+                Este campo es obligatorio!
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-10">
+            <mat-form-field class="w-3">
+              <input type="text" matInput [required]="validar" placeholder="Número de documento"
+                formControlName="numeroDocumento" (ngModelChange)='validateTypeDocument()'>
+              <mat-icon matSuffix class="iconsCA">credit_card</mat-icon>
+              <mat-error *ngIf="filtroOrdenes.get('numeroDocumento').hasError('pattern')">
+                Este campo no permite caracteres consecutivos!
+              </mat-error>
+              <mat-error *ngIf="filtroOrdenes.get('numeroDocumento').hasError('required')">
+                Este campo es obligatorio!
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-10">
+            <mat-form-field class="w-3">
+              <input type="text" onblur="this.value = this.value.toUpperCase()" matInput placeholder="Nombre" formControlName="nombre" [required]="nameRequired" class="input-uppercase"
+                (ngModelChange)="validateName($event)">
+              <mat-icon matSuffix class="iconsCA">person</mat-icon>
+              <mat-error *ngIf="filtroOrdenes.get('nombre').hasError('pattern')">
+                Este campo no permite caracteres consecutivos!
+              </mat-error>
+              <mat-error *ngIf="filtroOrdenes.get('nombre').hasError('required')">
+                Este campo es obligatorio!
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-10">
+            <mat-form-field class="w-3">
+              <input type="text" onblur="this.value = this.value.toUpperCase()" [required]="nameRequired" matInput placeholder="Primer apellido"
+                formControlName="primerApellido" class="input-uppercase">
+              <mat-icon matSuffix class="iconsCA">person</mat-icon>
+              <mat-error *ngIf="filtroOrdenes.get('primerApellido').hasError('pattern')">
+                Este campo no permite caracteres consecutivos!
+              </mat-error>
+              <mat-error *ngIf="filtroOrdenes.get('primerApellido').hasError('required')">
+                Este campo es obligatorio!
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-10">
+            <mat-form-field class="w-3">
+              <input type="text" onblur="this.value = this.value.toUpperCase()" matInput placeholder="Segundo apellido" formControlName="segundoApellido" class="input-uppercase">
+              <mat-icon matSuffix class="iconsCA">person</mat-icon>
+              <mat-error *ngIf="filtroOrdenes.get('segundoApellido').hasError('pattern')">
+                Este campo no permite caracteres consecutivos!
+              </mat-error>
+              <mat-error *ngIf="filtroOrdenes.get('primerApellido').hasError('required')">
+                Este campo es obligatorio!
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row justify-content-center text-center mb-4">
+          <div class="col-sm-12 col-md-12 col-lg-4">
+            <button mat-raised-button type="button" class="buttonCA-second" (click)="clear()">LIMPIAR</button>
+          </div>
+          <div class="col-sm-12 col-md-12 col-lg-4">
+            <button mat-raised-button class="buttonCA primary" type="submit" 
+              (click)="cambiar()" (click)="validateNumber()">FILTRAR</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-6 mt-5">
+      <div class="row">
+        <div class="col-sm-12">
+          <h3>Derivaciones</h3>
+        </div>
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-4">
+              <span><b>{{ jsonSize }}</b> Resultados</span>
+            </div>
+            <div class="col-sm-4">
+              <mat-icon>calendar_today</mat-icon>
+              <span>{{ fechaHoy1 }} - {{ horaHoy }}</span>
+            </div>
+            <div class="col-sm-4">
+              <mat-icon>room</mat-icon>
+              <span class="mt-n5">Nombre sede A</span>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="col-sm-12" *ngFor="let filter of filters | paginate: {itemsPerPage: 10, currentPage: pageActual} "> -->
+        <div class="col-sm-12">
+          <mat-card class="card mt-2 pt-2 pb-0 pl-1 pr-3"
+            *ngIf="ordenesMedicas !== undefined && ordenesMedicas !== null && ordenesMedicas.length > 0">
+            <div class="row">
+              <div class="col-sm-2">
+                <button mat-fab disabled>
+                  {{ ordenesMedicas[0].nombreCompleto.substring(0,2).toUpperCase() }}
+                </button>
+              </div>
+              <div class="col-sm-6">
+                <p class="mb-0"> <b class="text-primary f-2">{{ ordenesMedicas[0].nombreCompleto }}</b></p>
+                <p class="mb-0"><span>{{ ordenesMedicas[0].tipTipIDav }}: {{ ordenesMedicas[0].documento }}</span></p>
+              </div>
+              <!--<div class="col-sm-1 mt-n3">
+                  <button mat-icon-button [matMenuTriggerFor]="menus">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menus="matMenu">
+                    <a [routerLink]="['/radicar']" (click)="saveOrden()" routerLinkActive="router-link-active" >
+                      <button mat-menu-item >
+                        <span>Radicar derivacion</span>
+                      </button>
+                    </a>
+                  </mat-menu>
+                </div>-->
+              <div class="col-sm-6 offset-sm-6">
+                <mat-icon (click)="viewFiles()" class="text-secondary cursor">{{ icon }}</mat-icon>
+              </div>
+              <div *ngIf="verDocs" class="col-sm-12">
+
+                <!--<input type="file" style="display: none" #takePicture id="takePicture" (change)="handleInputChange($event)" accept="image/*" capture="camera">-->
+                <!-- <div class="col-sm-6 offset-sm-4" *ngIf="!ordenMedica.filename">
+                  <label for="caFile" class="text-success"><b>DOCUMENTO<mat-icon>camera_front</mat-icon></b></label>
+                </div> -->
+                <div class="col-sm-2 offset-sm-6" *ngIf="progress">
+                  <mat-spinner>
+                  </mat-spinner>
+                </div>
+                <div *ngIf="ordenesMedicas !== undefined && ordenesMedicas !== null && ordenesMedicas.length > 0  && ordenesMedicas[0].ormIdOrdmNumero != undefined">
+                  <mat-card class="pl-3 pr-3 bg-light" *ngFor="let ordenMedica of ordenesMedicas">
+                    <input type="file" [hidden]="true" style="display: block" #caFile id="caFile"
+                      (change)="handleInputChange($event, ordenMedica, '');" accept="image/*" capture="camera">
+                    <input type="file" [hidden]="true" style="display: block" #caFileRenovar id="caFileRenovar"
+                      (change)="handleInputChange($event, ordenMedica, 'renovar');" accept="image/*" capture="camera">
+                    <div class="row">
+                      <div class="col-sm-10">
+                        <div class="data-orden">
+                          <p class="mb-0"><span>No. de Órden: {{ ordenMedica.ormIdOrdmNumero }}</span></p>
+                          <p class="mb-0"><span>Estado: {{ getState(ordenMedica.eomIdCodigo) }}</span></p>
+                          <p><span> {{ ordenMedica.filename }}</span></p>
+                        </div>
+                      </div>
+                      <div class="col-sm-2">
+                        <button mat-icon-button [matMenuTriggerFor]="menuOrden">
+                          <mat-icon>more_horiz</mat-icon>
+                        </button>
+                        <mat-menu #menuOrden="matMenu">
+                          <button mat-menu-item (click)="download(ordenMedica)">
+                            <span>Consultar</span>
+                          </button>
+                          <button  *ngIf="ordenMedica.eomIdCodigo === 1" mat-menu-item (click)="caFileRenovar.click()">
+                            <span>Renovar</span>
+                          </button>
+                          <button *ngIf="ordenMedica.eomIdCodigo === 2" mat-menu-item (click)="delete(ordenMedica)">
+                            <span>Eliminar</span>
+                          </button>
+                        </mat-menu>
+                      </div>
+                    </div>
+                  </mat-card>
+                </div>
+                <input type="file" [hidden]="true" style="display: block" #caFile id="caFile"
+                      (change)="handleInputChange($event, ordenMedica, '');" accept="image/*" capture="camera">
+                <div style="margin-top: 1%;" class="col-sm-6 offset-sm-4">
+                  <label for="caFile" class="text-success"><b>DOCUMENTO<mat-icon>camera_front</mat-icon></b></label>
+                </div>
+              </div>
+            </div>
+            <br>
+
+          </mat-card>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
