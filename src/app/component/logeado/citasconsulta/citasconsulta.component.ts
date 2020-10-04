@@ -67,11 +67,13 @@ export class CitasconsultaComponent implements OnInit {
     pageEvent: PageEvent;
     options: any;
     date = new Date();
+    fechaFin = new Date();
     msjExp: boolean;
     minDateValue = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
     maxDateValue = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 8);
     minDate = new Date(this.date.getFullYear(), 0, 1);
-    maxDateIni = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 2);
+    minDateIn = new Date(this.date.getFullYear(), 0, 1);
+    maxDateIni = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 90);
     maxDateFin = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 8);
     maxDateIniAutorizacion = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
     maxDateFinAutorizacion = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 8);
@@ -96,6 +98,9 @@ export class CitasconsultaComponent implements OnInit {
     validarName: boolean = false;
     fechaHoy: Date;
     fechaHoy1: string;
+    fechaHoy2: string;
+    actual: Date;
+    nuevoMes: number;
     horaHoy: string;
     jsonSize: number;
     user: any;
@@ -144,8 +149,8 @@ export class CitasconsultaComponent implements OnInit {
         this.fechaHoy = new Date();
         this.fechaHoy1 = this.fechaHoy.getDate() + '-' + (this.fechaHoy.getMonth() + 1) + '-' + this.fechaHoy.getFullYear();
 
-       console.log('datos oooo',this.fechaHoy1);
-       
+       console.log('datos oooo', this.fechaHoy1);
+
 
         this.horaHoy = this.fechaHoy.getHours() + ":" + this.fechaHoy.getMinutes() + 'Hrs.';
         this.filtroCitas = this.fb.group({
@@ -393,6 +398,25 @@ export class CitasconsultaComponent implements OnInit {
         } else {
             this.validarName = false;
             this.validar = true;
+        }
+    }
+
+    changeSecondDate() {
+        this.actual = new Date();
+        // tslint:disable-next-line: max-line-length
+        this.fechaFin.setDate((this.filtroCitas.getRawValue().fecha.date() + 8));
+        this.filtroCitas.get('fechaFinal').setValue(this.fechaFin);
+        this.maxDateValue = new Date(this.fechaFin.getFullYear(), this.fechaFin.getMonth(), this.fechaFin.getDate() + 8);
+        this.maxDateFin = new Date(this.fechaFin.getFullYear(), this.fechaFin.getMonth(), this.fechaFin.getDate());
+        this.minDate = new Date(this.fechaFin.getFullYear(), this.fechaFin.getMonth(), this.fechaFin.getDate() - 8);
+
+        if ((this.actual.getMonth() + 1) !== (this.filtroCitas.getRawValue().fecha.month() + 1)) {
+            this.fechaFin.setMonth(((this.filtroCitas.getRawValue().fecha.month())));
+            this.filtroCitas.get('fechaFinal').setValue(this.fechaFin);
+            if ((this.filtroCitas.getRawValue().fecha.date()) >= 23) {
+                this.fechaFin.setMonth(((this.filtroCitas.getRawValue().fecha.month() + 1)));
+                this.filtroCitas.get('fechaFinal').setValue(this.fechaFin);
+            }
         }
     }
 

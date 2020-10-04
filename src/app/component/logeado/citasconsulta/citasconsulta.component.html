@@ -9,7 +9,7 @@
             <div class="col-sm-10">
               <mat-form-field class="w-3">
                 <input class="date-picker-form" matInput [matDatepicker]="pickers" placeholder="Fecha Inicial" formControlName="fecha"
-                  [min]="minDate" [max]="maxDateIni">
+                  [min]="minDateIn" [max]="maxDateIni" (dateChange)="changeSecondDate()">
                 <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
                 <mat-datepicker #pickers touchUi [disabled]="'false'" startView="year"></mat-datepicker>
                 <mat-error *ngIf="filtroCitas.get('fecha').hasError('pattern')">
