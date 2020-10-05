@@ -98,7 +98,6 @@ export class CitasconsultaComponent implements OnInit {
     validarName: boolean = false;
     fechaHoy: Date;
     fechaHoy1: string;
-    fechaHoy2: string;
     actual: Date;
     nuevoMes: number;
     horaHoy: string;
@@ -148,11 +147,7 @@ export class CitasconsultaComponent implements OnInit {
         this.setLists();
         this.fechaHoy = new Date();
         this.fechaHoy1 = this.fechaHoy.getDate() + '-' + (this.fechaHoy.getMonth() + 1) + '-' + this.fechaHoy.getFullYear();
-
-       console.log('datos oooo', this.fechaHoy1);
-
-
-        this.horaHoy = this.fechaHoy.getHours() + ":" + this.fechaHoy.getMinutes() + 'Hrs.';
+        this.horaHoy = this.fechaHoy.getHours() + ':' + this.fechaHoy.getMinutes() + 'Hrs.';
         this.filtroCitas = this.fb.group({
             fecha: [{ disabled: true, value: moment(this.minDateValue) }, [Validators.required]],
             fechaFinal: [{ disabled: true, value: moment(this.maxDateValue) }, [Validators.required]],
@@ -354,8 +349,43 @@ export class CitasconsultaComponent implements OnInit {
         }
     }
 
+    changeSecondDate() {
+        this.actual = new Date();
+        this.fechaFin.setDate((this.minDate.getFullYear(), this.minDate.getMonth(), this.filtroCitas.getRawValue().fecha.date()));
+        this.filtroCitas.get('fechaFinal').setValue(this.fechaFin);
+        this.maxDateValue = new Date(this.minDate.getFullYear(), (this.fechaFin.getMonth()), (this.fechaFin.getDate() + 8));
+        this.maxDateFin = new Date(this.fechaFin.getFullYear(), this.fechaFin.getMonth(), this.fechaFin.getDate());
+        this.minDate = new Date(this.fechaFin.getFullYear(), this.fechaFin.getMonth(), this.fechaFin.getDate());
+        if ((this.fechaFin.getMonth() + 1) !== (this.filtroCitas.getRawValue().fecha.month() + 1)) {
+            this.minDate.setMonth(((this.filtroCitas.getRawValue().fecha.month())));
+            this.maxDateValue.setMonth(((this.filtroCitas.getRawValue().fecha.month())));
+            if ((this.filtroCitas.getRawValue().fecha.date()) >= 22) {
+                this.maxDateValue.setMonth(((this.filtroCitas.getRawValue().fecha.month() + 1)));
+            }
+        }
+
+        this.filtroCitas = this.fb.group({
+            fecha: [{ disabled: true, value: moment(this.minDate) }, [Validators.required]],
+            fechaFinal: [{ disabled: true, value: moment(this.maxDateValue) }, [Validators.required]],
+            especialidad: ['', this.checkList(this.especialidades)],
+            subEspecialidad: ['', this.checkList(this.subEspecialidades)],
+            servicio: ['', this.checkList(this.servicios)],
+            sede: ['', this.checkList(this.sedes)],
+            estado: [null],
+            convenio: [null],
+            tipoDocumento: [''],
+            numeroDocumento: ['', [Validators.maxLength(20), Validators.pattern(/^[A-ZÑa-zñ0-9\s]+$/)]],
+            nombre: ['', [Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/),
+            Validators.pattern(/^(?!.*(.)\1{3})/)]],
+            primerApellido: ['', [Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/),
+            Validators.pattern(/^(?!.*(.)\1{3})/)]],
+            segundoApellido: ['', [Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/),
+            Validators.pattern(/^(?!.*(.)\1{3})/)]],
+            ubicacionesFilter: ['']
+        });
+    }
+
     validarFechas() {
-        if (this.filtroCitas.getRawValue().fecha.year() >= this.filtroCitas.getRawValue().fechaFinal.year()) {
             if ((this.filtroCitas.getRawValue().fecha.month() + 1) <= (this.filtroCitas.getRawValue().fechaFinal.month() + 1)) {
                 if (this.filtroCitas.getRawValue().fecha.year() === this.filtroCitas.getRawValue().fechaFinal.year() &&
                     (this.filtroCitas.getRawValue().fecha.month() + 1) === (this.filtroCitas.getRawValue().fechaFinal.month() + 1) &&
@@ -379,15 +409,6 @@ export class CitasconsultaComponent implements OnInit {
                 });
                 this.msjExp = true;
             }
-        } else {
-            this.filtroCitas.controls['fechaFinal'].setValue('');
-            swal({
-                title: 'Error',
-                text: 'Rango final cita no puede ser menor a Rango inicial cita, verifique',
-                icon: 'warning',
-            });
-            this.msjExp = true;
-        }
     }
 
     validateTypeDocument() {
@@ -398,25 +419,6 @@ export class CitasconsultaComponent implements OnInit {
         } else {
             this.validarName = false;
             this.validar = true;
-        }
-    }
-
-    changeSecondDate() {
-        this.actual = new Date();
-        // tslint:disable-next-line: max-line-length
-        this.fechaFin.setDate((this.filtroCitas.getRawValue().fecha.date() + 8));
-        this.filtroCitas.get('fechaFinal').setValue(this.fechaFin);
-        this.maxDateValue = new Date(this.fechaFin.getFullYear(), this.fechaFin.getMonth(), this.fechaFin.getDate() + 8);
-        this.maxDateFin = new Date(this.fechaFin.getFullYear(), this.fechaFin.getMonth(), this.fechaFin.getDate());
-        this.minDate = new Date(this.fechaFin.getFullYear(), this.fechaFin.getMonth(), this.fechaFin.getDate() - 8);
-
-        if ((this.actual.getMonth() + 1) !== (this.filtroCitas.getRawValue().fecha.month() + 1)) {
-            this.fechaFin.setMonth(((this.filtroCitas.getRawValue().fecha.month())));
-            this.filtroCitas.get('fechaFinal').setValue(this.fechaFin);
-            if ((this.filtroCitas.getRawValue().fecha.date()) >= 23) {
-                this.fechaFin.setMonth(((this.filtroCitas.getRawValue().fecha.month() + 1)));
-                this.filtroCitas.get('fechaFinal').setValue(this.fechaFin);
-            }
         }
     }
 
