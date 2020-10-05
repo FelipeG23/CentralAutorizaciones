@@ -354,8 +354,8 @@ export class CitasconsultaComponent implements OnInit {
         this.fechaFin.setDate((this.minDate.getFullYear(), this.minDate.getMonth(), this.filtroCitas.getRawValue().fecha.date()));
         this.filtroCitas.get('fechaFinal').setValue(this.fechaFin);
         this.maxDateValue = new Date(this.minDate.getFullYear(), (this.fechaFin.getMonth()), (this.fechaFin.getDate() + 8));
-        this.maxDateFin = new Date(this.fechaFin.getFullYear(), this.fechaFin.getMonth(), this.fechaFin.getDate());
         this.minDate = new Date(this.fechaFin.getFullYear(), this.fechaFin.getMonth(), this.fechaFin.getDate());
+        this.maxDateFin = new Date(this.minDate.getFullYear(), this.minDate.getMonth(), this.minDate.getDate());
         if ((this.fechaFin.getMonth() + 1) !== (this.filtroCitas.getRawValue().fecha.month() + 1)) {
             this.minDate.setMonth(((this.filtroCitas.getRawValue().fecha.month())));
             this.maxDateValue.setMonth(((this.filtroCitas.getRawValue().fecha.month())));
