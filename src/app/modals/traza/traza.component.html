@@ -28,13 +28,19 @@
 
         <!-- Weight Column -->
         <ng-container matColumnDef="cauDescUsuarios">
-          <th mat-header-cell *matHeaderCellDef> Actualizado por </th>
+          <th mat-header-cell *matHeaderCellDef> Actualizado porx </th>
           <td mat-cell *matCellDef="let element"> {{element.cauDescUsuarios}} </td>
         </ng-container>
 
         <!-- Symbol Column -->
         <ng-container matColumnDef="ecDescripcion">
           <th mat-header-cell *matHeaderCellDef> Estado </th>
+          <td mat-cell *matCellDef="let element"> {{element.ecDescripcion}} </td>
+        </ng-container>
+
+         <!-- Symbol Column -->
+         <ng-container matColumnDef="ecEstado">
+          <th mat-header-cell *matHeaderCellDef> Asistencia </th>
           <td mat-cell *matCellDef="let element"> {{element.ecDescripcion}} </td>
         </ng-container>
 
