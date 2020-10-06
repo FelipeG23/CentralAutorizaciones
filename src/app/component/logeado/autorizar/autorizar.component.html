@@ -241,6 +241,7 @@
                 <h3>Citas autorizadas</h3>
             </div>
             <div class="col-sm-12">
+                
                 <ng-container *ngIf="!citasAutorizadas">
                     <br>
                     <mat-spinner style="margin: auto" [diameter]="60"></mat-spinner>
@@ -248,6 +249,8 @@
                 </ng-container>
                 <ng-container *ngIf="citasAutorizadas">
                     <table mat-table [dataSource]="dataSourceCitasAutorizadas" class="mat-elevation-z8">
+
+                        <!--
                         <ng-container matColumnDef="cgFechaProceso">
                             <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
                             <td class="text-center" mat-cell *matCellDef="let element">
@@ -261,6 +264,11 @@
                                     <span class="color-time-red">{{element.fechaCitaCA }}</span>
                                 </ng-container>
                             </td>
+                        </ng-container>  -->
+
+                        <ng-container matColumnDef="idCita">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Número cita</th>
+                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.idCita}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="tipTipIDav">

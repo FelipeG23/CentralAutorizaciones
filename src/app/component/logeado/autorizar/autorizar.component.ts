@@ -77,7 +77,7 @@ export class AutorizarComponent implements OnInit {
     maxDateFin = new Date(this.date.getFullYear() + 1, this.date.getMonth(), this.date.getDate());
     displayedColumns: string[] = ['cgFechaProceso', 'tipTipIDav', 'documento', 'nombreCompleto', 'radicar'];
     displayedColumnsCitas: string[] = ['cgFechaProceso', 'tipTipIDav', 'documento', 'nombreCompleto', 'valorProcedimiento', 'enProceso', 'autorizar'];
-    displayedColumnsCitasAutorizadas: string[] = ['cgFechaProceso', 'tipTipIDav', 'documento', 'nombreCompleto', 'enProceso'];
+    displayedColumnsCitasAutorizadas: string[] = ['idCita', 'tipTipIDav', 'documento', 'nombreCompleto', 'enProceso'];
     dataSource = new MatTableDataSource(this.ordenesMedicas);
     @ViewChild('paginatorCitas', { read: MatPaginator }) paginatorCitas: MatPaginator;
     @ViewChild('paginatorCitasAutorizadas', { read: MatPaginator }) paginatorCitasAutorizadas: MatPaginator;
@@ -98,10 +98,11 @@ export class AutorizarComponent implements OnInit {
     metodo: any;
     resultados: any;
     
-    
     valor: any;
     validarName: boolean = false;
     ordenMedica: any;
+    listaCitasAutorizadas: any[];
+
 
     constructor(private fb: FormBuilder,
         public dialog: MatDialog,
@@ -121,6 +122,7 @@ export class AutorizarComponent implements OnInit {
     }
 
     ngOnInit() {
+
         moment.locale('es');
         moment.relativeTimeThreshold('m', 60);
         moment.relativeTimeThreshold('h', 24 * 26);
@@ -131,6 +133,13 @@ export class AutorizarComponent implements OnInit {
         this.dataSource.paginator = this.paginatorPorRadicadar;
         this.dataSourceRadicadas.paginator = this.paginatorRadicadas;
         this.callSubmits();
+
+    //    http://52.247.56.140:8091/fsfb-api/citas
+
+
+       
+
+
     }
 
     initFilter() {
@@ -148,6 +157,10 @@ export class AutorizarComponent implements OnInit {
             primerApellido: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/), ]],
             segundoApellido: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/), ]]
         });
+
+        console.log("prueba central Au", this.filtroOrdenes);
+        
+
     }
 
     callSubmits() {
@@ -309,16 +322,17 @@ export class AutorizarComponent implements OnInit {
             this.consultaService.getCitasPorAutorizar(this.filtroOrdenes.getRawValue()).subscribe(data => {
                 this.spinnerService.hide();
                 this.citasPorAutorizar = data;
-                console.log('Datos prueba', this.citasPorAutorizar);
 
-                this.citasAutorizadas = this.citasPorAutorizar.filter(data => data.codEstadoCita === "3");
-                console.log('Datos prueba', this.citasAutorizadas);
+                
+                this.consultaService.getCitasAutorizadas()
+                .subscribe((data: any) => {
+                  this.citasAutorizadas = data;
+                  
+                  this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;
+                  
+                });
 
-
-            //    this.datosUsuarios = this.listaUsuariosRegistro.find(word => word._id === this.registro.id);
-
-                this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;
-                console.log('Data', this.dataSourceCitasAutorizadas.data);
+            //    this.datosUsuarios = this.listaUsuariosRegistro.find(word => word._id === this.registro.id);                
             
                 this.dataSourceCitas.data = this.citasPorAutorizar;
                 if (isList) {

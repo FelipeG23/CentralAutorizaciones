@@ -167,6 +167,11 @@ export class CitasconsultaComponent implements OnInit {
             Validators.pattern(/^(?!.*(.)\1{3})/)]],
             ubicacionesFilter: ['']
         });
+
+
+        console.log("prueba Diego", this.filtroCitas);
+        
+
     }
 
     openDialog(datoCambio): void {
