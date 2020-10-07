@@ -157,8 +157,6 @@ export class AutorizarComponent implements OnInit {
             primerApellido: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/), ]],
             segundoApellido: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/), ]]
         });
-
-        console.log("prueba central Au", this.filtroOrdenes);
         
 
     }
@@ -323,14 +321,28 @@ export class AutorizarComponent implements OnInit {
                 this.spinnerService.hide();
                 this.citasPorAutorizar = data;
 
-                
+                /*
                 this.consultaService.getCitasAutorizadas()
                 .subscribe((data: any) => {
                   this.citasAutorizadas = data;
                   
                   this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;
                   
+                });  */
+
+                this.consultaService.postCitasAutorizadas()
+                .subscribe((data: any) => {
+                  this.citasAutorizadas = data;
+                  
+                  console.log(this.citasAutorizadas);
+                  
+                  this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;
+                  
                 });
+                
+
+
+
 
             //    this.datosUsuarios = this.listaUsuariosRegistro.find(word => word._id === this.registro.id);                
             

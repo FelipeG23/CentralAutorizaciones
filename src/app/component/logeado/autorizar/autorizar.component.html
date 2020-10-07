@@ -267,18 +267,18 @@
                         </ng-container>  -->
 
                         <ng-container matColumnDef="idCita">
-                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Número cita</th>
-                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.idCita}} </td>
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Autorización</th>
+                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.fechaAutorizacion}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="tipTipIDav">
                             <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Tipo documento</th>
-                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.tipTipIDav}} </td>
+                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.tipDocumento}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="documento">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Número documento</th>
-                            <td mat-cell *matCellDef="let element"> {{element.numDocId}} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.numDocumento}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="nombreCompleto">
@@ -302,7 +302,7 @@
                 </ng-container>
                 <ng-container *ngIf="citasAutorizadas == null || citasAutorizadas.length === 0">
                     <br>
-                    <p class="text-center">No se encontraron citas por autorizar</p>
+                    <p class="text-center">No se encontraron citas autorizadas</p>
                 </ng-container>
                 <mat-paginator #paginatorCitasAutorizadas [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
                 <br>

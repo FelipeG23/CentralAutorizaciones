@@ -126,6 +126,11 @@ export class ConsultaService {
     return this.http.post<any>( environment.api + '/citas', this.params);
   }
 
+  postCitasAutorizadas() {
+
+    return this.http.get<any>( environment.api + '/listas/citasAutorizadas');
+  }
+
 
 
 
