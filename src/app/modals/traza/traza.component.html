@@ -41,7 +41,7 @@
          <!-- Symbol Column -->
          <ng-container matColumnDef="ecEstado">
           <th mat-header-cell *matHeaderCellDef> Asistencia </th>
-          <td class="text-center" mat-cell *matCellDef="let element"> {{element.ecAsistencia === '1' ? 'Si' : 'Pendiente' === null ? 'No' : 'No'}} </td>
+          <td class="text-center" mat-cell *matCellDef="let element"> {{element.ecAsistencia === '1' ? 'Si' : 'No'}} </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
