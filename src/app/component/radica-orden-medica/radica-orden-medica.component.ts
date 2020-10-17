@@ -94,6 +94,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
   counter: number = 25;
   code: string;
   filteredDiagnostico: Observable<any[]>;
+  numeroPolizaReadonly = true;
 
   constructor(private fb: FormBuilder,
     private authenticatedService: AuthenticatedService,
@@ -126,6 +127,11 @@ export class RadicaOrdenMedicaComponent implements OnInit {
   }
 
   ngOnInit() {
+
+  //  if (this.datosCambio.myVar.data.tipoConvenio === "A" || this.datosCambio.myVar.data.tipoConvenio === "S" ) {
+  //    this.numeroPolizaReadonly = false;
+  //  } 
+
     this.setLists();
     this.fbRadicar = this.fb.group({
       ecPolizaNumero: [null, [Validators.required, Validators.pattern(/^(?!.*(.)\1{9})/),
@@ -140,6 +146,11 @@ export class RadicaOrdenMedicaComponent implements OnInit {
       conConCodigo: ['', [Validators.required, this.checkList(this.convenios)]],
       pcaAgeCodigProfe: ['', [Validators.required, this.checkList(this.medicos)]]
     });
+
+   //console.log("Datos prueba Diego", this.convenio.id);
+
+
+
     const id = JSON.parse(localStorage.getItem('orden'));
     if (id === null) {
       this.router.navigate(['/ordenes']);
@@ -150,6 +161,9 @@ export class RadicaOrdenMedicaComponent implements OnInit {
         (data: OrdenMedica) => {
           this.timer = setInterval(() => { this.alertUnlock() }, this.counter * 60000)
           this.ordenMedica = data;
+          if (this.ordenMedica.conTipoConvenio === "A" || this.ordenMedica.conTipoConvenio === "S" ) {
+                this.numeroPolizaReadonly = false;
+            }           
           if (this.ordenMedica.caDetalleOrdenesMedicas === null) {
             this.ordenMedica.caDetalleOrdenesMedicas = new DetalleOrdenMedica();
             this.consultarCitas();
@@ -452,6 +466,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
     });
     this.convenioService.getConvenio().subscribe(data => {
       this.convenios = data;
+
       this.filteredConvList = this.fbRadicar.get('conConCodigo').valueChanges
         .pipe(
           startWith(''),

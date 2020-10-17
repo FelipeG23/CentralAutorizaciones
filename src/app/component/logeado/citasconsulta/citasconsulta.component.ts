@@ -147,7 +147,9 @@ export class CitasconsultaComponent implements OnInit {
         this.setLists();
         this.fechaHoy = new Date();
         this.fechaHoy1 = this.fechaHoy.getDate() + '-' + (this.fechaHoy.getMonth() + 1) + '-' + this.fechaHoy.getFullYear();
-        this.horaHoy = this.fechaHoy.getHours() + ':' + this.fechaHoy.getMinutes() + 'Hrs.';
+
+       
+        this.horaHoy = this.fechaHoy.getHours() + ":" + this.fechaHoy.getMinutes() + 'Hrs.';
         this.filtroCitas = this.fb.group({
             fecha: [{ disabled: true, value: moment(this.minDateValue) }, [Validators.required]],
             fechaFinal: [{ disabled: true, value: moment(this.maxDateValue) }, [Validators.required]],
@@ -167,6 +169,8 @@ export class CitasconsultaComponent implements OnInit {
             Validators.pattern(/^(?!.*(.)\1{3})/)]],
             ubicacionesFilter: ['']
         });
+
+    
     }
 
     openDialog(datoCambio): void {

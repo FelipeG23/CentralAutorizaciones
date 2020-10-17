@@ -77,6 +77,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   documentoPersona: any;
   listaConvenios: any = {};
   datosConvenio: any = {};
+  numeroPolizaReadonly = true;
 
 
   constructor(private fb: FormBuilder,
@@ -97,6 +98,9 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    
+
     this.setFormRegistra();
     this.setEstado();
     const valor = {
@@ -113,6 +117,13 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
       }
       this.spinnerService.hide();
       this.detalleCita = detalleCita;
+
+      console.log(this.detalleCita);
+      
+
+      if (this.detalleCita.tipoConvenio === "A" || this.detalleCita.tipoConvenio === "S" ) {
+        this.numeroPolizaReadonly = false;
+      } 
 
     }, () => {
       this.spinnerService.hide();
@@ -495,7 +506,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
       gauCodigoAutorizacion: [{ value: null, disabled: true }, [
         Validators.minLength(3)
       ]],
-      numeroPoliza: [''],
+      numeroPoliza: ['', [Validators.required]],
       gauFechaAutorizacion: [{ disabled: true, value: null }],
       gauFechaVencAutorizacion: [{ disabled: true, value: null }],
       gauVigenciaAutorizacion: [{ disabled: true, value: null }],
