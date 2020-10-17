@@ -254,19 +254,19 @@
                         <ng-container matColumnDef="cgFechaProceso">
                             <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
                             <td class="text-center" mat-cell *matCellDef="let element">
-                                <ng-container *ngIf="getNumberHours(element.fechaCitaCA) <= 3">
-                                    <span class="color-time-green">{{element.fechaCitaCA }}</span>
+                                <ng-container *ngIf="getNumberHours(element.fechaAutorizacion) <= 3">
+                                    <span class="color-time-green">{{element.fechaAutorizacion }}</span>
                                 </ng-container>
-                                <ng-container *ngIf="getNumberHours(element.fechaCitaCA) > 3 && getNumberHours(element.fechaCitaCA) <= 6">
-                                    <span class="color-time-yellow">{{element.fechaCitaCA }}</span>
+                                <ng-container *ngIf="getNumberHours(element.fechaAutorizacion) > 3 && getNumberHours(element.fechaCitaCA) <= 6">
+                                    <span class="color-time-yellow">{{element.fechaAutorizacion }}</span>
                                 </ng-container>
-                                <ng-container *ngIf="getNumberHours(element.fechaCitaCA) > 6">
-                                    <span class="color-time-red">{{element.fechaCitaCA }}</span>
+                                <ng-container *ngIf="getNumberHours(element.fechaAutorizacion) > 6">
+                                    <span class="color-time-red">{{element.fechaCfechaAutorizacionitaCA }}</span>
                                 </ng-container>
                             </td>
                         </ng-container>  -->
 
-                        <ng-container matColumnDef="idCita">
+                <!---->        <ng-container matColumnDef="idCita">
                             <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Autorización</th>
                             <td class="text-center" mat-cell *matCellDef="let element"> {{element.fechaAutorizacion}} </td>
                         </ng-container>

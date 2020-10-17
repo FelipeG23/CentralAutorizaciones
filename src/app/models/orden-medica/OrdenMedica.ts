@@ -16,4 +16,5 @@ export class OrdenMedica {
     caDetalleOrdenesMedicas: DetalleOrdenMedica;
     caPrestacionesOrdMed: CaPrestacionesOrdMed[] = [];
     fechaRegistroFile: string;
+    conTipoConvenio: string;
 }

@@ -208,7 +208,7 @@
                                 <mat-form-field class="w-100">
                                   <input matInput placeholder="Numero póliza" formControlName="ecPolizaNumero" required
                                     #message minlength="1"
-                                    [ngModel]="ordenMedica.caDetalleOrdenesMedicas.ecPolizaNumero">
+                                    [ngModel]="ordenMedica.caDetalleOrdenesMedicas.ecPolizaNumero" [readonly]="numeroPolizaReadonly">
                                   <mat-error *ngIf="fbRadicar.get('ecPolizaNumero').hasError('pattern')">
                                     Este campo no permite caracteres consecutivos!
                                   </mat-error>
@@ -266,7 +266,7 @@
                           </div>
                           <div class="col-sm-12 col-md-12 col-lg-6 offset-lg-7 mt-3">
                             <button mat-raised-button class="buttonCA primary mr-1" (click)="unlockFirebase()"
-                              routerLink="/autorizacion">
+                              routerLink="/ordenes">
                               CANCELAR
                             </button>
                             <button mat-raised-button class="buttonCA primary"

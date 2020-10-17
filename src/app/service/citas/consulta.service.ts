@@ -17,14 +17,13 @@ export class ConsultaService {
 
   getCitas(userData, lista) {
 
+
     let convenios;
     if (lista !== '') {
       convenios = lista.map(data => data.id)
     }
     
-
     const fechaInicial = this.convertDate(userData.fecha);
-
 
     const fechaFinal = this.convertDate(userData.fechaFinal);
 
@@ -45,6 +44,7 @@ export class ConsultaService {
       'nombreSede': userData.ubicacionesFilter
     };
 
+  
     return this.http.post<any>( environment.api + '/citas', this.params);
   }
 
@@ -102,12 +102,6 @@ export class ConsultaService {
     let minDateValue = new Date(date.getFullYear(), 1, 1);
     let diego  = moment(minDateValue);
     let datosFechaInicial = this.convertDate(diego);
-
-
-
-      console.log("Vidal Guiza", diego);
-  
-
 
     this.params = {
       'convenios': [],

@@ -144,9 +144,7 @@ export class CitasconsultaComponent implements OnInit {
         this.fechaHoy = new Date();
         this.fechaHoy1 = this.fechaHoy.getDate() + '-' + (this.fechaHoy.getMonth() + 1) + '-' + this.fechaHoy.getFullYear();
 
-       console.log('datos oooo',this.fechaHoy1);
        
-
         this.horaHoy = this.fechaHoy.getHours() + ":" + this.fechaHoy.getMinutes() + 'Hrs.';
         this.filtroCitas = this.fb.group({
             fecha: [{ disabled: true, value: moment(this.minDateValue) }, [Validators.required]],
@@ -168,10 +166,7 @@ export class CitasconsultaComponent implements OnInit {
             ubicacionesFilter: ['']
         });
 
-
-        console.log("prueba Diego", this.filtroCitas);
-        
-
+    
     }
 
     openDialog(datoCambio): void {

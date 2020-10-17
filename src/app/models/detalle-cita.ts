@@ -16,4 +16,5 @@ export interface DetalleCita {
 	 usuarioAsignaCita: string;
 	 fechaAsignacion: string;
 	 codConvenio: string;
+	 tipoConvenio: string;
 }

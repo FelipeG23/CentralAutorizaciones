@@ -332,11 +332,9 @@ export class AutorizarComponent implements OnInit {
 
                 this.consultaService.postCitasAutorizadas()
                 .subscribe((data: any) => {
-                  this.citasAutorizadas = data;
-                  
-                  console.log(this.citasAutorizadas);
-                  
-                  this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;
+                    
+                this.citasAutorizadas = data.sort((a, b) => b.fechaAutorizacion - a.fechaAutorizacion);                  
+                this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;
                   
                 });
                 

@@ -213,13 +213,22 @@
                   <mat-label>Autorizó / no autorizó desde convenio</mat-label>
                   <mat-select (selectionChange)="selectionChangeAutoriza($event)" formControlName="gauNombreAutorizador">
                     <mat-option value="1">
-                      Pagina
+                      Audio respuesta (teléfono)
                     </mat-option>
                     <mat-option value="2">
-                      No autorizado
+                      Asesor
                     </mat-option>
                     <mat-option value="3">
-                      Usuario
+                      Carta física
+                    </mat-option>
+                    <mat-option value="3">
+                      Página
+                    </mat-option>
+                    <mat-option value="3">
+                      SOAT
+                    </mat-option>
+                    <mat-option value="3">
+                      VB Módulo HIS
                     </mat-option>
                   </mat-select>
                   <mat-error *ngIf="registrarAuto.get('gauNombreAutorizador').hasError('required')">
@@ -320,13 +329,13 @@
               </div>
               <div class="col-sm-12 col-md-12 col-lg-6">
                 <mat-form-field class="w-100">
-                  <input matInput placeholder="Número de póliza" type="text" formControlName="numeroPoliza">
-         <!--         <mat-error *ngIf="registrarAuto.get('numeroPoliza').hasError('required')">
+                  <input matInput placeholder="Número de póliza" type="text" formControlName="numeroPoliza" [readonly]="numeroPolizaReadonly">
+                  <mat-error *ngIf="registrarAuto.get('numeroPoliza').hasError('required')">
                     Este campo es obligatorio.
                   </mat-error>
-                  <mat-error *ngIf="registrarAuto.get('numeroPoliza').hasError('minlength')">
+            <!--  <mat-error *ngIf="registrarAuto.get('numeroPoliza').hasError('minlength')">
                     La longitud del texto excede el mínimo permitido.
-                  </mat-error>  -->
+                  </mat-error>   -->
                 </mat-form-field> 
                 <!--
                 <mat-form-field class="w-70">
