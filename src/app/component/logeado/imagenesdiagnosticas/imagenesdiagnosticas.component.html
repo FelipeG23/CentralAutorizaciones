@@ -31,7 +31,8 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="col-sm-10">
+           <!--
+              <div class="col-sm-10">
               <mat-form-field class="w-3">
                 <mat-label>
                   <mat-icon>check_circle_outline</mat-icon> Estados
@@ -61,8 +62,14 @@
                 </mat-select>
               </mat-form-field>
             </div>
+           -->
             <div class="col-sm-10">
               <mat-form-field class="w-3">
+                <input type="text" matInput placeholder="Identificacion del paciente" formControlName="patientId"
+                       >
+                <!--<mat-icon matSuffix class="iconsCA">credit_card</mat-icon>-->
+              </mat-form-field>
+             <!-- <mat-form-field class="w-3">
                 <mat-label>Todas las sedes</mat-label>
                 <input type="text" matInput formControlName="sede" [matAutocomplete]="auto4">
                 <mat-autocomplete #auto4="matAutocomplete" [displayWith]="displayFn">
@@ -73,7 +80,7 @@
                 <mat-error *ngIf="filtroCitas.get('sede').hasError('matchList')">
                   El valor no coincide con ninguno de la lista
                 </mat-error>
-              </mat-form-field>
+              </mat-form-field>/*--> 
             </div>
           </div>
             <div class="row justify-content-center text-center mb-4">
@@ -84,7 +91,8 @@
                 <button mat-raised-button class="buttonCA primary" type="submit" [disabled]="filtroCitas.invalid" (click)="validateNumber()" (click)="validarFechas()">FILTRAR</button>
               </div>
             </div>
-          <div class="row justify-content-end">
+          <!-- 
+            <div class="row justify-content-end">
             <div class="col-sm-10">
               <mat-accordion>
                 <mat-expansion-panel class="accordion-filter">
@@ -151,6 +159,7 @@
               </mat-accordion>
             </div>
           </div>
+          -->
         </form>
       </div>
       <div *ngIf="!classCA" class="col-sm-12 col-md-12 col-lg-7 mt-5 pl-5">
@@ -171,7 +180,7 @@
             </div>
           </div>
           <div class="col-sm-12 col-md-12 col-lg-12"
-            *ngFor="let filter of filters | paginate: {itemsPerPage: 10, currentPage: pageActual} ">
+            *ngFor="let filter of filters.message | paginate: {itemsPerPage: 10, currentPage: pageActual} ">
             <mat-card class="card mt-2 pt-2 pb-0 pl-1 pr-3">
               <div class="row">
                 <div class="col-sm-2 col-md-2 col-lg-2">
@@ -180,24 +189,25 @@
                   </button>
                 </div>
                 <div class="col-sm-5 col-md-5 col-lg-5 pl-0">
-                  <p class="mb-0"> <b class="text-primary f-2">{{ filter?.nombreCompleto }}</b> <br>
-                    <span>{{ filter?.tipTipIDav }}:
-                      {{ filter?.numDocId }}</span></p>
-                  <p class="mb-0 font-bold"><span *ngIf="filter.estadoCita"> ESTADO:
-                      {{ filter?.estadoCita }}
+                  <p class="mb-0"> <b class="text-primary f-2">{{ filter.NOMBRES }} {{ filter.APELLIDOS }}</b> <br>
+                    <span *ngIf="filter.IDENTIFICACION"> Identificacion:
+                      {{ filter.IDENTIFICACION }}
+                  </span></p>
+                  <p class="mb-0 font-bold"><span *ngIf="filter.EXAMEN"> EXAMEN:
+                      {{ filter.EXAMEN }}
                     </span></p>
                   <p class="mb-0"><span>
-                      {{ filter?.fechaCita }} - {{ filter?.horaCita }}
+                      {{ filter.CITA }}
                     </span></p>
-                    <p class="mb-0"><span>Ubicacion de la sede: {{ filter?.ubicacionSede }}</span></p>
+                    <p class="mb-0"><span>Servicio: {{ filter.SERVICIO }}</span></p>
                   <p class="f-1 text-primary">
-                    <mat-icon>trending_flat</mat-icon> {{ filter?.prestacion }}
+                    <mat-icon>trending_flat</mat-icon><span>Cita: {{ filter.IDCITA }}</span>
                   </p>
                 </div>
                 <div class="col-sm-4 col-md-4 col-lg-4 p-0">
                   <p class="m-0 p-0"><span>{{ filter?.convenio }}</span></p>
-                  <span>Teléfono(s): {{ filter?.telefono }}</span>
-                  <p class="mb-0"><span>Dirección de la sede: {{ filter?.direccionSede }}</span></p>
+                  <span>Teléfono(s): {{ filter.CELULAR }}</span>
+                  <p class="mb-0"><span>Convenio: {{ filter.CONVENIO }}</span></p>
                   <div class="row asistencia" *ngIf="filter.codEstadoCita === '2' || filter.codEstadoCita === '3'">
                     <div class="col-sm-12" >
                       <p class="mb-2">¿Paciente asistió a la cita?</p>
@@ -210,22 +220,18 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-sm-1 col-md-1 col-lg-1 mt-n3">
+                <!--<div class="col-sm-1 col-md-1 col-lg-1 mt-n3">
                   <button mat-icon-button [matMenuTriggerFor]="menus">
                     <mat-icon>more_vert</mat-icon>
                   </button>
-                  <mat-menu #menus="matMenu">
-                    <button *ngIf="user.role === roleConsulta || user.role === roleAdmin" mat-menu-item (click)="openDialogDetalle(filter)">
-                      <span>Consultar detalle cita paciente</span>
-                    </button>
+                  
+                    <mat-menu #menus="matMenu">
                     <button *ngIf="filter.codEstadoCita !== '3'" mat-menu-item (click)="openDialog(filter)">
                       <span>Cambio de estado de cita a paciente</span>
-                    </button>
-                    <button *ngIf="filter?.estadoCita !== 'ASIGNADA'" mat-menu-item (click)="openDialogTraza(filter)">
-                      <span>Trazabilidad cita</span>
-                    </button>
+                    </button>    
                   </mat-menu>
-                </div>
+                  
+                </div>-->
               </div>
             </mat-card>
           </div>
