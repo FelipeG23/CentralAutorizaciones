@@ -86,7 +86,7 @@ export class ConsultaService {
 
   getImagenesDiagnosticas(data){
     this.params = {
-      'fechaInicial': this.convertDate(data.fecha),
+      'fecha': this.convertDate(data.fecha),
       'fechaFinal': this.convertDate(data.fechaFinal),
       'PatiendId' : data.patientId
     }

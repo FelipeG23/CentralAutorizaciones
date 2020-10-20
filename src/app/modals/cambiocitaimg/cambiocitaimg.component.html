@@ -1,0 +1,291 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-11">
+      <h2 mat-dialog-title>Gestionar autorización</h2>
+    </div>
+    <div class="col-sm-1 padding-0 text-right">
+      <mat-icon class="cursor" (click)="close()">close</mat-icon>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-7">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 padding-0">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Nombre paciente</mat-card-title>
+              <mat-card-subtitle>{{ datosCambio.myVar.data.NOMBRES }} {{ datosCambio.myVar.data.APELLIDOS }}:
+                {{ datosCambio.myVar.data.IDENTIFICACION }}</mat-card-subtitle>
+            </mat-card-header>
+          </mat-card>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Teléfono</mat-card-title>
+              <mat-card-subtitle>{{ datosCambio.myVar.data.CELULAR }}
+              </mat-card-subtitle>
+            </mat-card-header>
+          </mat-card>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Correo electrónico</mat-card-title>
+              <mat-card-subtitle>{{ datosCambio.myVar.data.EMAIL }}
+              </mat-card-subtitle>
+            </mat-card-header>
+          </mat-card>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Examen</mat-card-title>
+              <mat-card-subtitle>{{ datosCambio.myVar.data.EXAMEN }}
+              </mat-card-subtitle>
+            </mat-card-header>
+          </mat-card>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Especialidad</mat-card-title>
+              <mat-card-subtitle>{{ datosCambio.myVar.data.SERVICIO }}
+              </mat-card-subtitle>
+            </mat-card-header>
+          </mat-card>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Sub especialidad</mat-card-title>
+              <mat-card-subtitle>{{ datosCambio.myVar.data.EXAMEN }}
+              </mat-card-subtitle>
+            </mat-card-header>
+          </mat-card>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Fecha de asignación</mat-card-title>
+              <mat-card-subtitle>{{ datosCambio.myVar.data.CITA }}
+              </mat-card-subtitle>
+            </mat-card-header>
+          </mat-card>
+        </div>
+        <!-- 
+            <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Prestación</mat-card-title>
+                <mat-card-subtitle>{{ datosCambio.myVar.data.codigoPrestacion }} - {{ datosCambio.myVar.data.prestacion }}
+                </mat-card-subtitle>
+              </mat-card-header>
+            </mat-card>
+          </div>
+          -->
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 padding-0 mt-1">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Convenio</mat-card-title>
+              <mat-card-subtitle>{{ datosCambio.myVar.data.CONVENIO }}
+              </mat-card-subtitle>
+            </mat-card-header>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-5">
+    <form novalidate (ngSubmit)="onSubmit()" [formGroup]="cambioCitas" #myform="ngForm">
+      <div class="row">
+        <div class="col-sm-6">
+          <mat-form-field class="w-100">
+            <mat-label>Autorizó / no autorizó desde convenio</mat-label>
+            <mat-select formControlName="gauNombreAutorizador">
+              <mat-option value="1">
+                Audio respuesta (teléfono)
+              </mat-option>
+              <mat-option value="2">
+                Asesor
+              </mat-option>
+              <mat-option value="3">
+                Carta física
+              </mat-option>
+              <mat-option value="3">
+                Página
+              </mat-option>
+              <mat-option value="3">
+                SOAT
+              </mat-option>
+              <mat-option value="3">
+                VB Módulo HIS
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="Número de contacto" type="number"
+              formControlName="gauTelefonoAutorizador">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class ="row">
+        <div class="col-sm-6">
+          <mat-form-field class="w-100">
+            <mat-label>Se autoriza servicio</mat-label>
+            <mat-select formControlName="gauAutorizaServ">
+              <mat-option value="1">
+                Si
+              </mat-option>
+              <mat-option value="2">
+                No
+              </mat-option>
+              <mat-option value="3">
+                En Proceso
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="Motivo no autoriza" type="text"
+              formControlName="mnaIdcodigo">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-sm-20">
+        <mat-form-field class="w-100">
+          <mat-label>¿Otro motivo?</mat-label>
+          <textarea matInput [errorStateMatcher]="errorMatcherOtroMotivo" formControlName="omnDesc"></textarea>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-6">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="Número de autorización" type="text"
+              formControlName="gauCodigoAutorizacion">
+            <mat-error *ngIf="cambioCitas.get('gauCodigoAutorizacion').hasError('required')">
+              Este campo es obligatorio.
+            </mat-error>
+            <mat-error *ngIf="cambioCitas.get('gauCodigoAutorizacion').hasError('minlength')">
+              La longitud del texto excede el mínimo permitido.
+            </mat-error>
+            <mat-error *ngIf="cambioCitas.get('gauCodigoAutorizacion').hasError('pattern')">
+              No se permite caracteres especiales o ha ingresado el mismo dígito más de 5 veces.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-6">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="Número de póliza" type="text" formControlName="numeroPoliza">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-6">
+          <mat-form-field class="w-100">
+            <input matInput class="date-picker-form" [matDatepicker]="picker" placeholder="Fecha autorización"
+                   [min]="minDate" [max]="maxDateAuto" formControlName="gauFechaAutorizacion" (dateChange)="updateCalcs()">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker touchUi #picker [disabled]="'false'"></mat-datepicker>
+            <mat-error *ngIf="cambioCitas.get('gauFechaAutorizacion').hasError('required')">
+              Este campo es obligatorio.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-6">
+          <mat-form-field class="w-100">
+            <input matInput class="date-picker-form" [matDatepicker]="pickers" placeholder="Fecha vencimiento"
+                   [min]="minDate" [max]="maxDateAuto" formControlName="gauFechaVencAutorizacion" (dateChange)="updateCalcs()">
+            <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
+            <mat-datepicker touchUi #pickers [disabled]="'false'"></mat-datepicker>
+            <mat-error *ngIf="cambioCitas.get('gauFechaVencAutorizacion').hasError('required')">
+              Este campo es obligatorio.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class ="row">
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="Valor procedimiento" currencyMask type="text" formControlName="gauValorPrestacion">
+            <mat-error *ngIf="cambioCitas.get('gauValorPrestacion').hasError('required')">
+              Este campo es obligatorio.
+            </mat-error>
+            <mat-error *ngIf="cambioCitas.get('gauValorPrestacion').hasError('pattern')">
+              El campo solo permite números.
+            </mat-error>
+            <mat-error *ngIf="cambioCitas.get('gauValorPrestacion').hasError('maxlength')">
+              La longitud del texto excede el máximo permitido.
+            </mat-error>
+            <mat-error *ngIf="cambioCitas.get('gauValorPrestacion').hasError('min')">
+              El valor mínimo es 0.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="Costo convenio" type="text" formControlName="gauCostoConvenio">
+            <mat-error *ngIf="cambioCitas.get('gauCostoConvenio').hasError('required')">
+              Este campo es obligatorio.
+            </mat-error>
+            <mat-error *ngIf="cambioCitas.get('gauCostoConvenio').hasError('pattern')">
+              El campo solo permite números con una longitud de 10 caracteres y no pueden ser repetidos.
+            </mat-error>
+            <mat-error *ngIf="cambioCitas.get('gauCostoConvenio').hasError('maxlength')">
+              La longitud del texto excede el máximo permitido.
+            </mat-error>
+            <mat-error *ngIf="cambioCitas.get('gauCostoConvenio').hasError('min')">
+              El valor mínimo es 0.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <mat-form-field class="w-100">
+            <input class="date-picker-form" matInput placeholder="Costo paciente" type="text" formControlName="gauCostoPac">
+            <mat-error *ngIf="cambioCitas.get('gauCostoPac').hasError('required')">
+              Este campo es obligatorio.
+            </mat-error>
+            <mat-error *ngIf="cambioCitas.get('gauCostoPac').hasError('pattern')">
+              El campo solo permite números.
+            </mat-error>
+            <mat-error *ngIf="cambioCitas.get('gauCostoPac').hasError('maxlength')">
+              La longitud del texto excede el máximo permitido.
+            </mat-error>
+            <mat-error *ngIf="cambioCitas.get('gauCostoPac').hasError('min')">
+              El valor mínimo es 0.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-sm-20">
+        <mat-form-field class="w-100">
+          <mat-label>Observaciones</mat-label>
+          <textarea matInput #messages formControlName="gauObservaciones" [errorStateMatcher]="errorMatcherObservacion"
+            cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+          <mat-hint align="end">{{messages.value.length}} / 600</mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="row mt-3">
+        <div class="col-sm-6">
+          <button mat-raised-button class="buttonCA-second" type="button" (click)="close()">CANCELAR</button>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <button mat-raised-button class="buttonCA primary ml-3" [disabled]="cambioCitas.invalid || !validDates" >GUARDAR</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

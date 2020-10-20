@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { PageEvent, MatDialog } from '@angular/material';
+import { PageEvent, MatDialog, MatSelectChange } from '@angular/material';
 import { CookieService } from 'ngx-cookie-service';
-import { CambiocitaComponent } from 'src/app/modals/cambiocita/cambiocita.component';
-import { TrazaComponent } from 'src/app/modals/traza/traza.component';
 import { TipodocService } from 'src/app/service/catalogos/tipodoc.service';
 import { ConvenioService } from 'src/app/service/catalogos/convenio.service';
 import { SedesService } from 'src/app/service/catalogos/sedes.service';
@@ -34,6 +32,7 @@ import { BloqueoService } from 'src/app/service/firebase/bloqueo.service';
 import { Userlock } from 'src/app/models/firebase/userlock';
 import { Bloqueo } from 'src/app/models/firebase/bloqueo';
 import { Listaubicacion } from 'src/app/models/ubicacion/listaubicacion';
+import { CambiocitaImgComponent } from 'src/app/modals/cambiocitaimg/cambiocitaimg.component';
 
 export const MY_FORMATS = {
     parse: {
@@ -67,6 +66,7 @@ export class ImagenesdiagnosticasComponent implements OnInit {
     pageEvent: PageEvent;
     options: any;
     date = new Date();
+    fecha = new Date();
     fechaFin = new Date();
     msjExp: boolean;
     minDateValue = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
@@ -116,6 +116,7 @@ export class ImagenesdiagnosticasComponent implements OnInit {
     valor: any;
     metodo: any;
     imagenesDiagnosticas: any[] = [];
+    motivosNoAutoriza: any[];
 
     constructor(private fb: FormBuilder,
         public dialog: MatDialog,
@@ -165,25 +166,11 @@ export class ImagenesdiagnosticasComponent implements OnInit {
     openDialog(datoCambio): void {
         this.dataLock.UserActive = new Userlock();
         this.dataLock.DateActive = datoCambio.pacNum
-        //this.dataLock.UserActive.Documento = this.user.uid;
-        //this.dataLock.UserActive.Nombre = this.user.cn;
         if(localStorage.getItem('lock')){
             this.bloqueoService.unLockAll()
         }
-        this.metodo = this.bloqueoService.search('userInfo', this.dataLock.DateActive).subscribe(data => {
-            this.unSubcribeFirebase()
-            if(data.length){
-                this.resultados = data;
-                swal({
-                    title: 'Cita bloqueada',
-                    text: `Esta cita se encuentra bloqueada por  ${this.resultados[0].UserActive.Nombre}`,
-                    icon: 'info',
-                  });
-            } else {
-                this.valor = this.bloqueoService.lock(this.dataLock, 'userInfo');
-                localStorage.setItem('lock', this.valor.key);
                 this.timer = setInterval(() => { this.alertUnlock(); }, this.counter * 60000);
-                const dialogRef = this.dialog.open(CambiocitaComponent, {
+                const dialogRef = this.dialog.open(CambiocitaImgComponent, {
                     data: {
                         myVar: { data: datoCambio },
                     },
@@ -193,7 +180,7 @@ export class ImagenesdiagnosticasComponent implements OnInit {
                     clearInterval(this.timer);
                     this.bloqueoService.unLock('userInfo/');
                     if (result != null) {
-                        datoCambio.estadoCita = result;
+                        datoCambio.fechaFinal = result;
                         this.filters.sort((a, b) => (a.estadoCita > b.estadoCita ? 1 : -1));
                         this.bloqueoService.unLock('userInfo/');
                         clearInterval(this.timer);
@@ -203,8 +190,6 @@ export class ImagenesdiagnosticasComponent implements OnInit {
                         clearInterval(this.timer);
                     }
                 });
-            }
-        });
     }
 
     onSubmit() {
@@ -338,7 +323,7 @@ export class ImagenesdiagnosticasComponent implements OnInit {
         }
 
         this.filtroCitas = this.fb.group({
-            fechaInicial: [{ disabled: true, value: moment(this.minDate) }, [Validators.required]],
+            fecha: [{ disabled: true, value: moment(this.minDate) }, [Validators.required]],
             fechaFinal: [{ disabled: true, value: moment(this.maxDateValue) }, [Validators.required]],
             especialidad: ['', this.checkList(this.especialidades)],
             subEspecialidad: ['', this.checkList(this.subEspecialidades)],
@@ -354,7 +339,8 @@ export class ImagenesdiagnosticasComponent implements OnInit {
             Validators.pattern(/^(?!.*(.)\1{3})/)]],
             segundoApellido: ['', [Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/),
             Validators.pattern(/^(?!.*(.)\1{3})/)]],
-            ubicacionesFilter: ['']
+            ubicacionesFilter: [''],
+            patientId: ['']
         });
     }
 
@@ -397,6 +383,7 @@ export class ImagenesdiagnosticasComponent implements OnInit {
 
     validateIdPatient() {
         const value = this.filtroCitas.get('patientId').value;
+        console.log('Ang + ' + this.filtroCitas.get('patientId').value);
         if (value === 'M' || value === 'A') {
             this.validarName = true;
             this.validar = false;
