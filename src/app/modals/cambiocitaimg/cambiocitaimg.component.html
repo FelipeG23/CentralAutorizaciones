@@ -81,17 +81,6 @@
             </mat-card-header>
           </mat-card>
         </div>
-        <!-- 
-            <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title>Prestación</mat-card-title>
-                <mat-card-subtitle>{{ datosCambio.myVar.data.codigoPrestacion }} - {{ datosCambio.myVar.data.prestacion }}
-                </mat-card-subtitle>
-              </mat-card-header>
-            </mat-card>
-          </div>
-          -->
       </div>
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 padding-0 mt-1">
@@ -145,7 +134,7 @@
         <div class="col-sm-6">
           <mat-form-field class="w-100">
             <mat-label>Se autoriza servicio</mat-label>
-            <mat-select formControlName="gauAutorizaServ">
+            <mat-select (selectionChange)="selectionChangeAutoriza($event)" formControlName="gauAutorizaServ">
               <mat-option value="1">
                 Si
               </mat-option>
@@ -194,24 +183,35 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-6">
+        <div class="col-sm-12 col-md-12 col-lg-4">
           <mat-form-field class="w-100">
-            <input matInput class="date-picker-form" [matDatepicker]="picker" placeholder="Fecha autorización"
-                   [min]="minDate" [max]="maxDateAuto" formControlName="gauFechaAutorizacion" (dateChange)="updateCalcs()">
+            <input matInput [errorStateMatcher]="errorMatcherFechaAut" class="date-picker-form"
+              [matDatepicker]="picker" placeholder="Fecha autorización" [min]="minDate" [max]="maxDateAuto"
+              formControlName="gauFechaAutorizacion" (dateChange)="updateCalcs()">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker touchUi #picker [disabled]="'false'"></mat-datepicker>
-            <mat-error *ngIf="cambioCitas.get('gauFechaAutorizacion').hasError('required')">
+            <mat-datepicker touchUi #picker></mat-datepicker>
+            <mat-error *ngIf="cambioCitas.hasError('requiredFechaAut')">
               Este campo es obligatorio.
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="col-sm-12 col-md-12 col-lg-6">
+        <div class="col-sm-12 col-md-12 col-lg-4">
           <mat-form-field class="w-100">
-            <input matInput class="date-picker-form" [matDatepicker]="pickers" placeholder="Fecha vencimiento"
-                   [min]="minDate" [max]="maxDateAuto" formControlName="gauFechaVencAutorizacion" (dateChange)="updateCalcs()">
+            <input matInput [errorStateMatcher]="errorMatcherFechaVencimiento" class="date-picker-form"
+              [matDatepicker]="pickers" placeholder="Fecha vencimiento" [min]="minDate" [max]="maxDateAuto"
+              formControlName="gauFechaVencAutorizacion" (dateChange)="updateCalcs()">
             <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
-            <mat-datepicker touchUi #pickers [disabled]="'false'"></mat-datepicker>
-            <mat-error *ngIf="cambioCitas.get('gauFechaVencAutorizacion').hasError('required')">
+            <mat-datepicker touchUi #pickers></mat-datepicker>
+            <mat-error *ngIf="cambioCitas.hasError('requiredFechaVencimiento')">
+              Este campo es obligatorio.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <mat-form-field class="w-100">
+            <input matInput class="date-picker-form" placeholder="Vigencia autorización (días)"
+              formControlName="gauVigenciaAutorizacion" type="number">
+            <mat-error *ngIf="cambioCitas.get('gauVigenciaAutorizacion').hasError('required')">
               Este campo es obligatorio.
             </mat-error>
           </mat-form-field>

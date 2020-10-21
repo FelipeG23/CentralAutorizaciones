@@ -102,9 +102,10 @@ export class CambiocitaImgComponent implements OnInit {
   }
   
   ngOnInit() {
+
     this.cambioCitas = this.fb.group({
-      gauNombreAutorizador: ['', [
-          Validators.maxLength(50)
+      gauNombreAutorizador: ['', [ 
+        Validators.required
       ]],
       gauTelefonoAutorizador: ['', [
           Validators.required, Validators.minLength(7), Validators.maxLength(20)
@@ -127,7 +128,7 @@ export class CambiocitaImgComponent implements OnInit {
       gauObservaciones: [null, [
         Validators.required, Validators.minLength(7), Validators.maxLength(600), Validators.pattern(/^(?!.*(.)\1{3})/)
       ]],
-      enviarCorreo: [true]
+      enviarCorreo: [true] 
     });
   }
 
@@ -140,21 +141,24 @@ export class CambiocitaImgComponent implements OnInit {
   }
 
   onSubmit() {
+ 
+    
+    if (this.data.datoCita == 'derivacion') {
+      console.log("Datos Diego");
 
-    if (this.data.datoCita.module == 'derivacion') {
       const caGestionAutorizacion: CaGestionAutorizacion = Object.assign(new CaGestionAutorizacion(), this.cambioCitas.value);
 
       if (caGestionAutorizacion.gauAutorizaServ !== '2') {
         caGestionAutorizacion.mnaIdcodigo = null;
         caGestionAutorizacion.omnDesc = null;
-      }
+      }  
       caGestionAutorizacion.pomIdPrestOrdm = this.data.datoCita.pomIdPrestOrdm;
       caGestionAutorizacion.pacPacNumero = this.data.datoCita.ordenMedica.pacPacNumero;
       caGestionAutorizacion.gauVigenciaAutorizacion = this.cambioCitas.get('gauVigenciaAutorizacion').value;
       caGestionAutorizacion.pcaAgeCodigoRecep = this.authenticatedService.getUser().uid;
       caGestionAutorizacion.nombrePaciente = this.data.datoCita.ordenMedica.nombreCompletoPaciente;
       caGestionAutorizacion.centroAtencion = this.data.datoCita.sedes[0].descripcion;
-      //this.spinnerService.show();
+      this.spinnerService.show();
       this.ordenService.registrarAutorizacion(caGestionAutorizacion).subscribe(
         (data: boolean) => {
           this.spinnerService.hide();
@@ -181,28 +185,31 @@ export class CambiocitaImgComponent implements OnInit {
             icon: 'warning',
           });
           this.bloqueoService.unLockAll();
-        });
+        }); 
 
     } else {
+
+      
       const caGestionAutorizacionCita: CaGestionAutorizacionCita = Object.assign(new CaGestionAutorizacionCita(), this.cambioCitas.value);
-
-      console.log(caGestionAutorizacionCita);
-
+    
       if (caGestionAutorizacionCita.gauAutorizaServ !== '2') {
         caGestionAutorizacionCita.mnaIdcodigo = null;
         caGestionAutorizacionCita.omnDesc = null;
-      }
-      caGestionAutorizacionCita.fechaCita = this.data.datoCita.fechaCita;
-      caGestionAutorizacionCita.horaCita = this.data.datoCita.horaCita;
-      caGestionAutorizacionCita.codUsrCita = this.data.datoCita.codUsrCita;
-      caGestionAutorizacionCita.pacNum = this.data.datoCita.pacNum;
+      }  
+      caGestionAutorizacionCita.fechaCita = "2020/03/02";
+      caGestionAutorizacionCita.horaCita = "07:40";
+      caGestionAutorizacionCita.codUsrCita = this.data.myVar.data.IDENTIFICACION;
+      caGestionAutorizacionCita.pacNum = 12345;
       caGestionAutorizacionCita.gauVigenciaAutorizacion = this.cambioCitas.get('gauVigenciaAutorizacion').value;
-      caGestionAutorizacionCita.nombrePaciente = this.data.cambioCitas.nombreCompleto;
-      caGestionAutorizacionCita.centroAtencion = this.detalleCita.nombreCentroAten;
-      caGestionAutorizacionCita.pcaAgeCodigoRecep = this.authenticatedService.getUser().uid;
+      caGestionAutorizacionCita.nombrePaciente =`${this.data.myVar.data.NOMBRES} ${this.data.myVar.data.APELLIDOS}`;
+      caGestionAutorizacionCita.centroAtencion = this.data.myVar.data.EXAMEN;
+      caGestionAutorizacionCita.pcaAgeCodigoRecep = this.authenticatedService.getUser().uid; 
 
-      console.log(this.data);
-//       this.spinnerService.show();
+      console.log("Test",this.data.myVar.data);
+
+
+
+       this.spinnerService.show();
 
       this.detalleCitaService.registrarAutorizacion(caGestionAutorizacionCita).subscribe(
         (data: boolean) => {
@@ -224,19 +231,17 @@ export class CambiocitaImgComponent implements OnInit {
           }
         }, (err) => {
           console.log(err);
-          const messageError: any = err.error.error.message;
+          //const messageError: any = err.error.error.message;
           this.spinnerService.hide();
           this.bloqueoService.unLockAll();
           swal({
             title: 'Error',
-            text: messageError,
+            text: "messageError",
             icon: 'warning',
           });
         });  
-    }
+    } 
   }
-
-
 
 
   updateCalcs() {
@@ -511,7 +516,7 @@ export class CambiocitaImgComponent implements OnInit {
   }
   */
 
-
+/*
   setEstadoPrestacion() {
     if (this.data.datoCita.module !== undefined && this.data.datoCita.module !== null &&
       this.data.datoCita.module === 'derivacion') {
@@ -524,7 +529,7 @@ export class CambiocitaImgComponent implements OnInit {
       }
       this.prestacion = this.data.datoCita;
     }
-  }
+  }  */
 
 /*
   getState(state: number) {
