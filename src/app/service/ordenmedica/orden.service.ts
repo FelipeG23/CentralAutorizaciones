@@ -9,7 +9,6 @@ import { OrdenMedica } from 'src/app/models/orden-medica/OrdenMedica';
 import { CrearPrestacionesOrdMed } from 'src/app/models/orden-medica/CrearPrestacionesOrdMed';
 import { FinalizarOrdenMedica } from 'src/app/models/orden-medica/FinalizarOrden';
 import { CaGestionAutorizacion } from 'src/app/models/orden-medica/CaGestionAutorizacion';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

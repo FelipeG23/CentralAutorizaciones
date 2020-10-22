@@ -128,14 +128,11 @@ export class RadicaOrdenMedicaComponent implements OnInit {
 
   ngOnInit() {
 
-  //  if (this.datosCambio.myVar.data.tipoConvenio === "A" || this.datosCambio.myVar.data.tipoConvenio === "S" ) {
-  //    this.numeroPolizaReadonly = false;
-  //  } 
 
     this.setLists();
     this.fbRadicar = this.fb.group({
-      ecPolizaNumero: [null, [Validators.required, Validators.pattern(/^(?!.*(.)\1{9})/),
-      Validators.pattern(/^[A-Za-z0-9\s]+$/), Validators.minLength(3)]],
+      ecPolizaNumero: [null, [Validators.required]],  //  Validators.pattern(/^(?!.*(.)\1{9})/),
+      // Validators.pattern(/^[A-Za-z0-9\s]+$/), Validators.minLength(3)]],
       dorFechaOrdenmString: [{ disabled: true, value: null }, [Validators.required]],
       serEspCodigo: ['', [Validators.required, this.checkList(this.especialidades)]],
       serSerCodSubEspe: ['', [Validators.required, this.checkList(this.subEspecialidades)]],
@@ -161,9 +158,15 @@ export class RadicaOrdenMedicaComponent implements OnInit {
         (data: OrdenMedica) => {
           this.timer = setInterval(() => { this.alertUnlock() }, this.counter * 60000)
           this.ordenMedica = data;
+          
           if (this.ordenMedica.conTipoConvenio === "A" || this.ordenMedica.conTipoConvenio === "S" ) {
                 this.numeroPolizaReadonly = false;
-            }           
+                this.fbRadicar.controls['ecPolizaNumero'].setValidators([Validators.required]);
+            } else {
+              this.fbRadicar.controls['ecPolizaNumero'].setValidators([]);
+            }
+
+
           if (this.ordenMedica.caDetalleOrdenesMedicas === null) {
             this.ordenMedica.caDetalleOrdenesMedicas = new DetalleOrdenMedica();
             this.consultarCitas();

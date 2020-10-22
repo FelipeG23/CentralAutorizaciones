@@ -508,7 +508,6 @@ export class AutorizarComponent implements OnInit {
         }
         this.metodo = this.bloqueoService.search('locktresMenu', element.ormIdOrdmNumeroP).subscribe(data => {
             this.unSubcribeFirebase()
-            console.log(data.length)
             if (data.length) {
                 this.resultados = data;
                 swal({

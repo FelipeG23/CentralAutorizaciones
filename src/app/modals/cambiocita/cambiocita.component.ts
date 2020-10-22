@@ -40,11 +40,10 @@ export class CambiocitaComponent implements OnInit {
 
   ngOnInit() {
 
+    console.log(this.datosCambio.myVar.data.tipoConvenio);
     
-    if (this.datosCambio.myVar.data.tipoConvenio === "A" || this.datosCambio.myVar.data.tipoConvenio === "S" ) {
-      this.numeroPolizaReadonly = false;
-    } 
 
+   
     this.cambioCitas = this.fb.group({
       tipoCita: ['', [Validators.required]],
       estado: ['', [Validators.required, this.checkState(this.datosCambio.myVar.data.estadoCita)]],
@@ -54,6 +53,15 @@ export class CambiocitaComponent implements OnInit {
       numeroPoliza: ['', [Validators.required]],
       sendEmail: ['']
     });
+
+    if (this.datosCambio.myVar.data.tipoConvenio === "A" || this.datosCambio.myVar.data.tipoConvenio === "S" ) {
+      this.numeroPolizaReadonly = false;
+      this.cambioCitas.controls['numeroPoliza'].setValidators([Validators.required]);
+    } else {
+      this.cambioCitas.controls['numeroPoliza'].setValidators([]);
+    }
+
+
 
     // consultamos la poliza
     this.detalleCitaService.consultarPoliza(this.datosCambio.myVar.data.pacNum).
