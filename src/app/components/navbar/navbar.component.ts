@@ -17,6 +17,7 @@ export class NavbarComponent implements OnInit {
   rolRadicar: string = Roles.RADICAR;
   rolAautorizar: string = Roles.AUTORIZA;
   rolDerivaciones: string = Roles.AUTORIZA;
+  rolImagenes: string = Roles.AUTORIZA;
   rolAdmin: string = Roles.ADMIN;
   activate: boolean;
 
@@ -29,7 +30,7 @@ export class NavbarComponent implements OnInit {
                 this.user = JSON.parse(this.user);
 
                 console.log(this.router.url)
-                
+
   }
 
   ngOnInit() {

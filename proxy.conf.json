@@ -1,0 +1,8 @@
+{
+    "/GetAppointmenstList*":{
+        "target": "https://10.14.246.75:4434",
+        "secure" : false,
+        "loglevel": "debug",
+        "changeOrigin": true
+    }
+}

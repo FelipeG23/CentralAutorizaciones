@@ -22,6 +22,7 @@ export class CambiocitaComponent implements OnInit {
   cambioCitas: FormGroup;
   datosCambio: any;
   panelOpenState = false;
+  numeroPolizaReadonly = true;
 
   constructor(private fb: FormBuilder,
     public dialog: MatDialog,
@@ -38,11 +39,19 @@ export class CambiocitaComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    
+    if (this.datosCambio.myVar.data.tipoConvenio === "A" || this.datosCambio.myVar.data.tipoConvenio === "S" ) {
+      this.numeroPolizaReadonly = false;
+    } 
+
     this.cambioCitas = this.fb.group({
+      tipoCita: ['', [Validators.required]],
       estado: ['', [Validators.required, this.checkState(this.datosCambio.myVar.data.estadoCita)]],
+      detalleEstado: ['', [Validators.required]],
       observacion: ['', [Validators.maxLength(600), Validators.minLength(1),
       Validators.pattern(/^(?!.*(.)\1{3})/)]],
-      numeroPoliza: [''],
+      numeroPoliza: ['', [Validators.required]],
       sendEmail: ['']
     });
 
@@ -59,6 +68,7 @@ export class CambiocitaComponent implements OnInit {
   onSubmit() {
     if (this.cambioCitas.valid) {
       this.spinnerService.show();
+      
       this.cambiocitaService.changeAppointment(this.datosCambio, this.cambioCitas.value).subscribe(data => {
         this.spinnerService.hide();
         const est = this.getEstado(this.cambioCitas.value.estado);
@@ -80,7 +90,7 @@ export class CambiocitaComponent implements OnInit {
           text: 'No podemos procesar la información!',
           icon: 'warning',
         });
-      });
+      }); 
     }
   }
 

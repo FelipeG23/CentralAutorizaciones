@@ -31,7 +31,7 @@ export class TrazaComponent implements OnInit {
         this.spinnerService.hide();
         this.dataSource = data;
         console.log(this.dataSource);
-        
+
       },
       error => {
         console.log(error);

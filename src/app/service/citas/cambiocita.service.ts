@@ -17,6 +17,7 @@ export class CambiocitaService {
               private cookie: CookieService) {}
 
   changeAppointment(datosDeCita, datosDeCambio) {
+
     this.params = {
       'ecIdCodigo': datosDeCambio.estado,
       'pcaAgeCodigRecep': this.session.uid,
@@ -51,9 +52,14 @@ export class CambiocitaService {
       'indRecepcionado': datosDeCita.myVar.data.indRecepcionado,
       'direccionCentroOperativo': datosDeCita.myVar.data.direccionCentroOperativo,
       'telefonoCentroOperativo': datosDeCita.myVar.data.telefonoCentroOperativo,
-      'codServicio': datosDeCita.myVar.data.codServicio
+      'codServicio': datosDeCita.myVar.data.codServicio,
+      'tipoCita': datosDeCambio.tipoCita,
+      'detalleEstado': datosDeCambio.detalleEstado,
     };
-    this.params.email = 'centralautorizacionesfsfb@gmail.com';
+    
+    console.log(this.params);
+    
+    //this.params.email = 'centralautorizacionesfsfb@gmail.com';
     return this.http.post<any>( environment.url + '/CentralAutoriza/rest/ClienteCita/cambiarEstadoCita', this.params);
 
   }

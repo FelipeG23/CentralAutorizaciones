@@ -48,9 +48,9 @@ export const MY_FORMATS = {
 };
 
 @Component({
-    selector: 'app-citasconsulta',
-    templateUrl: './citasconsulta.component.html',
-    styleUrls: ['./citasconsulta.component.less'],
+    selector: 'app-imagenesdiagnosticas',
+    templateUrl: './imagenesdiagnosticas.component.html',
+    styleUrls: ['./imagenesdiagnosticas.component.less'],
     providers: [
         { provide: MAT_DATE_LOCALE, useValue: 'es-US' },
         { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
@@ -62,7 +62,7 @@ export const MY_FORMATS = {
         }))])
     ],
 })
-export class CitasconsultaComponent implements OnInit {
+export class ImagenesdiagnosticasComponent implements OnInit {
     filtroCitas: FormGroup;
     pageEvent: PageEvent;
     options: any;
@@ -79,7 +79,7 @@ export class CitasconsultaComponent implements OnInit {
     maxDateFinAutorizacion = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 8);
     classCA: boolean;
     pageActual: number = 1;
-    filters: any;
+    filters: any = {};
     validar: boolean = false;
     nameRequired: boolean = false;
     secondNameRequired: boolean = false;
@@ -108,7 +108,6 @@ export class CitasconsultaComponent implements OnInit {
     fireCA: any;
     roleAdmin: string = Roles.ADMIN;
     listConvenios: Filtrocitasconvenios = new Filtrocitasconvenios();
-    // descripList: Filtrocitasconvenios[];
     conveniosLista: Filtrocitasconvenios[] = [];
     timer: any;
     counter: number = 25;
@@ -116,6 +115,7 @@ export class CitasconsultaComponent implements OnInit {
     resultados: any;
     valor: any;
     metodo: any;
+    imagenesDiagnosticas: any[] = [];
 
     constructor(private fb: FormBuilder,
         public dialog: MatDialog,
@@ -147,9 +147,7 @@ export class CitasconsultaComponent implements OnInit {
         this.setLists();
         this.fechaHoy = new Date();
         this.fechaHoy1 = this.fechaHoy.getDate() + '-' + (this.fechaHoy.getMonth() + 1) + '-' + this.fechaHoy.getFullYear();
-
-       
-        this.horaHoy = this.fechaHoy.getHours() + ":" + this.fechaHoy.getMinutes() + 'Hrs.';
+        this.horaHoy = this.fechaHoy.getHours() + ':' + this.fechaHoy.getMinutes() + 'Hrs.';
         this.filtroCitas = this.fb.group({
             fecha: [{ disabled: true, value: moment(this.minDateValue) }, [Validators.required]],
             fechaFinal: [{ disabled: true, value: moment(this.maxDateValue) }, [Validators.required]],
@@ -158,26 +156,17 @@ export class CitasconsultaComponent implements OnInit {
             servicio: ['', this.checkList(this.servicios)],
             sede: ['', this.checkList(this.sedes)],
             estado: [null],
+            patientId: ['', [Validators.required]],
             convenio: [null],
-            tipoDocumento: [''],
-            numeroDocumento: ['', [Validators.maxLength(20), Validators.pattern(/^[A-ZÑa-zñ0-9\s]+$/)]],
-            nombre: ['', [Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/),
-            Validators.pattern(/^(?!.*(.)\1{3})/)]],
-            primerApellido: ['', [Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/),
-            Validators.pattern(/^(?!.*(.)\1{3})/)]],
-            segundoApellido: ['', [Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/),
-            Validators.pattern(/^(?!.*(.)\1{3})/)]],
-            ubicacionesFilter: ['']
+            tipoDocumento: ['']
         });
-
-    
     }
 
     openDialog(datoCambio): void {
         this.dataLock.UserActive = new Userlock();
         this.dataLock.DateActive = datoCambio.pacNum
-        this.dataLock.UserActive.Documento = this.user.uid;
-        this.dataLock.UserActive.Nombre = this.user.cn;
+        //this.dataLock.UserActive.Documento = this.user.uid;
+        //this.dataLock.UserActive.Nombre = this.user.cn;
         if(localStorage.getItem('lock')){
             this.bloqueoService.unLockAll()
         }
@@ -217,28 +206,6 @@ export class CitasconsultaComponent implements OnInit {
             }
         });
     }
-    
-
-    openDialogTraza(datoTraza): void {
-        const dialogRef = this.dialog.open(TrazaComponent, {
-            height: '500px',
-            data: datoTraza
-        });
-        dialogRef.afterClosed().subscribe(result => {
-        });
-    }
-
-    openDialogDetalle(datoDetalle): void {
-        const dialogRef = this.dialog.open(DetallepacienteComponent, {
-            data: {
-                myVar: { data: datoDetalle }
-            },
-            height: '500px',
-            width: '750px',
-        });
-        dialogRef.afterClosed().subscribe(result => {
-        });
-    }
 
     onSubmit() {
         document.body.scrollTop = document.documentElement.scrollTop = 0;
@@ -254,13 +221,11 @@ export class CitasconsultaComponent implements OnInit {
         }
         if (!this.filtroCitas.invalid) {
             this.spinner.show();
-            this.consulta.getCitas(this.filtroCitas.getRawValue(), this.conveniosLista).subscribe(data => {
+            this.consulta.getImagenesDiagnosticas(this.filtroCitas.getRawValue()).subscribe(data => {
                 this.spinner.hide();
                 if (Object.keys(data).length > 0) {
                     this.jsonSize = Object.keys(data).length;
                     this.filters = data;
-                    this.filters.map(c => c.estadoCita == null ? c.estadoCita = 'ASIGNADA' : c.estadoCita = c.estadoCita);
-                    this.filters.sort((a, b) => (a.estadoCita > b.estadoCita ? 1 : -1));
                 } else {
                     this.jsonSize = 0;
                     this.filters = [];
@@ -365,8 +330,7 @@ export class CitasconsultaComponent implements OnInit {
             this.maxDateValue.setMonth(((this.filtroCitas.getRawValue().fecha.month())));
             if (this.actual.getMonth() !== this.filtroCitas.getRawValue().fecha.date()) {
                 this.maxDateFin = new Date(this.minDate.getFullYear(), this.minDate.getMonth(), this.minDate.getDate() + 8);
-                console.log('this.maxDateValue - ' + this.maxDateValue);
-                console.log('this.maxDateFin - ' + this.maxDateFin);
+
             }
             if ((this.filtroCitas.getRawValue().fecha.date()) >= 22) {
                 this.maxDateValue.setMonth(((this.filtroCitas.getRawValue().fecha.month() + 1)));
@@ -374,7 +338,7 @@ export class CitasconsultaComponent implements OnInit {
         }
 
         this.filtroCitas = this.fb.group({
-            fecha: [{ disabled: true, value: moment(this.minDate) }, [Validators.required]],
+            fechaInicial: [{ disabled: true, value: moment(this.minDate) }, [Validators.required]],
             fechaFinal: [{ disabled: true, value: moment(this.maxDateValue) }, [Validators.required]],
             especialidad: ['', this.checkList(this.especialidades)],
             subEspecialidad: ['', this.checkList(this.subEspecialidades)],
@@ -431,19 +395,14 @@ export class CitasconsultaComponent implements OnInit {
         }
     }
 
-    validateName(event) {
-        if (event.target.value.length > 0) {
-            this.nameRequired = true;
+    validateIdPatient() {
+        const value = this.filtroCitas.get('patientId').value;
+        if (value === 'M' || value === 'A') {
+            this.validarName = true;
+            this.validar = false;
         } else {
-            this.nameRequired = false;
-        }
-    }
-
-    validateSecondName(event) {
-        if (event.target.value.length > 0) {
-            this.secondNameRequired = true;
-        } else {
-            this.secondNameRequired = false;
+            this.validarName = false;
+            this.validar = true;
         }
     }
 

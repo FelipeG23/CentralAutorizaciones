@@ -241,6 +241,7 @@
                 <h3>Citas autorizadas</h3>
             </div>
             <div class="col-sm-12">
+                
                 <ng-container *ngIf="!citasAutorizadas">
                     <br>
                     <mat-spinner style="margin: auto" [diameter]="60"></mat-spinner>
@@ -248,29 +249,36 @@
                 </ng-container>
                 <ng-container *ngIf="citasAutorizadas">
                     <table mat-table [dataSource]="dataSourceCitasAutorizadas" class="mat-elevation-z8">
+
+                        <!--
                         <ng-container matColumnDef="cgFechaProceso">
                             <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
                             <td class="text-center" mat-cell *matCellDef="let element">
-                                <ng-container *ngIf="getNumberHours(element.fechaCitaCA) <= 3">
-                                    <span class="color-time-green">{{element.fechaCitaCA }}</span>
+                                <ng-container *ngIf="getNumberHours(element.fechaAutorizacion) <= 3">
+                                    <span class="color-time-green">{{element.fechaAutorizacion }}</span>
                                 </ng-container>
-                                <ng-container *ngIf="getNumberHours(element.fechaCitaCA) > 3 && getNumberHours(element.fechaCitaCA) <= 6">
-                                    <span class="color-time-yellow">{{element.fechaCitaCA }}</span>
+                                <ng-container *ngIf="getNumberHours(element.fechaAutorizacion) > 3 && getNumberHours(element.fechaCitaCA) <= 6">
+                                    <span class="color-time-yellow">{{element.fechaAutorizacion }}</span>
                                 </ng-container>
-                                <ng-container *ngIf="getNumberHours(element.fechaCitaCA) > 6">
-                                    <span class="color-time-red">{{element.fechaCitaCA }}</span>
+                                <ng-container *ngIf="getNumberHours(element.fechaAutorizacion) > 6">
+                                    <span class="color-time-red">{{element.fechaCfechaAutorizacionitaCA }}</span>
                                 </ng-container>
                             </td>
+                        </ng-container>  -->
+
+                <!---->        <ng-container matColumnDef="idCita">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Autorización</th>
+                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.fechaAutorizacion}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="tipTipIDav">
                             <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Tipo documento</th>
-                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.tipTipIDav}} </td>
+                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.tipDocumento}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="documento">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Número documento</th>
-                            <td mat-cell *matCellDef="let element"> {{element.numDocId}} </td>
+                            <td mat-cell *matCellDef="let element"> {{element.numDocumento}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="nombreCompleto">
@@ -294,7 +302,7 @@
                 </ng-container>
                 <ng-container *ngIf="citasAutorizadas == null || citasAutorizadas.length === 0">
                     <br>
-                    <p class="text-center">No se encontraron citas por autorizar</p>
+                    <p class="text-center">No se encontraron citas autorizadas</p>
                 </ng-container>
                 <mat-paginator #paginatorCitasAutorizadas [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
                 <br>

@@ -28,7 +28,7 @@
 
         <!-- Weight Column -->
         <ng-container matColumnDef="cauDescUsuarios">
-          <th mat-header-cell *matHeaderCellDef> Actualizado porx </th>
+          <th mat-header-cell *matHeaderCellDef> Actualizado por </th>
           <td mat-cell *matCellDef="let element"> {{element.cauDescUsuarios}} </td>
         </ng-container>
 
@@ -41,7 +41,7 @@
          <!-- Symbol Column -->
          <ng-container matColumnDef="ecEstado">
           <th mat-header-cell *matHeaderCellDef> Asistencia </th>
-          <td mat-cell *matCellDef="let element"> {{element.ecDescripcion}} </td>
+          <td class="text-center" mat-cell *matCellDef="let element"> {{element.ecAsistencia === '1' ? 'Si' : 'No'}} </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
