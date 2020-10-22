@@ -15,9 +15,9 @@ export class DetalleCitaService {
 
   constructor(private http: HttpClient) { }
 
-  registrarAutorizacion(caGestionAutorizacionCitas: CaGestionAutorizacionCita) {
-
-    console.log("Vidal", caGestionAutorizacionCitas);
+  registrarAutorizacion(caGestionAutorizacionCita: CaGestionAutorizacionCita) {
+/*
+ console.log("Vidal", caGestionAutorizacionCitas);
 
     let caGestionAutorizacionCita = {
       'centroAtencion': "CENTRO MADRID FSFB-GUSTAVO ESCALLÓN CAYZEDO",
@@ -45,6 +45,7 @@ export class DetalleCitaService {
 
     }
     console.log(caGestionAutorizacionCita);
+ */
     
     
     return this.http.post<Boolean>(environment.url + '/CentralAutoriza/rest/ClienteCita/registrarAutorizacion', caGestionAutorizacionCita);
