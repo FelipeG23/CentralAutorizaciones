@@ -15,38 +15,7 @@ export class DetalleCitaService {
 
   constructor(private http: HttpClient) { }
 
-  registrarAutorizacion(caGestionAutorizacionCitas: any) {
-  console.log("Prueba",caGestionAutorizacionCitas);
-
-
-    let caGestionAutorizacionCita = {
-      "centroAtencion": caGestionAutorizacionCitas.centroAtencion,
-      "codUsrCita": caGestionAutorizacionCitas.codUsrCita,     
-      "enviarCorreo": true,
-      "fechaCita": "2020/03/02",    
-      "gauAutorizaServ": "1",       
-      "gauCodigoAutorizacion": "12345",      
-      "gauCostoConvenio": 0,         
-      "gauCostoPac": 0,            
-      "gauFechaAutorizacion": caGestionAutorizacionCitas.gauFechaAutorizacion,        
-      "gauFechaVencAutorizacion": caGestionAutorizacionCitas.gauFechaVencAutorizacion,    
-      "gauNombreAutorizador": "3",                 
-      "gauObservaciones": "kkekfnenfkenfke",
-      "gauTelefonoAutorizador": 123456,           
-      "gauValorPrestacion": 12334,                    
-      "gauVigenciaAutorizacion": 3,            
-      "horaCita": "07:40",           
-      "mnaIdcodigo": null,               
-      "nombrePaciente": "MARINA VIZCAINO RIVEROS",
-      "numeroPoliza": "655449",
-      "omnDesc": null,            
-      "pacNum": 548110,              
-      "pcaAgeCodigoRecep": "53101149"
-    }
-
-    console.log(caGestionAutorizacionCita);
-    
-    
+  registrarAutorizacion(caGestionAutorizacionCita: CaGestionAutorizacionCita) {
     return this.http.post<Boolean>(environment.url + '/CentralAutoriza/rest/ClienteCita/registrarAutorizacion', caGestionAutorizacionCita);
   }
 
