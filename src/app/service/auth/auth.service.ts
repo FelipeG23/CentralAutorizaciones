@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Auth } from '../../models/auth/auth';
 
@@ -10,7 +11,7 @@ export class AuthService {
   usserLogged: Auth;
   userLogget: string;
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.isUserLoggedIn = false;
   }
 
@@ -24,4 +25,15 @@ export class AuthService {
     this.userLogget = sessionStorage.getItem('login');
     return atob(this.userLogget);
   }
+
+
+  recapcha() {
+    return this.http.post('https://www.google.com/recaptcha/api.js?render=6LemONkZAAAAADm7ziErk-kxOp31Zw_3CuwofeCm', {action: 'submit'});
+
+  }
+
+
+
+
+
 }

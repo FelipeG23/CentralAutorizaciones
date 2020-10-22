@@ -46,6 +46,7 @@ import { DerivacionesComponent } from './component/logeado/derivaciones/derivaci
 import { ImagenesdiagnosticasComponent } from './component/logeado/imagenesdiagnosticas/imagenesdiagnosticas.component';
 import { CambiocitaImgComponent } from './modals/cambiocitaimg/cambiocitaimg.component';
 
+
 export const customCurrencyMaskConfig = {
   align: "right",
   allowNegative: true,
@@ -118,7 +119,7 @@ export const customCurrencyMaskConfig = {
     RadicaOrdenMedicaComponent,
     InfoConvenioComponent,
     RegistrarautorizacionComponent,
-    RegistrarautorizacionCitaComponent,
+    RegistrarautorizacionCitaComponent, 
     SelectPrestacionComponent,
     VerDerivacionesComponent,
     SelectCitaComponent,
@@ -130,7 +131,6 @@ export const customCurrencyMaskConfig = {
     AngularFirestore,
     {provide: LocationStrategy, useClass: HashLocationStrategy}
   ],
-
   bootstrap: [AppComponent]
 })
 export class AppModule { }
