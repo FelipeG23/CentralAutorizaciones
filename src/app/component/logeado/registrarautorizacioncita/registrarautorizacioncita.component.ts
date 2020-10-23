@@ -522,7 +522,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
       gauCodigoAutorizacion: [{ value: null, disabled: true }, [
         Validators.minLength(3)
       ]],
-      numeroPoliza: ['', [Validators.required]],
+      numeroPoliza: [''],
       gauFechaAutorizacion: [{ disabled: true, value: null }],
       gauFechaVencAutorizacion: [{ disabled: true, value: null }],
       gauVigenciaAutorizacion: [{ disabled: true, value: null }],
