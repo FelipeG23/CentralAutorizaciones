@@ -89,7 +89,6 @@ export class CambiocitaImgComponent implements OnInit {
     private firestore: AngularFirestore,
     private cookie: CookieService,
     public dialog: MatDialog,
-  
     private gestionAutorizacionService: GestionAutorizacionService,
     private ordenService: OrdenService,
     private consultarOrdenService: ConsultarordenService,
@@ -140,25 +139,25 @@ export class CambiocitaImgComponent implements OnInit {
     }
   }
 
-  onSubmit() {
- 
-    
+  onSubmit() {    
     if (this.data.datoCita == 'derivacion') {
       console.log("Datos Diego");
-
       const caGestionAutorizacion: CaGestionAutorizacion = Object.assign(new CaGestionAutorizacion(), this.cambioCitas.value);
-
       if (caGestionAutorizacion.gauAutorizaServ !== '2') {
         caGestionAutorizacion.mnaIdcodigo = null;
         caGestionAutorizacion.omnDesc = null;
+        console.log('entra en 1');
       }  
+      console.log('entra en 2');
       caGestionAutorizacion.pomIdPrestOrdm = this.data.datoCita.pomIdPrestOrdm;
       caGestionAutorizacion.pacPacNumero = this.data.datoCita.ordenMedica.pacPacNumero;
       caGestionAutorizacion.gauVigenciaAutorizacion = this.cambioCitas.get('gauVigenciaAutorizacion').value;
       caGestionAutorizacion.pcaAgeCodigoRecep = this.authenticatedService.getUser().uid;
+      console.log('mouse ' , caGestionAutorizacion.pcaAgeCodigoRecep);
       caGestionAutorizacion.nombrePaciente = this.data.datoCita.ordenMedica.nombreCompletoPaciente;
       caGestionAutorizacion.centroAtencion = this.data.datoCita.sedes[0].descripcion;
       this.spinnerService.show();
+      /*
       this.ordenService.registrarAutorizacion(caGestionAutorizacion).subscribe(
         (data: boolean) => {
           this.spinnerService.hide();
@@ -185,9 +184,11 @@ export class CambiocitaImgComponent implements OnInit {
             icon: 'warning',
           });
           this.bloqueoService.unLockAll();
-        }); 
+        });
+       */ 
 
     } else {
+      console.log('entra en 3');
 
       
       const caGestionAutorizacionCita: CaGestionAutorizacionCita = Object.assign(new CaGestionAutorizacionCita(), this.cambioCitas.value);
@@ -195,20 +196,22 @@ export class CambiocitaImgComponent implements OnInit {
       if (caGestionAutorizacionCita.gauAutorizaServ !== '2') {
         caGestionAutorizacionCita.mnaIdcodigo = null;
         caGestionAutorizacionCita.omnDesc = null;
+        console.log('entra en 4');
+
       }  
+      console.log('entra en 5');
+
       caGestionAutorizacionCita.fechaCita = "2020/03/02";
       caGestionAutorizacionCita.horaCita = "07:40";
       caGestionAutorizacionCita.codUsrCita = this.data.myVar.data.IDENTIFICACION;
       caGestionAutorizacionCita.pacNum = 12345;
       caGestionAutorizacionCita.gauVigenciaAutorizacion = this.cambioCitas.get('gauVigenciaAutorizacion').value;
       caGestionAutorizacionCita.nombrePaciente =`${this.data.myVar.data.NOMBRES} ${this.data.myVar.data.APELLIDOS}`;
-      caGestionAutorizacionCita.centroAtencion = this.data.myVar.data.EXAMEN;
+      caGestionAutorizacionCita.centroAtencion = this.data.myVar.data.SERVICIO;
       caGestionAutorizacionCita.pcaAgeCodigoRecep = this.authenticatedService.getUser().uid; 
-
-      console.log("Test",this.data.myVar.data);
-
-
-
+      console.log('Prueba ' ,this.authenticatedService.getUser());
+      console.log("prueba 2",this.data.myVar.data.SERVICIO);//daniela
+      console.log("Test",this.data.myVar);
        this.spinnerService.show();
 
       this.detalleCitaService.registrarAutorizacion(caGestionAutorizacionCita).subscribe(
@@ -245,6 +248,8 @@ export class CambiocitaImgComponent implements OnInit {
 
 
   updateCalcs() {
+    console.log('entra en 6');
+
     if (this.cambioCitas.get('gauFechaAutorizacion').value != null &&
       this.cambioCitas.get('gauFechaVencAutorizacion').value != null) {
       const days = this.cambioCitas.get('gauFechaVencAutorizacion').value
@@ -284,6 +289,8 @@ export class CambiocitaImgComponent implements OnInit {
   }
 
   selectionChangeAutoriza(matSelectChange: MatSelectChange) {
+    console.log('entra en 7');
+
     this.cambioCitas.get('gauFechaAutorizacion').setValue(null);
     this.cambioCitas.get('gauFechaVencAutorizacion').setValue(null);
     this.cambioCitas.get('gauVigenciaAutorizacion').setValue(null);

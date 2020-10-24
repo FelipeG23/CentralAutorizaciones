@@ -15,39 +15,7 @@ export class DetalleCitaService {
 
   constructor(private http: HttpClient) { }
 
-  registrarAutorizacion(caGestionAutorizacionCita: CaGestionAutorizacionCita) {
-/*
- console.log("Vidal", caGestionAutorizacionCitas);
-
-    let caGestionAutorizacionCita = {
-      'centroAtencion': "CENTRO MADRID FSFB-GUSTAVO ESCALLÓN CAYZEDO",
-      'codUsrCita': "FSM04389",
-  'enviarCorreo': true,
-'fechaCita': "2020/03/02",
-'gauAutorizaServ': "1",
-'gauCodigoAutorizacion': "12345",
-'gauCostoConvenio': 0,
-'gauCostoPac': 0,
-'gauFechaAutorizacion': caGestionAutorizacionCitas.gauFechaAutorizacion,
-'gauFechaVencAutorizacion': caGestionAutorizacionCitas.gauFechaVencAutorizacion,
-'gauNombreAutorizador': "2",
-'gauObservaciones': "kkekfnenfkenfke",
-'gauTelefonoAutorizador': 12344,
-'gauValorPrestacion': 12334,
-'gauVigenciaAutorizacion': 3,
-'horaCita': "07:40",
-'mnaIdcodigo': null,
-'nombrePaciente': "MARINA VIZCAINO RIVEROS",
-'numeroPoliza': "655449",
-'omnDesc': null,
-'pacNum': 548110,
-'pcaAgeCodigoRecep': "53101149"
-
-    }
-    console.log(caGestionAutorizacionCita);
- */
-    
-    
+  registrarAutorizacion(caGestionAutorizacionCita: CaGestionAutorizacionCita) {    
     return this.http.post<Boolean>(environment.url + '/CentralAutoriza/rest/ClienteCita/registrarAutorizacion', caGestionAutorizacionCita);
   }
 
