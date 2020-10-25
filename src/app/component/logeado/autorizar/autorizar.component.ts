@@ -77,7 +77,7 @@ export class AutorizarComponent implements OnInit {
     maxDateFin = new Date(this.date.getFullYear() + 1, this.date.getMonth(), this.date.getDate());
     displayedColumns: string[] = ['cgFechaProceso', 'tipTipIDav', 'documento', 'nombreCompleto', 'radicar'];
     displayedColumnsCitas: string[] = ['cgFechaProceso', 'tipTipIDav', 'documento', 'nombreCompleto', 'valorProcedimiento', 'enProceso', 'autorizar'];
-    displayedColumnsCitasAutorizadas: string[] = ['idCita', 'tipTipIDav', 'documento', 'nombreCompleto', 'enProceso'];
+    displayedColumnsCitasAutorizadas: string[] = ['idCita', 'codAutorizacion', 'tipTipIDav', 'documento', 'nombreCompleto', 'valorProcedimiento', 'enProceso'];
     dataSource = new MatTableDataSource(this.ordenesMedicas);
     @ViewChild('paginatorCitas', { read: MatPaginator }) paginatorCitas: MatPaginator;
     @ViewChild('paginatorCitasAutorizadas', { read: MatPaginator }) paginatorCitasAutorizadas: MatPaginator;

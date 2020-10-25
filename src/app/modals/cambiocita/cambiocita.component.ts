@@ -50,7 +50,7 @@ export class CambiocitaComponent implements OnInit {
       detalleEstado: ['', [Validators.required]],
       observacion: ['', [Validators.maxLength(600), Validators.minLength(1),
       Validators.pattern(/^(?!.*(.)\1{3})/)]],
-      numeroPoliza: ['', [Validators.required]],
+      numeroPoliza: [''],
       sendEmail: ['']
     });
 
