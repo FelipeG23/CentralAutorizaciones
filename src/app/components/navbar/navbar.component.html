@@ -17,12 +17,10 @@
                     <a (click)="deleteFirebase()" [routerLink]="['/derivaciones']" routerLinkActive="router-link-active"
                         class="nav-link">Diego</a>
                 </li>
-               <!--
                     <li *ngIf="user.role === rolImagenes || user.role === rolAdmin" class="nav-item">
                     <a (click)="deleteFirebase()" [routerLink]="['/imagenesdiagnosticas']" routerLinkActive="router-link-active"
                         class="nav-link">Apoyo Diagnostico</a>
                 </li>
-               -->
                 <li class="nav-item">
                     <a (click)="logout()" class="nav-link">Salir</a>
                 </li>
@@ -88,9 +86,9 @@
                   <li *ngIf="user.role === rolRadicar || user.role === rolAdmin" class="nav-item">
                       <a (click)="deleteFirebase()" [routerLink]="['/ordenes']" routerLinkActive="router-link-active"  class="nav-link">Derivaciones</a>
                   </li>
-               <!--   <li *ngIf="user.role === rolRadicar || user.role === rolAdmin" class="nav-item">
-                    <a (click)="deleteFirebase()" [routerLink]="['/derivaciones']" routerLinkActive="router-link-active"  class="nav-link">Derivaciones</a>
-                  </li>  -->
+                  <li *ngIf="user.role === rolRadicar || user.role === rolAdmin" class="nav-item">
+                    <a (click)="deleteFirebase()" [routerLink]="['/imagenesdiagnosticas']" routerLinkActive="router-link-active"  class="nav-link">Apoyo Diagnostico</a>
+                  </li>  
               </ul>
           </div>
           <div class="col-sm-4">
