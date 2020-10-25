@@ -78,6 +78,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   listaConvenios: any = {};
   datosConvenio: any = {};
   numeroPolizaReadonly = true;
+  registrarAutoAlerta = false;
 
 
   constructor(private fb: FormBuilder,
@@ -99,7 +100,8 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
 
   ngOnInit() {
 
-    
+    //this.registrarAuto.get('numeroPoliza').setValidators([Validators.required]);
+
 
     this.setFormRegistra();
     this.setEstado();
@@ -118,29 +120,37 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
       this.spinnerService.hide();
       this.detalleCita = detalleCita;
 
-      console.log(this.detalleCita);
-      
 
       if (this.detalleCita.tipoConvenio === "A" || this.detalleCita.tipoConvenio === "S" ) {
         this.numeroPolizaReadonly = false;
-      } 
+        this.registrarAuto.controls['numeroPoliza'].setValidators([Validators.required]);
+      } else {
+        this.registrarAuto.controls['numeroPoliza'].setValidators([]);
+      }
 
     }, () => {
       this.spinnerService.hide();
     });
 
+
+
     const numeroPoliza = this.data.datoCita.numeroPoliza !== undefined && this.data.datoCita.numeroPoliza !== null ? this.data.datoCita.numeroPoliza.trim() : '';
     this.registrarAuto.get('numeroPoliza').setValue(numeroPoliza);
+
+    console.log("Prueba", numeroPoliza);
+    
 
     if (numeroPoliza === '') {
       this.detalleCitaService.consultarPoliza(this.data.datoCita.pacNum).
         subscribe((poliza: CaPolizasPaciente) => {
           if (poliza !== null) {
             this.registrarAuto.get('numeroPoliza').setValue(poliza.ecPolizaNumero);
+          } else {
           }
         });
     }
 
+    
     if (this.data.datoCita.module !== undefined && this.data.datoCita.module !== null &&
       this.data.datoCita.module === 'derivacion') {
       this.consultarOrdenService.consultarPrestacion(this.data.datoCita.pomIdPrestOrdm).
@@ -176,6 +186,8 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
 
   onSubmit() {
 
+    console.log("datos Diego", this.data.datoCita.module);
+    
     if (this.data.datoCita.module == 'derivacion') {
       const caGestionAutorizacion: CaGestionAutorizacion = Object.assign(new CaGestionAutorizacion(), this.registrarAuto.value);
 
@@ -236,7 +248,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
       caGestionAutorizacionCita.centroAtencion = this.detalleCita.nombreCentroAten;
       caGestionAutorizacionCita.pcaAgeCodigoRecep = this.authenticatedService.getUser().uid;
 
-      console.log(this.data);
+      console.log(caGestionAutorizacionCita);
 
        this.spinnerService.show();
 
@@ -444,8 +456,12 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   validateRequiredPoliza(group: FormGroup) {
     const autorizar = group.get('gauAutorizaServ').value; // to get value in input tag
     if (group.get('numeroPoliza').value === null || group.get('numeroPoliza').value === '') {
+      console.log("Entro Aqui");
+      
       return { requiredPoliza: true };
     } else {
+      console.log("Entro Aqui");
+
       return null;
     }
   }

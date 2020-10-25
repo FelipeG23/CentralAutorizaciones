@@ -15,7 +15,7 @@ export class DetalleCitaService {
 
   constructor(private http: HttpClient) { }
 
-  registrarAutorizacion(caGestionAutorizacionCita: CaGestionAutorizacionCita) {
+  registrarAutorizacion(caGestionAutorizacionCita: CaGestionAutorizacionCita) {    
     return this.http.post<Boolean>(environment.url + '/CentralAutoriza/rest/ClienteCita/registrarAutorizacion', caGestionAutorizacionCita);
   }
 

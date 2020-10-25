@@ -44,6 +44,8 @@ import { VerRadicarComponent } from './modals/ver-radicar/ver-radicar.component'
 import { VerDerivacionesComponent } from './modals/ver-derivaciones/ver-derivaciones.component';
 import { DerivacionesComponent } from './component/logeado/derivaciones/derivaciones.component';
 import { ImagenesdiagnosticasComponent } from './component/logeado/imagenesdiagnosticas/imagenesdiagnosticas.component';
+import { CambiocitaImgComponent } from './modals/cambiocitaimg/cambiocitaimg.component';
+
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -67,6 +69,7 @@ export const customCurrencyMaskConfig = {
     NavbarComponent,
     NavbarSecondaryComponent,
     CambiocitaComponent,
+    CambiocitaImgComponent,
     EliminaromComponent,
     TrazaComponent,
     TrazaOrdenComponent,
@@ -109,13 +112,14 @@ export const customCurrencyMaskConfig = {
   entryComponents: [
     EliminaromComponent,
     CambiocitaComponent,
+    CambiocitaImgComponent,
     TrazaComponent,
     TrazaOrdenComponent,
     DetallepacienteComponent,
     RadicaOrdenMedicaComponent,
     InfoConvenioComponent,
     RegistrarautorizacionComponent,
-    RegistrarautorizacionCitaComponent,
+    RegistrarautorizacionCitaComponent, 
     SelectPrestacionComponent,
     VerDerivacionesComponent,
     SelectCitaComponent,
@@ -127,7 +131,6 @@ export const customCurrencyMaskConfig = {
     AngularFirestore,
     {provide: LocationStrategy, useClass: HashLocationStrategy}
   ],
-
   bootstrap: [AppComponent]
 })
 export class AppModule { }
