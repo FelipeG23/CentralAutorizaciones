@@ -19,6 +19,13 @@ export class DetalleCitaService {
     return this.http.post<Boolean>(environment.url + '/CentralAutoriza/rest/ClienteCita/registrarAutorizacion', caGestionAutorizacionCita);
   }
 
+  registrarAutorizacionImg(caGestionAutorizacionCita: CaGestionAutorizacionCita) { 
+    let caGestionAutorizacionCitas = caGestionAutorizacionCita;
+    caGestionAutorizacionCitas.codUsrCita = "FSM04389",
+    caGestionAutorizacionCitas.pacNum = 548110;
+    return this.http.post<Boolean>(environment.url + '/CentralAutoriza/rest/ClienteCita/registrarAutorizacion', caGestionAutorizacionCitas);
+  }
+
   consultarValor(dataUser) {
     return this.http.post<any>(environment.api + '/recaudo/consultaValoresPrestaciones', dataUser)
   }

@@ -157,7 +157,6 @@ export class CambiocitaImgComponent implements OnInit {
       caGestionAutorizacion.nombrePaciente = this.data.datoCita.ordenMedica.nombreCompletoPaciente;
       caGestionAutorizacion.centroAtencion = this.data.datoCita.sedes[0].descripcion;
       this.spinnerService.show();
-      /*
       this.ordenService.registrarAutorizacion(caGestionAutorizacion).subscribe(
         (data: boolean) => {
           this.spinnerService.hide();
@@ -185,36 +184,29 @@ export class CambiocitaImgComponent implements OnInit {
           });
           this.bloqueoService.unLockAll();
         });
-       */ 
-
     } else {
-      console.log('entra en 3');
-
-      
-      const caGestionAutorizacionCita: CaGestionAutorizacionCita = Object.assign(new CaGestionAutorizacionCita(), this.cambioCitas.value);
-    
+      const caGestionAutorizacionCita: CaGestionAutorizacionCita = Object.assign(new CaGestionAutorizacionCita(), this.cambioCitas.value);    
       if (caGestionAutorizacionCita.gauAutorizaServ !== '2') {
         caGestionAutorizacionCita.mnaIdcodigo = null;
         caGestionAutorizacionCita.omnDesc = null;
-        console.log('entra en 4');
-
-      }  
-      console.log('entra en 5');
-
+      }
+      let date = this.data.myVar.data.CITA;
+      date = date.split(' ')[0];
+      date = date.replaceAll('-', '/');
+      let hour = this.data.myVar.data.CITA;
+      hour = hour.split(' ')[1];
+      hour = hour.replace(':00','');
       caGestionAutorizacionCita.fechaCita = "2020/03/02";
       caGestionAutorizacionCita.horaCita = "07:40";
-      caGestionAutorizacionCita.codUsrCita = this.data.myVar.data.IDENTIFICACION;
-      caGestionAutorizacionCita.pacNum = 12345;
+      caGestionAutorizacionCita.codUsrCita = "FSM04389";
+      caGestionAutorizacionCita.pacNum = 548110;
       caGestionAutorizacionCita.gauVigenciaAutorizacion = this.cambioCitas.get('gauVigenciaAutorizacion').value;
       caGestionAutorizacionCita.nombrePaciente =`${this.data.myVar.data.NOMBRES} ${this.data.myVar.data.APELLIDOS}`;
       caGestionAutorizacionCita.centroAtencion = this.data.myVar.data.SERVICIO;
       caGestionAutorizacionCita.pcaAgeCodigoRecep = this.authenticatedService.getUser().uid; 
-      console.log('Prueba ' ,this.authenticatedService.getUser());
-      console.log("prueba 2",this.data.myVar.data.SERVICIO);//daniela
-      console.log("Test",this.data.myVar);
        this.spinnerService.show();
 
-      this.detalleCitaService.registrarAutorizacion(caGestionAutorizacionCita).subscribe(
+      this.detalleCitaService.registrarAutorizacionImg(caGestionAutorizacionCita).subscribe(
         (data: boolean) => {
           this.spinnerService.hide();
           this.bloqueoService.unLockAll();

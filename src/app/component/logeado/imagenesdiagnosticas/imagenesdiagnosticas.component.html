@@ -67,20 +67,21 @@
                         <div class="row">
                             <div class="col-sm-2 col-md-2 col-lg-2">
                                 <button mat-fab class="bg-blue text-white" *ngIf="filter.estadoCita">
-                  {{ getSigla(filter?.estadoCita) }}
-                </button>
+                                    {{ getSigla(filter?.estadoCita) }}
+                                </button>
                             </div>
                             <div class="col-sm-5 col-md-5 col-lg-5 pl-0">
-                                <p class="mb-0"> <b class="text-primary f-2">{{ filter.NOMBRES }} {{ filter.APELLIDOS }}</b> <br>
+                                <p class="mb-0"> <b class="text-primary f-2">{{ filter.NOMBRES }}
+                                        {{ filter.APELLIDOS }}</b> <br>
                                     <span *ngIf="filter.IDENTIFICACION"> Identificacion:
-                    {{ filter.IDENTIFICACION }}
-                  </span></p>
+                                        {{ filter.IDENTIFICACION }}
+                                    </span></p>
                                 <p class="mb-0 font-bold"><span *ngIf="filter.EXAMEN"> EXAMEN:
-                    {{ filter.EXAMEN }}
-                  </span></p>
+                                        {{ filter.EXAMEN }}
+                                    </span></p>
                                 <p class="mb-0"><span>
-                    {{ filter.CITA }}
-                  </span></p>
+                                        {{ filter.CITA }}
+                                    </span></p>
                                 <p class="mb-0"><span>Servicio: {{ filter.SERVICIO }}</span></p>
                                 <p class="f-1 text-primary">
                                     <mat-icon>trending_flat</mat-icon><span>Cita: {{ filter.IDCITA }}</span>
@@ -93,16 +94,13 @@
                             </div>
                             <div class="col-sm-1 col-md-1 col-lg-1 mt-n3">
                                 <button mat-icon-button [matMenuTriggerFor]="menus">
-                  <mat-icon>more_vert</mat-icon>
-                </button>
+                                    <mat-icon>more_vert</mat-icon>
+                                </button>
                                 <mat-menu #menus="matMenu">
-                                <!--
-                                 <button mat-menu-item (click)="openDialog(filter)">
-                                -->
-                    <button mat-menu-item>
 
-                    <span>Cambio de estado de cita a paciente</span>
-                  </button>
+                                    <button mat-menu-item (click)="openDialog(filter)">
+                                        <span>Cambio de estado de cita a paciente</span>
+                                    </button>
                                 </mat-menu>
 
                             </div>
