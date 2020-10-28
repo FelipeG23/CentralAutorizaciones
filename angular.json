@@ -38,11 +38,7 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-<<<<<<< HEAD
                   "with": "src/environments/environment.ts"
-=======
-                  "with": "src/environments/environments.prod.ts"
->>>>>>> 0b57ace5abff61ab96dcf2535fde6c938af10200
                 }
               ],
               "optimization": true,
