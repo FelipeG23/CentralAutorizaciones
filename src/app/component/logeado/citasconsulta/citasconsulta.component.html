@@ -1,160 +1,158 @@
 <app-navbar></app-navbar>
 <div class="bgbody"></div>
 <!--  <div *ngFor="let f of resultados ">{{ f?.DateActive}}</div>-->
-  <div class="container">
+<div class="container">
     <div class="row">
-      <div class="col-sm-12 col-md-12 col-lg-5 mt-5">
-        <form novalidate (ngSubmit)="onSubmit()" [formGroup]="filtroCitas" #myform="ngForm">
-          <div class="row  justify-content-end">
-            <div class="col-sm-10">
-              <mat-form-field class="w-3">
-                <input class="date-picker-form" matInput [matDatepicker]="pickers" placeholder="Fecha Inicial" formControlName="fecha"
-                  [min]="minDateIn" [max]="maxDateIni" (dateChange)="changeSecondDate()">
-                <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
-                <mat-datepicker #pickers touchUi [disabled]="'false'" startView="year"></mat-datepicker>
-                <mat-error *ngIf="filtroCitas.get('fecha').hasError('pattern')">
-                  El formato ingresado no es permitido. Ej: 4/1/2019 - d/m/yyyy
-                </mat-error>
-                <mat-error *ngIf="filtroCitas.get('fecha').hasError('required')">
-                  La fecha inicial es requerida!
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <div class="col-sm-10">
-              <mat-form-field class="w-3">
-                <input class="date-picker-form" matInput [matDatepicker]="picker" placeholder="Fecha Final" formControlName="fechaFinal" required
-                  [min]="minDate" [max]="maxDateFin">
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker touchUi [disabled]="'false'" startView="year"></mat-datepicker>
-                <mat-error *ngIf="filtroCitas.get('fechaFinal').hasError('required')">
-                  Este campo es obligatorio!
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <div class="col-sm-10">
-              <mat-form-field class="w-3">
-                <mat-label>
-                  <mat-icon>check_circle_outline</mat-icon> Estados
-                </mat-label>
-                <mat-select formControlName="estado">
-                  <mat-option [value]="1">
-                    Asignada
-                  </mat-option>
-                  <mat-option [value]="2">
-                    Confirmada
-                  </mat-option>
-                  <mat-option [value]="3">
-                    Autorizada
-                  </mat-option>
-                  <mat-option [value]="4">
-                    Cancelada por paciente
-                  </mat-option>
-                  <mat-option [value]="5">
-                    Cancelada por médico
-                  </mat-option>
-                  <mat-option [value]="6">
-                    Reprogramada
-                  </mat-option>
-                  <mat-option [value]="7">
-                    No autorizada
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="col-sm-10">
-              <mat-form-field class="w-3">
-                <mat-label>Todas las sedes</mat-label>
-                <input type="text" matInput formControlName="sede" [matAutocomplete]="auto4">
-                <mat-autocomplete #auto4="matAutocomplete" [displayWith]="displayFn">
-                  <mat-option *ngFor="let sede of filteredSedeList | async " [value]="sede">
-                    {{sede.descripcion}}
-                  </mat-option>
-                </mat-autocomplete>
-                <mat-error *ngIf="filtroCitas.get('sede').hasError('matchList')">
-                  El valor no coincide con ninguno de la lista
-                </mat-error>
-              </mat-form-field>
-            </div>
-          </div>
-            <div class="row justify-content-center text-center mb-4">
-              <div class="col-sm-12 col-md-12 col-lg-6">
-                <button mat-raised-button type="button" class="buttonCA-second" (click)="clear()">LIMPIAR</button>
-              </div>
-              <div class="col-sm-12 col-md-12 col-lg-3">
-                <button mat-raised-button class="buttonCA primary" type="submit" [disabled]="filtroCitas.invalid" (click)="validateNumber()" (click)="validarFechas()">FILTRAR</button>
-              </div>
-            </div>
-          <div class="row justify-content-end">
-            <div class="col-sm-10">
-              <mat-accordion>
-                <mat-expansion-panel class="accordion-filter">
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      <mat-icon>account_circle</mat-icon>
-                    </mat-panel-title>
-                    <mat-panel-description>
-                      Búsqueda avanzada
-                    </mat-panel-description>
-                  </mat-expansion-panel-header>
-                  <div class="col-sm-10">
-                    <mat-form-field class="w-3">
-                      <mat-label>Especialidad</mat-label>
-                      <input type="text" matInput formControlName="especialidad" [matAutocomplete]="auto1" (blur)="changeSubs()">
-                      <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayFn">
-                        <mat-option *ngFor="let especialidad of filteredEspList | async" [value]="especialidad">
-                          {{ especialidad.descripcion }}</mat-option>
-                      </mat-autocomplete>
-                      <mat-error *ngIf="filtroCitas.get('especialidad').hasError('matchList')">
-                        El valor no coincide con ninguno de la lista
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-sm-10">
-                    <mat-form-field class="w-3">
-                      <mat-label>Sub especialidad</mat-label>
-                      <input type="text" matInput formControlName="subEspecialidad" [matAutocomplete]="auto2" (blur)="changeServs()">
-                      <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn">
-                        <mat-option *ngFor="let subEspecialidad of filteredSubEspList | async" [value]="subEspecialidad">
-                          {{ subEspecialidad.descripcion }}
-                        </mat-option>
-                      </mat-autocomplete>
-                      <mat-error *ngIf="filtroCitas.get('subEspecialidad').hasError('matchList')">
-                        El valor no coincide con ninguno de la lista
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                  
-                  <div class="col-sm-10">
-                    <mat-form-field class="w-3-rem">
-                      <mat-label>Servicio</mat-label>
-                      <input type="text" matInput formControlName="servicio" [matAutocomplete]="auto3">
-                      <mat-autocomplete #auto3="matAutocomplete" [displayWith]="displayFn.bind(this)">
-                        <mat-option *ngFor="let servicio of filteredServList | async" [value]="servicio">
-                          {{ servicio.descripcion }}
-                        </mat-option>
-                      </mat-autocomplete>
-                      <mat-error *ngIf="filtroCitas.get('servicio').hasError('matchList')">
-                        El valor no coincide con ninguno de la lista
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-sm-10">
-                    <mat-chip-list aria-label="Fish selection" *ngFor="let lista of conveniosLista">
-                      <mat-chip>
-                        {{ lista.descripcion }}
-                        <mat-icon matChipRemove (click)="removeConvenio(lista)">cancel</mat-icon>
-                      </mat-chip>
-                    </mat-chip-list>
-                    <mat-form-field class="w-3">
-                      <input type="text" matInput formControlName="convenio" (change)="listMia($event)" list="colores" placeholder="Todos los convenios">
-                      <datalist id="colores">
+        <div class="col-sm-12 col-md-12 col-lg-5 mt-5">
+            <form novalidate (ngSubmit)="onSubmit()" [formGroup]="filtroCitas" #myform="ngForm">
+                <div class="row  justify-content-end">
+                    <div class="col-sm-10">
+                        <mat-form-field class="w-3">
+                            <input class="date-picker-form" matInput [matDatepicker]="pickers" placeholder="Fecha Inicial" formControlName="fecha" [min]="minDateIn" [max]="maxDateIni" (dateChange)="changeSecondDate()">
+                            <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
+                            <mat-datepicker #pickers touchUi [disabled]="'false'" startView="year"></mat-datepicker>
+                            <mat-error *ngIf="filtroCitas.get('fecha').hasError('pattern')">
+                                El formato ingresado no es permitido. Ej: 4/1/2019 - d/m/yyyy
+                            </mat-error>
+                            <mat-error *ngIf="filtroCitas.get('fecha').hasError('required')">
+                                La fecha inicial es requerida!
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-10">
+                        <mat-form-field class="w-3">
+                            <input class="date-picker-form" matInput [matDatepicker]="picker" placeholder="Fecha Final" formControlName="fechaFinal" required [min]="minDate" [max]="maxDateFin">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker touchUi [disabled]="'false'" startView="year"></mat-datepicker>
+                            <mat-error *ngIf="filtroCitas.get('fechaFinal').hasError('required')">
+                                Este campo es obligatorio!
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-10">
+                        <mat-form-field class="w-3">
+                            <mat-label>
+                                <mat-icon>check_circle_outline</mat-icon> Estados
+                            </mat-label>
+                            <mat-select formControlName="estado">
+                                <mat-option [value]="1">
+                                    Asignada
+                                </mat-option>
+                                <mat-option [value]="2">
+                                    Confirmada
+                                </mat-option>
+                                <mat-option [value]="3">
+                                    Autorizada
+                                </mat-option>
+                                <mat-option [value]="4">
+                                    Cancelada por paciente
+                                </mat-option>
+                                <mat-option [value]="5">
+                                    Cancelada por médico
+                                </mat-option>
+                                <mat-option [value]="6">
+                                    Reprogramada
+                                </mat-option>
+                                <mat-option [value]="7">
+                                    No autorizada
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-10">
+                        <mat-form-field class="w-3">
+                            <mat-label>Todas las sedes</mat-label>
+                            <input type="text" matInput formControlName="sede" [matAutocomplete]="auto4">
+                            <mat-autocomplete #auto4="matAutocomplete" [displayWith]="displayFn">
+                                <mat-option *ngFor="let sede of filteredSedeList | async " [value]="sede">
+                                    {{sede.descripcion}}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <mat-error *ngIf="filtroCitas.get('sede').hasError('matchList')">
+                                El valor no coincide con ninguno de la lista
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row justify-content-center text-center mb-4">
+                    <div class="col-sm-12 col-md-12 col-lg-6">
+                        <button mat-raised-button type="button" class="buttonCA-second" (click)="clear()">LIMPIAR</button>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-3">
+                        <button mat-raised-button class="buttonCA primary" type="submit" [disabled]="filtroCitas.invalid" (click)="validateNumber()" (click)="validarFechas()">FILTRAR</button>
+                    </div>
+                </div>
+                <div class="row justify-content-end">
+                    <div class="col-sm-10">
+                        <mat-accordion>
+                            <mat-expansion-panel class="accordion-filter">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <mat-icon>account_circle</mat-icon>
+                                    </mat-panel-title>
+                                    <mat-panel-description>
+                                        Búsqueda avanzada
+                                    </mat-panel-description>
+                                </mat-expansion-panel-header>
+                                <div class="col-sm-10">
+                                    <mat-form-field class="w-3">
+                                        <mat-label>Especialidad</mat-label>
+                                        <input type="text" matInput formControlName="especialidad" [matAutocomplete]="auto1" (blur)="changeSubs()">
+                                        <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayFn">
+                                            <mat-option *ngFor="let especialidad of filteredEspList | async" [value]="especialidad">
+                                                {{ especialidad.descripcion }}</mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error *ngIf="filtroCitas.get('especialidad').hasError('matchList')">
+                                            El valor no coincide con ninguno de la lista
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-10">
+                                    <mat-form-field class="w-3">
+                                        <mat-label>Sub especialidad</mat-label>
+                                        <input type="text" matInput formControlName="subEspecialidad" [matAutocomplete]="auto2" (blur)="changeServs()">
+                                        <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn">
+                                            <mat-option *ngFor="let subEspecialidad of filteredSubEspList | async" [value]="subEspecialidad">
+                                                {{ subEspecialidad.descripcion }}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error *ngIf="filtroCitas.get('subEspecialidad').hasError('matchList')">
+                                            El valor no coincide con ninguno de la lista
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-sm-10">
+                                    <mat-form-field class="w-3-rem">
+                                        <mat-label>Servicio</mat-label>
+                                        <input type="text" matInput formControlName="servicio" [matAutocomplete]="auto3">
+                                        <mat-autocomplete #auto3="matAutocomplete" [displayWith]="displayFn.bind(this)">
+                                            <mat-option *ngFor="let servicio of filteredServList | async" [value]="servicio">
+                                                {{ servicio.descripcion }}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error *ngIf="filtroCitas.get('servicio').hasError('matchList')">
+                                            El valor no coincide con ninguno de la lista
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-10">
+                                    <mat-chip-list aria-label="Fish selection" *ngFor="let lista of conveniosLista">
+                                        <mat-chip>
+                                            {{ lista.descripcion }}
+                                            <mat-icon matChipRemove (click)="removeConvenio(lista)">cancel</mat-icon>
+                                        </mat-chip>
+                                    </mat-chip-list>
+                                    <mat-form-field class="w-3">
+                                        <input type="text" matInput formControlName="convenio" (change)="listMia($event)" list="colores" placeholder="Todos los convenios">
+                                        <datalist id="colores">
                         <option *ngFor="let conv of convenios" [value]="conv.descripcion" >
                         </option>
                       </datalist>
-                        
 
-                      <!-- this.listConvenios -->
-                        <!-- <mat-label>Todos los convenios</mat-label>
+
+                                        <!-- this.listConvenios -->
+                                        <!-- <mat-label>Todos los convenios</mat-label>
                         <mat-select formControlName="convenio" multiple  >
                           <mat-option *ngFor="let convenio of convenios" panelClass="example-panel-top" [value]="convenio.id" >
                             {{convenio.descripcion}}
@@ -163,168 +161,164 @@
                       <mat-error *ngIf="filtroCitas.get('convenio').hasError('matchList')">
                         El valor no coincide con ninguno de la lista
                       </mat-error> -->
-                    </mat-form-field>
-                  </div>
-                  <div class="col-sm-10">
-                    <mat-form-field class="w-3">
-                    <mat-label>
-                      Ubicación sedes
-                    </mat-label>
-                    <mat-select formControlName="ubicacionesFilter">
-                      <mat-option *ngFor="let ubicacion of ubicacionesList" [value]="ubicacion?.id">
-                        {{ ubicacion?.descripcion }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                  </div>
-                  <div class="col-sm-10">
-                    <mat-form-field class="w-3">
-                      <mat-label>Tipo de documento</mat-label>
-                      <mat-select formControlName="tipoDocumento" [required]="validar" (ngModelChange)='validateTypeDocument()'>
-                        <mat-option *ngFor="let option of options | async" [value]="option.strTipIdeCod">
-                          {{option.strTipIdeGlosa}}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-sm-10">
-                    <mat-form-field class="w-3">
-                      <input type="text" matInput placeholder="Número de documento" formControlName="numeroDocumento" (ngModelChange)='validateTypeDocument()'
-                             [required]="validar">
-                      <mat-icon matSuffix class="iconsCA">credit_card</mat-icon>
-                      <mat-error *ngIf="filtroCitas.get('numeroDocumento').hasError('pattern')">
-                        Este campo no permite caracteres consecutivos y/o caracteres especiales!
-                      </mat-error>
-                      <mat-error *ngIf="filtroCitas.get('numeroDocumento').hasError('required')">
-                        El numero de documento es requerido!
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-sm-10">
-                    <mat-form-field class="w-3">
-                      <input type="text" onblur="this.value = this.value.toUpperCase()" matInput placeholder="Nombre" formControlName="nombre" [required]="validarName" class="input-uppercase"
-                             (keyup)="validateName($event)">
-                      <mat-icon matSuffix class="iconsCA">person</mat-icon>
-                      <mat-error *ngIf="filtroCitas.get('nombre').hasError('pattern')">
-                        Este campo no permite caracteres consecutivos y/o especiales!
-                      </mat-error>
-                      <mat-error *ngIf="filtroCitas.get('nombre').hasError('required')">
-                        El nombre es requerido!
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-sm-10">
-                    <mat-form-field class="w-3">
-                      <input type="text" onblur="this.value = this.value.toUpperCase()" matInput placeholder="Primer apellido" formControlName="primerApellido" class="input-uppercase"
-                             [required]="validarName || nameRequired" (keyup)="validateSecondName($event)">
-                      <mat-icon matSuffix class="iconsCA">person</mat-icon>
-                      <mat-error *ngIf="filtroCitas.get('primerApellido').hasError('pattern')">
-                        Este campo no permite caracteres consecutivos y/o especiales!
-                      </mat-error>
-                      <mat-error *ngIf="filtroCitas.get('primerApellido').hasError('required')">
-                        El primer apellido es requerido!
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-sm-10">
-                    <mat-form-field class="w-3">
-                      <input type="text" onblur="this.value = this.value.toUpperCase()" matInput placeholder="Segundo apellido" class="input-uppercase" formControlName="segundoApellido">
-                      <!-- [required]="validarName || nameRequired || secondNameRequired" -->
-                      <mat-icon matSuffix class="iconsCA">person</mat-icon>
-                      <mat-error *ngIf="filtroCitas.get('segundoApellido').hasError('pattern')">
-                        Este campo no permite caracteres consecutivos y/o especiales!
-                      </mat-error>
-                      <mat-error *ngIf="filtroCitas.get('segundoApellido').hasError('required')">
-                        El segundo apellido es requerido!
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                </mat-expansion-panel>
-              </mat-accordion>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div *ngIf="!classCA" class="col-sm-12 col-md-12 col-lg-7 mt-5 pl-5">
-        <div class="row">
-          <div class="col-sm-12 col-md-12 col-lg-12">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-10">
+                                    <mat-form-field class="w-3">
+                                        <mat-label>
+                                            Ubicación sedes
+                                        </mat-label>
+                                        <mat-select formControlName="ubicacionesFilter">
+                                            <mat-option *ngFor="let ubicacion of ubicacionesList" [value]="ubicacion?.id">
+                                                {{ ubicacion?.descripcion }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-10">
+                                    <mat-form-field class="w-3">
+                                        <mat-label>Tipo de documento</mat-label>
+                                        <mat-select formControlName="tipoDocumento" [required]="validar" (ngModelChange)='validateTypeDocument()'>
+                                            <mat-option *ngFor="let option of options | async" [value]="option.strTipIdeCod">
+                                                {{option.strTipIdeGlosa}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-10">
+                                    <mat-form-field class="w-3">
+                                        <input type="text" matInput placeholder="Número de documento" formControlName="numeroDocumento" (ngModelChange)='validateTypeDocument()' [required]="validar">
+                                        <mat-icon matSuffix class="iconsCA">credit_card</mat-icon>
+                                        <mat-error *ngIf="filtroCitas.get('numeroDocumento').hasError('pattern')">
+                                            Este campo no permite caracteres consecutivos y/o caracteres especiales!
+                                        </mat-error>
+                                        <mat-error *ngIf="filtroCitas.get('numeroDocumento').hasError('required')">
+                                            El numero de documento es requerido!
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-10">
+                                    <mat-form-field class="w-3">
+                                        <input type="text" onblur="this.value = this.value.toUpperCase()" matInput placeholder="Nombre" formControlName="nombre" [required]="validarName" class="input-uppercase" (keyup)="validateName($event)">
+                                        <mat-icon matSuffix class="iconsCA">person</mat-icon>
+                                        <mat-error *ngIf="filtroCitas.get('nombre').hasError('pattern')">
+                                            Este campo no permite caracteres consecutivos y/o especiales!
+                                        </mat-error>
+                                        <mat-error *ngIf="filtroCitas.get('nombre').hasError('required')">
+                                            El nombre es requerido!
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-10">
+                                    <mat-form-field class="w-3">
+                                        <input type="text" onblur="this.value = this.value.toUpperCase()" matInput placeholder="Primer apellido" formControlName="primerApellido" class="input-uppercase" [required]="validarName || nameRequired" (keyup)="validateSecondName($event)">
+                                        <mat-icon matSuffix class="iconsCA">person</mat-icon>
+                                        <mat-error *ngIf="filtroCitas.get('primerApellido').hasError('pattern')">
+                                            Este campo no permite caracteres consecutivos y/o especiales!
+                                        </mat-error>
+                                        <mat-error *ngIf="filtroCitas.get('primerApellido').hasError('required')">
+                                            El primer apellido es requerido!
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-10">
+                                    <mat-form-field class="w-3">
+                                        <input type="text" onblur="this.value = this.value.toUpperCase()" matInput placeholder="Segundo apellido" class="input-uppercase" formControlName="segundoApellido">
+                                        <!-- [required]="validarName || nameRequired || secondNameRequired" -->
+                                        <mat-icon matSuffix class="iconsCA">person</mat-icon>
+                                        <mat-error *ngIf="filtroCitas.get('segundoApellido').hasError('pattern')">
+                                            Este campo no permite caracteres consecutivos y/o especiales!
+                                        </mat-error>
+                                        <mat-error *ngIf="filtroCitas.get('segundoApellido').hasError('required')">
+                                            El segundo apellido es requerido!
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div *ngIf="!classCA" class="col-sm-12 col-md-12 col-lg-7 mt-5 pl-5">
             <div class="row">
-              <div class="col-sm-4 col-md-4 col-lg-4">
-                <span><b>{{ jsonSize }}</b> Resultados</span>
-              </div>
-              <div class="col-sm-4 col-md-4 col-lg-4">
-                <mat-icon>calendar_today</mat-icon>
-                <span>{{ fechaHoy1 }} - {{ horaHoy }}</span>
-              </div>
-              <div class="col-sm-4 col-md-4 col-lg-4">
-                <mat-icon>room</mat-icon>
-                <span class="mt-n5">Nombre sede A</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-12 col-lg-12"
-            *ngFor="let filter of filters | paginate: {itemsPerPage: 10, currentPage: pageActual} ">
-            <mat-card class="card mt-2 pt-2 pb-0 pl-1 pr-3">
-              <div class="row">
-                <div class="col-sm-2 col-md-2 col-lg-2">
-                  <button mat-fab class="bg-blue text-white" *ngIf="filter.estadoCita">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="row">
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <span><b>{{ jsonSize }}</b> Resultados</span>
+                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <mat-icon>calendar_today</mat-icon>
+                            <span>{{ fechaHoy1 }} - {{ horaHoy }}</span>
+                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <mat-icon>room</mat-icon>
+                            <span class="mt-n5">Nombre sede A</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12" *ngFor="let filter of filters | paginate: {itemsPerPage: 10, currentPage: pageActual} ">
+                    <mat-card class="card mt-2 pt-2 pb-0 pl-1 pr-3">
+                        <div class="row">
+                            <div class="col-sm-2 col-md-2 col-lg-2">
+                                <button mat-fab class="bg-blue text-white" *ngIf="filter.estadoCita">
                     {{ getSigla(filter?.estadoCita) }}
                   </button>
-                </div>
-                <div class="col-sm-5 col-md-5 col-lg-5 pl-0">
-                  <p class="mb-0"> <b class="text-primary f-2">{{ filter?.nombreCompleto }}</b> <br>
-                    <span>{{ filter?.tipTipIDav }}:
+                            </div>
+                            <div class="col-sm-5 col-md-5 col-lg-5 pl-0">
+                                <p class="mb-0"> <b class="text-primary f-2">{{ filter?.nombreCompleto }}</b> <br>
+                                    <span>{{ filter?.tipTipIDav }}:
                       {{ filter?.numDocId }}</span></p>
-                  <p class="mb-0 font-bold"><span *ngIf="filter.estadoCita"> ESTADO:
+                                <p class="mb-0 font-bold"><span *ngIf="filter.estadoCita"> ESTADO:
                       {{ filter?.estadoCita }}
                     </span></p>
-                  <p class="mb-0"><span>
+                                <p class="mb-0"><span>
                       {{ filter?.fechaCita }} - {{ filter?.horaCita }}
                     </span></p>
-                    <p class="mb-0"><span>Ubicacion de la sede: {{ filter?.ubicacionSede }}</span></p>
-                  <p class="f-1 text-primary">
-                    <mat-icon>trending_flat</mat-icon> {{ filter?.prestacion }}
-                  </p>
-                </div>
-                <div class="col-sm-4 col-md-4 col-lg-4 p-0">
-                  <p class="m-0 p-0"><span>{{ filter?.convenio }}</span></p>
-                  <span>Teléfono(s): {{ filter?.telefono }}</span>
-                  <p class="mb-0"><span>Dirección de la sede: {{ filter?.direccionSede }}</span></p>
-                  <div class="row asistencia" *ngIf="filter.codEstadoCita === '2' || filter.codEstadoCita === '3'">
-                    <div class="col-sm-12" >
-                      <p class="mb-2">¿Paciente asistió a la cita?</p>
-                    </div>
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                      <mat-radio-group [(ngModel)]="filter.asistencia" aria-label="Select an option">
-                        <mat-radio-button value="1" (change)="updateAsistencia(filter, '1')">SI</mat-radio-button>
-                        <mat-radio-button value="0" (change)="updateAsistencia(filter, '0')">NO</mat-radio-button>
-                      </mat-radio-group>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-1 col-md-1 col-lg-1 mt-n3">
-                  <button mat-icon-button [matMenuTriggerFor]="menus">
+                                <p class="mb-0"><span>Ubicacion de la sede: {{ filter?.ubicacionSede }}</span></p>
+                                <p class="f-1 text-primary">
+                                    <mat-icon>trending_flat</mat-icon> {{ filter?.prestacion }}
+                                </p>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4 p-0">
+                                <p class="m-0 p-0"><span>{{ filter?.convenio }}</span></p>
+                                <span>Teléfono(s): {{ filter?.telefono }}</span>
+                                <p class="mb-0"><span>Dirección de la sede: {{ filter?.direccionSede }}</span></p>
+                                <div class="row asistencia" *ngIf="filter.codEstadoCita === '2' || filter.codEstadoCita === '3'">
+                                    <div class="col-sm-12">
+                                        <p class="mb-2">¿Paciente asistió a la cita?</p>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                        <mat-radio-group [(ngModel)]="filter.asistencia" aria-label="Select an option">
+                                            <mat-radio-button value="1" (change)="updateAsistencia(filter, '1')">SI</mat-radio-button>
+                                            <mat-radio-button value="0" (change)="updateAsistencia(filter, '0')">NO</mat-radio-button>
+                                        </mat-radio-group>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1 col-md-1 col-lg-1 mt-n3">
+                                <button mat-icon-button [matMenuTriggerFor]="menus">
                     <mat-icon>more_vert</mat-icon>
                   </button>
-                  <mat-menu #menus="matMenu">
-                    <button *ngIf="user.role === roleConsulta || user.role === roleAdmin" mat-menu-item (click)="openDialogDetalle(filter)">
+                                <mat-menu #menus="matMenu">
+                                    <button *ngIf="user.role === roleConsulta || user.role === roleAdmin" mat-menu-item (click)="openDialogDetalle(filter)">
                       <span>Consultar detalle cita paciente</span>
                     </button>
-                    <button *ngIf="filter.codEstadoCita !== '3'" mat-menu-item (click)="openDialog(filter)">
+                                    <button *ngIf="filter.codEstadoCita !== '3'" mat-menu-item (click)="openDialog(filter)">
                       <span>Cambio de estado de cita a paciente</span>
                     </button>
-                    <button *ngIf="filter?.estadoCita !== 'ASIGNADA'" mat-menu-item (click)="openDialogTraza(filter)">
+                                    <button *ngIf="filter?.estadoCita !== 'ASIGNADA'" mat-menu-item (click)="openDialogTraza(filter)">
                       <span>Trazabilidad cita</span>
                     </button>
-                  </mat-menu>
+                                </mat-menu>
+                            </div>
+                        </div>
+                    </mat-card>
                 </div>
-              </div>
+            </div>
+            <mat-card class="card mt-2 pt-2 pb-0 pl-1 pr-3" *ngIf="filters">
+                <pagination-controls (pageChange)="pageActual = $event;"></pagination-controls>
             </mat-card>
-          </div>
         </div>
-        <mat-card class="card mt-2 pt-2 pb-0 pl-1 pr-3" *ngIf="filters">
-          <pagination-controls (pageChange)="pageActual = $event;"></pagination-controls>
-        </mat-card>
-      </div>
     </div>
-  </div>
+</div>

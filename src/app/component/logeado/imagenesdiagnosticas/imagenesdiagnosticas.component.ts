@@ -197,19 +197,16 @@ export class ImagenesdiagnosticasComponent implements OnInit {
         this.dataLock.DateActive = datoCambio.pacNum
         this.dataLock.UserActive.Documento = this.user.uid;
         this.dataLock.UserActive.Nombre = this.user.cn;
-        if(localStorage.getItem('lock')){
+                this.timer = setInterval(() => { this.alertUnlock(); }, this.counter * 60000);
+                const dialogRef = this.dialog.open(CambiocitaImgComponent, {
+                    data: {
+                        myVar: { data: datoCambio },
+                    },
+                    height: '500px'
+                });
+       /* if(localStorage.getItem('lock')){
             this.bloqueoService.unLockAll()
-        }
-        this.metodo = this.bloqueoService.search('userInfo', this.dataLock.DateActive).subscribe(data => {
-            this.unSubcribeFirebase()
-            if(data.length){
-                this.resultados = data;
-                swal({
-                    title: 'Cita bloqueada',
-                    text: `Esta cita se encuentra bloqueada por  ${this.resultados[0].UserActive.Nombre}`,
-                    icon: 'info',
-                  });
-            } else {
+        }        
                 this.valor = this.bloqueoService.lock(this.dataLock, 'userInfo');
                 localStorage.setItem('lock', this.valor.key);
                 this.timer = setInterval(() => { this.alertUnlock(); }, this.counter * 60000);
@@ -219,7 +216,7 @@ export class ImagenesdiagnosticasComponent implements OnInit {
                     },
                     height: '500px'
                 });
-                dialogRef.afterClosed().subscribe(result => {
+               /* dialogRef.afterClosed().subscribe(result => {
                     clearInterval(this.timer);
                     this.bloqueoService.unLock('userInfo/');
                     if (result != null) {
@@ -233,7 +230,19 @@ export class ImagenesdiagnosticasComponent implements OnInit {
                         clearInterval(this.timer);
                     }
                 });
-            }
+            
+       
+    }*/
+    }
+    openDialogDetalle(datoDetalle): void {
+        const dialogRef = this.dialog.open(DetallepacienteComponent, {
+            data: {
+                myVar: { data: datoDetalle }
+            },
+            height: '500px',
+            width: '750px',
+        });
+        dialogRef.afterClosed().subscribe(result => {
         });
     }
     onSubmit() {
