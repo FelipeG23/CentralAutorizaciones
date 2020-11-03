@@ -176,7 +176,7 @@
                 <ng-container *ngIf="citasPorAutorizar">
                     <table mat-table [dataSource]="dataSourceCitas" class="mat-elevation-z8">
                         <ng-container matColumnDef="cgFechaProceso">
-                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Proceso</th>
                             <td class="text-center" mat-cell *matCellDef="let element">
                                 <ng-container *ngIf="getNumberHours(element.fechaCitaCA) <= 3">
                                     <span class="color-time-green">{{element.fechaCitaCA }}</span>
@@ -188,6 +188,11 @@
                                     <span class="color-time-red">{{element.fechaCitaCA }}</span>
                                 </ng-container>
                             </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="diaFechaCita">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Cita</th>
+                            <td class="text-center fechaCita" mat-cell *matCellDef="let element"> {{element.fechaCita}} {{element.horaCita}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="tipTipIDav">
@@ -266,9 +271,14 @@
                             </td>
                         </ng-container>  -->
 
-                <!---->        <ng-container matColumnDef="idCita">
+                        <ng-container matColumnDef="idCita">
                             <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Autorización</th>
                             <td class="text-center" mat-cell *matCellDef="let element"> {{element.fechaAutorizacion}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="fechaCita">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Cita</th>
+                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.fechaCita}} {{element.horaCita}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="tipTipIDav">
@@ -293,7 +303,7 @@
 
                         <ng-container matColumnDef="valorProcedimiento">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor procedimiento</th>
-                            <td class="text-center" mat-cell *matCellDef="let element" currencyMask> {{element.valorPrestacion | currency:'COP':'$ ' }} </td>
+                            <td class="" mat-cell *matCellDef="let element" currencyMask> {{element.valorPrestacion | currency:'COP':'$ ' }} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="enProceso">

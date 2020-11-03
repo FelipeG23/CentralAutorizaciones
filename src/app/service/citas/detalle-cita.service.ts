@@ -15,11 +15,12 @@ export class DetalleCitaService {
 
   constructor(private http: HttpClient) { }
 
-  registrarAutorizacion(caGestionAutorizacionCita: CaGestionAutorizacionCita) {    
+ 
+  registrarAutorizacion(caGestionAutorizacionCita: CaGestionAutorizacionCita) {
     return this.http.post<Boolean>(environment.url + '/CentralAutoriza/rest/ClienteCita/registrarAutorizacion', caGestionAutorizacionCita);
   }
 
-  registrarAutorizacionImg(caGestionAutorizacionCita: CaGestionAutorizacionCita) { 
+  registrarAutorizacionImg(caGestionAutorizacionCita: CaGestionAutorizacionCita) {
     let caGestionAutorizacionCitas = caGestionAutorizacionCita;
     caGestionAutorizacionCita.codUsrCita = "FSM04389",
     caGestionAutorizacionCita.pacNum = 548110;

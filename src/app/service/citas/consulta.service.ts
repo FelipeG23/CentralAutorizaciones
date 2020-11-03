@@ -109,8 +109,8 @@ export class ConsultaService {
     let datosFechaFinal = this.convertDate(fechaFinallAuto);
   
     let minDateValue = new Date(date.getFullYear(), 1, 1);
-    let diego  = moment(minDateValue);
-    let datosFechaInicial = this.convertDate(diego);
+    let data  = moment(minDateValue);
+    let datosFechaInicial = this.convertDate(data);
 
     this.params = {
       'convenios': [],

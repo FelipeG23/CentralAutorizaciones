@@ -76,8 +76,8 @@ export class AutorizarComponent implements OnInit {
     maxDate = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
     maxDateFin = new Date(this.date.getFullYear() + 1, this.date.getMonth(), this.date.getDate());
     displayedColumns: string[] = ['cgFechaProceso', 'tipTipIDav', 'documento', 'nombreCompleto', 'radicar'];
-    displayedColumnsCitas: string[] = ['cgFechaProceso', 'tipTipIDav', 'documento', 'nombreCompleto', 'valorProcedimiento', 'enProceso', 'autorizar'];
-    displayedColumnsCitasAutorizadas: string[] = ['idCita', 'codAutorizacion', 'tipTipIDav', 'documento', 'nombreCompleto', 'valorProcedimiento', 'enProceso'];
+    displayedColumnsCitas: string[] = ['cgFechaProceso', 'diaFechaCita', 'tipTipIDav', 'documento', 'nombreCompleto', 'valorProcedimiento', 'enProceso', 'autorizar'];
+    displayedColumnsCitasAutorizadas: string[] = ['idCita', 'fechaCita', 'codAutorizacion', 'tipTipIDav', 'documento', 'nombreCompleto', 'valorProcedimiento', 'enProceso'];
     dataSource = new MatTableDataSource(this.ordenesMedicas);
     @ViewChild('paginatorCitas', { read: MatPaginator }) paginatorCitas: MatPaginator;
     @ViewChild('paginatorCitasAutorizadas', { read: MatPaginator }) paginatorCitasAutorizadas: MatPaginator;
@@ -133,11 +133,6 @@ export class AutorizarComponent implements OnInit {
         this.dataSource.paginator = this.paginatorPorRadicadar;
         this.dataSourceRadicadas.paginator = this.paginatorRadicadas;
         this.callSubmits();
-
-    //    http://52.247.56.140:8091/fsfb-api/citas
-
-
-       
 
 
     }
@@ -321,26 +316,18 @@ export class AutorizarComponent implements OnInit {
                 this.spinnerService.hide();
                 this.citasPorAutorizar = data;
 
-                /*
-                this.consultaService.getCitasAutorizadas()
-                .subscribe((data: any) => {
-                  this.citasAutorizadas = data;
-                  
-                  this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;
-                  
-                });  */
+                console.log(this.citasPorAutorizar);
+
+                
 
                 this.consultaService.postCitasAutorizadas()
                 .subscribe((data: any) => {
                     
                 this.citasAutorizadas = data.sort((a, b) => b.fechaAutorizacion - a.fechaAutorizacion);                  
-                this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;
+                this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;                
                   
                 });
                 
-
-
-
 
             //    this.datosUsuarios = this.listaUsuariosRegistro.find(word => word._id === this.registro.id);                
             
