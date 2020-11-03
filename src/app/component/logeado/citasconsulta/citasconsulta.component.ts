@@ -67,11 +67,13 @@ export class CitasconsultaComponent implements OnInit {
     pageEvent: PageEvent;
     options: any;
     date = new Date();
+    fechaFin = new Date();
     msjExp: boolean;
     minDateValue = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
     maxDateValue = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 600);
     minDate = new Date(this.date.getFullYear(), 0, 1);
-    maxDateIni = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 2);
+    minDateIn = new Date(this.date.getFullYear(), 0, 1);
+    maxDateIni = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 90);
     maxDateFin = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 8);
     maxDateIniAutorizacion = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
     maxDateFinAutorizacion = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 8);
@@ -96,6 +98,8 @@ export class CitasconsultaComponent implements OnInit {
     validarName: boolean = false;
     fechaHoy: Date;
     fechaHoy1: string;
+    actual: Date;
+    nuevoMes: number;
     horaHoy: string;
     jsonSize: number;
     user: any;
@@ -349,8 +353,48 @@ export class CitasconsultaComponent implements OnInit {
         }
     }
 
+    changeSecondDate() {
+        this.actual = new Date();
+        this.fechaFin.setDate((this.minDate.getFullYear(), this.minDate.getMonth(), this.filtroCitas.getRawValue().fecha.date()));
+        this.filtroCitas.get('fechaFinal').setValue(this.fechaFin);
+        this.maxDateValue = new Date(this.minDate.getFullYear(), (this.fechaFin.getMonth()), (this.fechaFin.getDate() + 8));
+        this.minDate = new Date(this.fechaFin.getFullYear(), this.fechaFin.getMonth(), this.fechaFin.getDate());
+        this.maxDateFin = new Date(this.minDate.getFullYear(), this.minDate.getMonth(), this.minDate.getDate() + 8);
+        if ((this.fechaFin.getMonth() + 1) !== (this.filtroCitas.getRawValue().fecha.month() + 1)) {
+            this.minDate.setMonth(((this.filtroCitas.getRawValue().fecha.month())));
+            this.maxDateValue.setMonth(((this.filtroCitas.getRawValue().fecha.month())));
+            if (this.actual.getMonth() !== this.filtroCitas.getRawValue().fecha.date()) {
+                this.maxDateFin = new Date(this.minDate.getFullYear(), this.minDate.getMonth(), this.minDate.getDate() + 8);
+                console.log('this.maxDateValue - ' + this.maxDateValue);
+                console.log('this.maxDateFin - ' + this.maxDateFin);
+            }
+            if ((this.filtroCitas.getRawValue().fecha.date()) >= 22) {
+                this.maxDateValue.setMonth(((this.filtroCitas.getRawValue().fecha.month() + 1)));
+            }
+        }
+
+        this.filtroCitas = this.fb.group({
+            fecha: [{ disabled: true, value: moment(this.minDate) }, [Validators.required]],
+            fechaFinal: [{ disabled: true, value: moment(this.maxDateValue) }, [Validators.required]],
+            especialidad: ['', this.checkList(this.especialidades)],
+            subEspecialidad: ['', this.checkList(this.subEspecialidades)],
+            servicio: ['', this.checkList(this.servicios)],
+            sede: ['', this.checkList(this.sedes)],
+            estado: [null],
+            convenio: [null],
+            tipoDocumento: [''],
+            numeroDocumento: ['', [Validators.maxLength(20), Validators.pattern(/^[A-ZÑa-zñ0-9\s]+$/)]],
+            nombre: ['', [Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/),
+            Validators.pattern(/^(?!.*(.)\1{3})/)]],
+            primerApellido: ['', [Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/),
+            Validators.pattern(/^(?!.*(.)\1{3})/)]],
+            segundoApellido: ['', [Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/),
+            Validators.pattern(/^(?!.*(.)\1{3})/)]],
+            ubicacionesFilter: ['']
+        });
+    }
+
     validarFechas() {
-        if (this.filtroCitas.getRawValue().fecha.year() >= this.filtroCitas.getRawValue().fechaFinal.year()) {
             if ((this.filtroCitas.getRawValue().fecha.month() + 1) <= (this.filtroCitas.getRawValue().fechaFinal.month() + 1)) {
                 if (this.filtroCitas.getRawValue().fecha.year() === this.filtroCitas.getRawValue().fechaFinal.year() &&
                     (this.filtroCitas.getRawValue().fecha.month() + 1) === (this.filtroCitas.getRawValue().fechaFinal.month() + 1) &&
@@ -374,15 +418,6 @@ export class CitasconsultaComponent implements OnInit {
                 });
                 this.msjExp = true;
             }
-        } else {
-            this.filtroCitas.controls['fechaFinal'].setValue('');
-            swal({
-                title: 'Error',
-                text: 'Rango final cita no puede ser menor a Rango inicial cita, verifique',
-                icon: 'warning',
-            });
-            this.msjExp = true;
-        }
     }
 
     validateTypeDocument() {

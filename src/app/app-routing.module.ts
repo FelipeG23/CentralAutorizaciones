@@ -1,3 +1,4 @@
+import { ImagenesdiagnosticasComponent } from './component/logeado/imagenesdiagnosticas/imagenesdiagnosticas.component';
 import { DerivacionesComponent } from './component/logeado/derivaciones/derivaciones.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -48,6 +49,11 @@ const routes: Routes = [
   {
     path: 'registrarautorizacion',
     component: RegistrarautorizacionComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'imagenesdiagnosticas',
+    component: ImagenesdiagnosticasComponent,
     canActivate: [AuthGuard]
   },
   {

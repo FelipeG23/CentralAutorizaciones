@@ -11,7 +11,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./traza.component.less']
 })
 export class TrazaComponent implements OnInit {
-  displayedColumns: string[] = ['cgFechaProceso', 'cgHoraProceso', 'cauDescUsuarios', 'ecDescripcion'];
+  displayedColumns: string[] = ['cgFechaProceso', 'cgHoraProceso', 'cauDescUsuarios',  'ecEstado'];
   dataSource;
   trazadata: any;
   fechaAsignada: string;
@@ -31,7 +31,7 @@ export class TrazaComponent implements OnInit {
         this.spinnerService.hide();
         this.dataSource = data;
         console.log(this.dataSource);
-        
+
       },
       error => {
         console.log(error);

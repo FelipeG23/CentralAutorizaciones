@@ -24,4 +24,7 @@ export class TrazabilidadService {
       environment.url + '/CentralAutoriza/rest/ClienteCita/consultarTrazabilidadOrden/' + dataTraza.ormIdOrdmNumero);
   }
 
+
+  
+
 }

@@ -84,6 +84,15 @@ export class ConsultaService {
     return this.http.get(environment.api + `/listas/convenios`);
   }
 
+  getImagenesDiagnosticas(data){
+    this.params = {
+      'fecha': this.convertDate(data.fecha),
+      'fechaFinal': this.convertDate(data.fechaFinal),
+      'PatiendId' : data.patientId
+    }
+    return this.http.get(environment.imgDiagnosticas + '/GetAppointmenstList?FechaInicial='+this.convertDate(data.fecha)+'&FechaFinal='+this.convertDate(data.fechaFinal)+'&PatientId='+ data.patientId);
+  
+  }
 
   getCitasAutorizadas() {
 
@@ -124,7 +133,6 @@ export class ConsultaService {
 
     return this.http.get<any>( environment.api + '/listas/citasAutorizadas');
   }
-
 
 
 

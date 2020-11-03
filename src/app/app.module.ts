@@ -43,6 +43,8 @@ import { TrimPipe } from './pipes/trim.pipe';
 import { VerRadicarComponent } from './modals/ver-radicar/ver-radicar.component';
 import { VerDerivacionesComponent } from './modals/ver-derivaciones/ver-derivaciones.component';
 import { DerivacionesComponent } from './component/logeado/derivaciones/derivaciones.component';
+import { ImagenesdiagnosticasComponent } from './component/logeado/imagenesdiagnosticas/imagenesdiagnosticas.component';
+import { CambiocitaImgComponent } from './modals/cambiocitaimg/cambiocitaimg.component';
 
 
 export const customCurrencyMaskConfig = {
@@ -67,6 +69,7 @@ export const customCurrencyMaskConfig = {
     NavbarComponent,
     NavbarSecondaryComponent,
     CambiocitaComponent,
+    CambiocitaImgComponent,
     EliminaromComponent,
     TrazaComponent,
     TrazaOrdenComponent,
@@ -84,7 +87,8 @@ export const customCurrencyMaskConfig = {
     TrimPipe,
     VerRadicarComponent,
     VerDerivacionesComponent,
-    DerivacionesComponent
+    DerivacionesComponent,
+    ImagenesdiagnosticasComponent
   ],
     imports: [
         BrowserModule,
@@ -108,6 +112,7 @@ export const customCurrencyMaskConfig = {
   entryComponents: [
     EliminaromComponent,
     CambiocitaComponent,
+    CambiocitaImgComponent,
     TrazaComponent,
     TrazaOrdenComponent,
     DetallepacienteComponent,
