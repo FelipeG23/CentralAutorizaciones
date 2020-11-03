@@ -18,19 +18,12 @@
                     <a (click)="deleteFirebase()" [routerLink]="['/derivaciones']" routerLinkActive="router-link-active"
                         class="nav-link">Diego</a>
                 </li>
-<<<<<<< HEAD
-                    <li *ngIf="user.role === rolImagenes || user.role === rolAdmin" class="nav-item">
-                    <a (click)="deleteFirebase()" [routerLink]="['/imagenesdiagnosticas']" routerLinkActive="router-link-active"
-                        class="nav-link">Apoyo Diagnostico</a>
-                </li>
-=======
 
                 <li *ngIf="user.role === rolImagenes || user.role === rolAdmin" class="nav-item">
                     <a (click)="deleteFirebase()" [routerLink]="['/imagenesdiagnosticas']"
                         routerLinkActive="router-link-active" class="nav-link">Apoyo Diagnostico</a>
                 </li>
 
->>>>>>> 0b57ace5abff61ab96dcf2535fde6c938af10200
                 <li class="nav-item">
                     <a (click)="logout()" class="nav-link">Salir</a>
                 </li>
@@ -151,32 +144,6 @@
                         <a (click)="deleteFirebase()" [routerLink]="['/ordenes']" routerLinkActive="router-link-active"
                             class="nav-link">Derivaciones</a>
                     </li>
-<<<<<<< HEAD
-                  <li *ngIf="user.role === rolRadicar || user.role === rolAdmin" class="nav-item">
-                      <a (click)="deleteFirebase()" [routerLink]="['/ordenes']" routerLinkActive="router-link-active"  class="nav-link">Derivaciones</a>
-                  </li>
-                  <li *ngIf="user.role === rolRadicar || user.role === rolAdmin" class="nav-item">
-                    <a (click)="deleteFirebase()" [routerLink]="['/imagenesdiagnosticas']" routerLinkActive="router-link-active"  class="nav-link">Apoyo Diagnostico</a>
-                  </li>  
-              </ul>
-          </div>
-          <div class="col-sm-4">
-              <ul class="nav user fix-menu">
-                  <li class="nav-item">
-                      <a class="nav-link f-1r">{{ user?.cn }}</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link f-1r">{{ rol }}</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link mt-n1">
-                          <button mat-icon-button [matMenuTriggerFor]="menu">
-                              <mat-icon>more_vert</mat-icon>
-                          </button>
-                      </a>
-                  </li>
-              </ul>
-=======
                     <li *ngIf="user.role === rolImagenes || user.role === rolAdmin" class="nav-item">
                         <a (click)="deleteFirebase()" [routerLink]="['/imagenesdiagnosticas']"
                             routerLinkActive="router-link-active" class="nav-link">Apoyo Diagnostico</a>
@@ -202,7 +169,6 @@
                         </a>
                     </li>
                 </ul>
->>>>>>> 0b57ace5abff61ab96dcf2535fde6c938af10200
 
                 <mat-menu #menu="matMenu">
                     <button mat-menu-item (click)="logout()">
