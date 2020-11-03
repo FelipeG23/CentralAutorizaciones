@@ -207,7 +207,7 @@
 
                         <ng-container matColumnDef="valorProcedimiento">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor procedimiento</th>
-                            <td class="text-center" mat-cell *matCellDef="let element"> ${{element.valorPrestacional}} </td>
+                            <td class="text-center" mat-cell *matCellDef="let element"> ${{element.valorPrestacional > 0 ? element.valorPrestacional : ' 0 '}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="enProceso">
