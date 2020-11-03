@@ -131,7 +131,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
 
     this.setLists();
     this.fbRadicar = this.fb.group({
-      ecPolizaNumero: [null],  //  Validators.pattern(/^(?!.*(.)\1{9})/),
+      ecPolizaNumero: [''],  //  Validators.pattern(/^(?!.*(.)\1{9})/),
       // Validators.pattern(/^[A-Za-z0-9\s]+$/), Validators.minLength(3)]],
       dorFechaOrdenmString: [{ disabled: true, value: null }, [Validators.required]],
       serEspCodigo: ['', [Validators.required, this.checkList(this.especialidades)]],

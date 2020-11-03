@@ -61,7 +61,8 @@ export class CambiocitaComponent implements OnInit {
       this.cambioCitas.controls['numeroPoliza'].setValidators([]);
     }
 
-
+  console.log(this.cambioCitas);
+  
 
     // consultamos la poliza
     this.detalleCitaService.consultarPoliza(this.datosCambio.myVar.data.pacNum).
