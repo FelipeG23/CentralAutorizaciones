@@ -21,9 +21,9 @@ export class DetalleCitaService {
 
   registrarAutorizacionImg(caGestionAutorizacionCita: CaGestionAutorizacionCita) { 
     let caGestionAutorizacionCitas = caGestionAutorizacionCita;
-    caGestionAutorizacionCitas.codUsrCita = "FSM04389",
-    caGestionAutorizacionCitas.pacNum = 548110;
-    return this.http.post<Boolean>(environment.url + '/CentralAutoriza/rest/ClienteCita/registrarAutorizacion', caGestionAutorizacionCitas);
+    caGestionAutorizacionCita.codUsrCita = "FSM04389",
+    caGestionAutorizacionCita.pacNum = 548110;
+    return this.http.post<Boolean>(environment.url + '/CentralAutoriza/rest/ClienteCita/registrarAutorizacion', caGestionAutorizacionCita);
   }
 
   consultarValor(dataUser) {

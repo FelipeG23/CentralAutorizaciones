@@ -163,7 +163,7 @@ export class ImagenesdiagnosticasComponent implements OnInit {
         });
     }
 
-    openDialog(datoCambio): void {
+    /*openDialog(datoCambio): void {
         this.dataLock.UserActive = new Userlock();
         this.dataLock.DateActive = datoCambio.pacNum
         if(localStorage.getItem('lock')){
@@ -190,8 +190,61 @@ export class ImagenesdiagnosticasComponent implements OnInit {
                         clearInterval(this.timer);
                     }
                 });
-    }
+    }*/
 
+    openDialog(datoCambio): void {
+        this.dataLock.UserActive = new Userlock();
+        this.dataLock.DateActive = datoCambio.pacNum
+        this.dataLock.UserActive.Documento = this.user.uid;
+        this.dataLock.UserActive.Nombre = this.user.cn;
+                this.timer = setInterval(() => { this.alertUnlock(); }, this.counter * 60000);
+                const dialogRef = this.dialog.open(CambiocitaImgComponent, {
+                    data: {
+                        myVar: { data: datoCambio },
+                    },
+                    height: '500px'
+                });
+       /* if(localStorage.getItem('lock')){
+            this.bloqueoService.unLockAll()
+        }        
+                this.valor = this.bloqueoService.lock(this.dataLock, 'userInfo');
+                localStorage.setItem('lock', this.valor.key);
+                this.timer = setInterval(() => { this.alertUnlock(); }, this.counter * 60000);
+                const dialogRef = this.dialog.open(CambiocitaImgComponent, {
+                    data: {
+                        myVar: { data: datoCambio },
+                    },
+                    height: '500px'
+                });
+               /* dialogRef.afterClosed().subscribe(result => {
+                    clearInterval(this.timer);
+                    this.bloqueoService.unLock('userInfo/');
+                    if (result != null) {
+                        datoCambio.estadoCita = result;
+                        this.filters.sort((a, b) => (a.estadoCita > b.estadoCita ? 1 : -1));
+                        this.bloqueoService.unLock('userInfo/');
+                        clearInterval(this.timer);
+                    }
+                    if (result === undefined) {
+                        this.bloqueoService.unLock('userInfo/');
+                        clearInterval(this.timer);
+                    }
+                });
+            
+       
+    }*/
+    }
+    openDialogDetalle(datoDetalle): void {
+        const dialogRef = this.dialog.open(DetallepacienteComponent, {
+            data: {
+                myVar: { data: datoDetalle }
+            },
+            height: '500px',
+            width: '750px',
+        });
+        dialogRef.afterClosed().subscribe(result => {
+        });
+    }
     onSubmit() {
         document.body.scrollTop = document.documentElement.scrollTop = 0;
         const months = this.filtroCitas.get("fechaFinal").value
