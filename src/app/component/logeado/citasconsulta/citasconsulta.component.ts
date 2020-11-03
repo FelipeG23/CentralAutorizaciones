@@ -72,9 +72,9 @@ export class CitasconsultaComponent implements OnInit {
     maxDateValue = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 600);
     minDate = new Date(this.date.getFullYear(), 0, 1);
     maxDateIni = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 2);
-    maxDateFin = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 60);
+    maxDateFin = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 8);
     maxDateIniAutorizacion = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
-    maxDateFinAutorizacion = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 60);
+    maxDateFinAutorizacion = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 8);
     classCA: boolean;
     pageActual: number = 1;
     filters: any;

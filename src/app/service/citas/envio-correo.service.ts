@@ -33,7 +33,8 @@ export class EnvioCorreoService {
               },
           'mail': dataPaciente.myVar.data.email
       };
-      this.params.mail = 'centralautorizacionesfsfb@gmail.com';
+      
+    this.params.mail = 'centralautorizacionesfsfb@gmail.com';
     return this.http.post<any>( environment.url + '/CentralAutoriza/rest/General/email', this.params);
   }
 
