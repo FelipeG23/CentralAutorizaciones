@@ -11,22 +11,15 @@ export class ConsultaService {
 
   params;
   minDateValue = new Date();
-
-
   constructor(private http: HttpClient) {}
-
   getCitas(userData, lista) {
-
-
     let convenios;
     if (lista !== '') {
-      convenios = lista.map(data => data.id)
+      convenios = lista.map(data => data.id);
     }
     
     const fechaInicial = this.convertDate(userData.fecha);
-
     const fechaFinal = this.convertDate(userData.fechaFinal);
-
     this.params = {
       'fechaInicial': fechaInicial,
       'fechaFinal': fechaFinal,
@@ -52,7 +45,7 @@ export class ConsultaService {
     this.params = {
       'fechaInicial': this.convertDate(data.fecha),
       'fechaFinal': this.convertDate(data.fechaFinal),
-    }
+    };
 
     return this.http.post<any>( environment.api + '/citas/porautorizar', this.params);
   }
@@ -89,25 +82,19 @@ export class ConsultaService {
       'fecha': this.convertDate(data.fecha),
       'fechaFinal': this.convertDate(data.fechaFinal),
       'PatiendId' : data.patientId
-    }
+    };
     return this.http.get(environment.imgDiagnosticas + '/GetAppointmenstList?FechaInicial='+this.convertDate(data.fecha)+'&FechaFinal='+this.convertDate(data.fechaFinal)+'&PatientId='+ data.patientId);
-  
   }
 
   getCitasAutorizadas() {
-
     let convenios = 3;
-
-    let date = new Date();
-      
+    let date = new Date();   
     let fechInicial = new Date(date.getFullYear(), date.getMonth(), date.getDate() -14);
     let fechaInicialAuto =  moment(fechInicial);
     // let datosFechaInicial = this.convertDate(fechaInicialAuto);
-
     let fechFinal = new Date(date.getFullYear(), date.getMonth(), date.getDate() +1);
     let fechaFinallAuto =  moment(fechFinal);
     let datosFechaFinal = this.convertDate(fechaFinallAuto);
-  
     let minDateValue = new Date(date.getFullYear(), 1, 1);
     let data  = moment(minDateValue);
     let datosFechaInicial = this.convertDate(data);
@@ -124,16 +111,13 @@ export class ConsultaService {
       'segundoApellido': "",
       'numDtipoDocIdocId': "",
     };
-    
 
     return this.http.post<any>( environment.api + '/citas', this.params);
   }
 
-  postCitasAutorizadas() {
-
-    return this.http.get<any>( environment.api + '/listas/citasAutorizadas');
+  postCitasAutorizadas(page: number, size: number): Observable<any> {
+    return this.http.get<any>(environment.api + `/listas/citasAuto?page=${page}&size=${size}`);
+    //return this.http.get<any>( environment.api + '/listas/citasAutorizadas');
   }
-
-
 
 }
