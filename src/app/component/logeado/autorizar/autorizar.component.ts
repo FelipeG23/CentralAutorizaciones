@@ -54,7 +54,7 @@ export const MY_FORMATS = {
 })
 export class AutorizarComponent implements OnInit {
     page = 0;
-    size = 20;
+    size = 11;
     length = 800;
     pageSize = 10;
     pageSizeOptions: number[] = [5, 10, 20];
