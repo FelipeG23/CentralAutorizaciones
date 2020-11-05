@@ -23,6 +23,7 @@ import { CaPrestacionesOrdMed } from 'src/app/models/orden-medica/CaPrestaciones
 import { BloqueoService } from 'src/app/service/firebase/bloqueo.service';
 import { Bloqueo } from 'src/app/models/firebase/bloqueo';
 import { Userlock } from 'src/app/models/firebase/userlock';
+import { stringify } from 'querystring';
 
 export const MY_FORMATS = {
     parse: {
@@ -180,16 +181,11 @@ export class AutorizarComponent implements OnInit {
         }
     }
 
-    setPageSizeOptions(setPageSizeOptionsInput: string) {
+    setPageSizeOptions(setPageSizeOptionsInput: any) {
         this.citasAutorizadas = null;
-        console.log('log', setPageSizeOptionsInput.pageSize);
-        //this.spinnerService.show();
-        this.consultaService.postCitasAutorizadas(setPageSizeOptionsInput.pageIndex, (setPageSizeOptionsInput.pageSize + 1))
+        this.consultaService.postCitasAutorizadas(setPageSizeOptionsInput.pageIndex, (setPageSizeOptionsInput.pageSize))
                 .subscribe((data: any) => {
                 this.citasAutorizadas = data;
-               // if (data) {
-               //     this.spinnerService.hide();
-               // }
                 this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;
                 });
     }

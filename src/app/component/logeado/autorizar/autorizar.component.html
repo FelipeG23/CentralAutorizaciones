@@ -210,9 +210,16 @@
                             <td mat-cell *matCellDef="let element"> {{element.nombreCompleto}} </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="valorProcedimiento">
+                        <!--
+                            <ng-container matColumnDef="valorProcedimiento">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor procedimiento</th>
                             <td class="text-center" mat-cell *matCellDef="let element"> ${{element.valorPrestacional > 0 ? element.valorPrestacional : ' 0 '}} </td>
+                        </ng-container>
+                        -->
+
+                        <ng-container matColumnDef="valorProcedimiento">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor procedimiento</th>
+                            <td class="" mat-cell *matCellDef="let element" currencyMask> {{element.valorPrestacional > 0 ? (element.valorPrestacional | currency:'COP':'$ ') : '0' | currency:'COP':'$ ' }} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="enProceso">
