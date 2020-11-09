@@ -116,7 +116,7 @@
                                     [ngModel]="ordenMedica.caDetalleOrdenesMedicas.serSerCodSubEspe">
                                   <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn2.bind(this)">
                                     <mat-option *ngFor="let subEspecialidad of filteredSubEspList | async"
-                                      [value]="subEspecialidad.id">
+                                      [value]="subEspecialidad.descripcion">
                                       {{ subEspecialidad.descripcion }}
                                     </mat-option>
                                   </mat-autocomplete>
@@ -206,7 +206,7 @@
                               </div>
                               <div class="col-sm-12 col-md-12 col-lg-6">
                                 <mat-form-field class="w-100">
-                                  <input matInput placeholder="Numero póliza" formControlName="ecPolizaNumero" required
+                                  <input matInput placeholder="Numero póliza" formControlName="ecPolizaNumero"
                                     #message minlength="1"
                                     [ngModel]="ordenMedica.caDetalleOrdenesMedicas.ecPolizaNumero" [readonly]="numeroPolizaReadonly">
                                   <mat-error *ngIf="fbRadicar.get('ecPolizaNumero').hasError('pattern')">
