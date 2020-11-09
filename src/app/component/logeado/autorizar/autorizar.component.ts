@@ -3,7 +3,7 @@ import {FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
 import { TipodocService } from 'src/app/service/catalogos/tipodoc.service';
 import { trigger, transition, useAnimation } from '@angular/animations';
 import { fadeIn } from 'ng-animate';
-import { MatDialog, MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS, MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
+import { MatDialog, MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS, MatPaginator, MatTableDataSource, MatSort, PageEvent } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import swal from 'sweetalert';
 import { ConsultarordenService } from 'src/app/service/ordenmedica/consultarorden.service';
@@ -104,6 +104,17 @@ export class AutorizarComponent implements OnInit {
     listaCitasAutorizadas: any[];
 
 
+    // MatPaginator Inputs
+  length = 100;
+  pageSize = 10;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+
+  // MatPaginator Output
+  pageEvent: PageEvent;
+
+  
+
+
     constructor(private fb: FormBuilder,
         public dialog: MatDialog,
         private consultaService: ConsultaService,
@@ -129,6 +140,8 @@ export class AutorizarComponent implements OnInit {
         this.initFilter();
         this.dataSource.sort = this.sort;
         this.dataSourceCitas.paginator = this.paginatorCitas;
+        console.log('prueba Diego', this.dataSourceCitas.paginator);
+        
         this.dataSourceCitasAutorizadas.paginator = this.paginatorCitasAutorizadas;
         this.dataSource.paginator = this.paginatorPorRadicadar;
         this.dataSourceRadicadas.paginator = this.paginatorRadicadas;
@@ -136,6 +149,12 @@ export class AutorizarComponent implements OnInit {
 
 
     }
+
+    setPageSizeOptions(setPageSizeOptionsInput: string) {
+        if (setPageSizeOptionsInput) {
+          this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
+        }
+      }
 
     initFilter() {
         this.filtroOrdenes = this.fb.group({

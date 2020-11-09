@@ -70,7 +70,7 @@ export class CitasconsultaComponent implements OnInit {
     fechaFin = new Date();
     msjExp: boolean;
     minDateValue = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
-    maxDateValue = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 600);
+    maxDateValue = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 8);
     minDate = new Date(this.date.getFullYear(), 0, 1);
     minDateIn = new Date(this.date.getFullYear(), 0, 1);
     maxDateIni = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 90);

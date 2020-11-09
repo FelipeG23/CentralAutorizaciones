@@ -600,7 +600,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
   displayFn2(id) {
     if (id) {
       return this.subEspecialidades.filter(i => {
-        const b = i.id === id.trim();
+        const b = i.descripcion === id.trim();
         return b;
       })[0].descripcion;
     }
