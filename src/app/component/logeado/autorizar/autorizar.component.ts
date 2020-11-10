@@ -116,16 +116,6 @@ export class AutorizarComponent implements OnInit {
     listaCitasAutorizadas: any[];
 
 
-    // MatPaginator Inputs
-  length = 100;
-  pageSize = 10;
-  pageSizeOptions: number[] = [5, 10, 25, 100];
-
-  // MatPaginator Output
-  pageEvent: PageEvent;
-
-  
-
 
     constructor(private fb: FormBuilder,
         public dialog: MatDialog,
@@ -152,14 +142,12 @@ export class AutorizarComponent implements OnInit {
         this.initFilter();
         this.dataSource.sort = this.sort;
         this.dataSourceCitas.paginator = this.paginatorCitas;
-        console.log('prueba Diego', this.dataSourceCitas.paginator);
         
         this.dataSourceCitasAutorizadas.paginator = this.paginatorCitasAutorizadas;
         this.dataSource.paginator = this.paginatorPorRadicadar;
         this.dataSourceRadicadas.paginator = this.paginatorRadicadas;
         this.callSubmits();
         this.onSubmitCitas();
-        console.log('log --> ' + this.pageEvent.pageIndex);
     }
 
     onSubmitCitas(isList?) {
@@ -196,18 +184,12 @@ export class AutorizarComponent implements OnInit {
 
     setPageSizeOptions(setPageSizeOptionsInput: any) {
         this.citasAutorizadas = null;
-        this.consultaService.postCitasAutorizadas(setPageSizeOptionsInput.pageIndex, (setPageSizeOptionsInput.pageSize))
+        this.consultaService.postCitasAutorizadas(setPageSizeOptionsInput.pageIndex, (setPageSizeOptionsInput.pageSize +1))
                 .subscribe((data: any) => {
                 this.citasAutorizadas = data;
                 this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;
                 });
     }
-
-    setPageSizeOptions(setPageSizeOptionsInput: string) {
-        if (setPageSizeOptionsInput) {
-          this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
-        }
-      }
 
     initFilter() {
         this.filtroOrdenes = this.fb.group({

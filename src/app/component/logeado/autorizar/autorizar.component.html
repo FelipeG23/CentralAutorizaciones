@@ -242,22 +242,9 @@
                 <ng-container *ngIf="citasPorAutorizar == null || citasPorAutorizar.length === 0">
                     <br>
                     <p class="text-center">No se encontraron citas por autorizar</p>
-                </ng-container>
-                <mat-paginator #paginatorCitas [pageSizeOptions]="pageSizeOptions" (ngModelChange)="setPageSizeOptions($event)"
-                [length]="length"
-                [pageSize]="pageSize"
-                [pageSizeOptions]="pageSizeOptions"
-                (page)="pageEvent = $event"
-                showFirstLastButtons></mat-paginator>               
+                </ng-container>   
+                <mat-paginator #paginatorCitas  [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
                 <br>
-            </div>
-
-
-            <div *ngIf="pageEvent">
-                <h5>Page Change Event Properties</h5>
-                <div>List length: {{pageEvent.length}}</div>
-                <div>Page size: {{pageEvent.pageSize}}</div>
-                <div>Page index: {{pageEvent.pageIndex}}</div>
             </div>
 
 
@@ -348,11 +335,13 @@
                 <br>
             </div>
 
+            <!--
             <div *ngIf = "pageEvent">
                 <h5>Page Change Event</h5>
                 <div>List length: {{pageEvent.length}}</div>
                 <div>Page size: {{pageEvent.pageSize}}</div>
                 <div>Page index: {{pageEvent.pageIndex}}</div>
              </div>
-
+             -->
+             
 <br> <br>
