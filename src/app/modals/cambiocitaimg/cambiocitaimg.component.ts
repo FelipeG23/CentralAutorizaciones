@@ -39,7 +39,6 @@ export class CambiocitaImgComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.datosCambio.myVar.data.tipoConvenio);
     this.cambioCitas = this.fb.group({
       tipoCita: ['', [Validators.required]],
       estado: ['', [Validators.required, this.checkState(this.datosCambio.myVar.data.estadoCita)]],
@@ -57,11 +56,10 @@ export class CambiocitaImgComponent implements OnInit {
       this.cambioCitas.controls['numeroPoliza'].setValidators([]);
     }
 
-
-
     // consultamos la poliza
-    this.detalleCitaService.consultarPoliza(this.datosCambio.myVar.data.pacNum).
+    this.detalleCitaService.consultarPoliza(this.datosCambio.myVar.data.CUPS).
       subscribe((poliza: CaPolizasPaciente) => {
+        console.log('entra ', poliza);
         if (poliza !== null) {
           this.cambioCitas.get('numeroPoliza').setValue(poliza.ecPolizaNumero);
         }

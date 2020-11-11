@@ -157,7 +157,7 @@ export class ImagenesdiagnosticasComponent implements OnInit {
             servicio: ['', this.checkList(this.servicios)],
             sede: ['', this.checkList(this.sedes)],
             estado: [null],
-            patientId: ['', [Validators.required]],
+            //patientId: ['', [Validators.required]],
             convenio: [null],
             tipoDocumento: ['']
         });

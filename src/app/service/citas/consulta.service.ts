@@ -81,7 +81,8 @@ export class ConsultaService {
       'PatiendId' : data.patientId
     };
     // tslint:disable-next-line: max-line-length
-    return this.http.get(environment.imgDiagnosticas + '/GetAppointmenstList?FechaInicial=' + this.convertDate(data.fecha) + '&FechaFinal=' + this.convertDate(data.fechaFinal) + '&PatientId=' + data.patientId);
+    //return this.http.get(environment.imgDiagnosticas + '/GetAppointmenstList?FechaInicial=' + this.convertDate(data.fecha) + '&FechaFinal=' + this.convertDate(data.fechaFinal) + '&PatientId=' + data.patientId);
+    return this.http.get(environment.imgDiagnosticas + '/GetAppointmenstList?FechaInicial=' + this.convertDate(data.fecha) + '&FechaFinal=' + this.convertDate(data.fechaFinal) + '&PatientId=&ServiceCode');
   }
 
   getCitasAutorizadas() {

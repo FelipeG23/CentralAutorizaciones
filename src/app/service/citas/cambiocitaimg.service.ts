@@ -23,6 +23,8 @@ export class CambiocitaimgService {
     var numbs = str.replace(chars,'');
     var datecita = datosDeCita.myVar.data.CITA;
     datecita = datecita.split(' ')[0];
+    var dateAsigna = datosDeCita.myVar.data.FECHAAGENDAMIENTO;
+    dateAsigna = dateAsigna.split(' ')[0];
     var hour = datosDeCita.myVar.data.CITA;
     hour = hour.split(' ')[1];
     hour = hour.replace(':00','');
@@ -35,7 +37,7 @@ export class CambiocitaimgService {
       'otcObservacion': datosDeCambio.observacion,
       'correoElectronicoPaciente': datosDeCambio.sendEmail === 'true' ? true : false,
       'ecPolizaNumero': datosDeCambio.numeroPoliza,
-      'pacNum': 548110,
+      'pacNum': parseInt(datosDeCita.myVar.data.CUPS),
       'nombreCompleto': datosDeCita.myVar.data.NOMBRES + ' ' + datosDeCita.myVar.data.APELLIDOS,
       'pacPacTipoIdentCodigo': 4,
       'tipoDocId': 4,
@@ -45,7 +47,7 @@ export class CambiocitaimgService {
       'email': datosDeCita.myVar.data.EMAIL,
       'horaCita': hour,
       'fechaCita': datecita,
-      'codEspecialidad': "",
+      'codEspecialidad': "Imagenes diagnosticas",
       'especialidad': datosDeCita.myVar.data.EXAMEN,
       'codProf': "",
       'nombreProf': "",
@@ -55,10 +57,10 @@ export class CambiocitaimgService {
       'codCentroAten': "",
       'nombreCentroAten': datosDeCita.myVar.data.SERVICIO,
       'codConvenio': codConv,
-      'convenio': datosDeCita.myVar.data.CONVENIO,
-      'codUsrCita': "FSM04389",
-      'usrCita': "FSM04389",
-      'fechaAsigna': "2020-06-08",
+      'convenio': datosDeCita.myVar.data.NOMBRECONVENIO,
+      'codUsrCita': 'FSM04389',
+      'usrCita': 'FSM04389',
+      'fechaAsigna': dateAsigna,
       'indRecepcionado': datosDeCita.myVar.data.indRecepcionado,
       'direccionCentroOperativo': "",
       'telefonoCentroOperativo': datosDeCita.myVar.data.P_PHONE,
