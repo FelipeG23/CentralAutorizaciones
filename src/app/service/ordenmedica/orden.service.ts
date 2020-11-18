@@ -9,6 +9,7 @@ import { OrdenMedica } from 'src/app/models/orden-medica/OrdenMedica';
 import { CrearPrestacionesOrdMed } from 'src/app/models/orden-medica/CrearPrestacionesOrdMed';
 import { FinalizarOrdenMedica } from 'src/app/models/orden-medica/FinalizarOrden';
 import { CaGestionAutorizacion } from 'src/app/models/orden-medica/CaGestionAutorizacion';
+import { analytics } from 'firebase';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,36 @@ export class OrdenService {
     return this.http.get<OrdenMedica>(environment.url + '/CentralAutoriza/rest/ordenesMedicas/detalleOrdenMedica/' + ormIdOrdmNumero);
   }
 
-  createDetailOrden(adminOrdenMedica: AdminOrdenMedica) {
+  createDetailOrden(adminOrdenMedica: any) {
+
+    //  AdminOrdenMedica
+
+    console.log("Test 10", adminOrdenMedica);
+
+    /*
+    var adminOrdenMedicas = {};
+    adminOrdenMedicas = {
+      'conConCodigo': "3205",
+      'diaAgrCodigo': "1       ",
+      'diaOtroAgr': "Autorizacion de prueba",    
+      'dorFechaOrdenmString': "2020-11-17T05:00:00.000Z",
+      'ecPolizaNumero': "SEGUROS BOLIVAR",
+      'ormIdOrdmNumero': 28947,
+      'pacPacNumero': 984386,
+      'pacPacRut': "1013276086",
+      'pacPacTipoIdentCodigo': "2",
+      'pcaAgeCodigProfe': "16692093",
+      'pcaAgeCodigRecep': "53101149",
+      'pcaAgeLugar': "IMAD",
+      'serEspCodigo': "9",
+      'serSerCodSubEspe': "012",
+      'serSerCodigo': "ORTOCHIA",
+      'codUsrCita': "53101149",
+    };
+
+    console.log(adminOrdenMedicas);  */
+    
+    
     return this.http.post<any>(environment.url + '/CentralAutoriza/rest/ordenesMedicas/administrarOrdenMedica', adminOrdenMedica);
   }
 

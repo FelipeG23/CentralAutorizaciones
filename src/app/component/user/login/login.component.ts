@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
       // status: success/error
       // success - script is loaded and greaptcha is ready
       // error - script is not loaded
-      console.log("Diego", status);
+      // console.log("Diego", status);
     })
 
     this.login = this.fb.group({

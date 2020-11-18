@@ -205,6 +205,9 @@ export class RadicaOrdenMedicaComponent implements OnInit {
     this.adminOrdenMedica.ecPolizaNumero = this.fbRadicar.get('ecPolizaNumero').value;
     this.spinner.show();
     this.adminOrdenMedica.caDetalleOrdenesMedicas.diaAgrCodigo = this.fbRadicar.get('diaAgrCodigo').value.diaAgrCodigo;
+
+    
+  
     this.ordenService.createDetailOrden(this.adminOrdenMedica).subscribe(
       (data) => {
         this.spinner.hide();
@@ -600,7 +603,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
   displayFn2(id) {
     if (id) {
       return this.subEspecialidades.filter(i => {
-        const b = i.descripcion === id.trim();
+        const b = i.id === id.trim();
         return b;
       })[0].descripcion;
     }

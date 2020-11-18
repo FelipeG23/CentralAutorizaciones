@@ -116,7 +116,7 @@
                                     [ngModel]="ordenMedica.caDetalleOrdenesMedicas.serSerCodSubEspe">
                                   <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn2.bind(this)">
                                     <mat-option *ngFor="let subEspecialidad of filteredSubEspList | async"
-                                      [value]="subEspecialidad.descripcion">
+                                      [value]="subEspecialidad.id">
                                       {{ subEspecialidad.descripcion }}
                                     </mat-option>
                                   </mat-autocomplete>
@@ -208,7 +208,7 @@
                                 <mat-form-field class="w-100">
                                   <input matInput placeholder="Numero póliza" formControlName="ecPolizaNumero"
                                     #message minlength="1"
-                                    [ngModel]="ordenMedica.caDetalleOrdenesMedicas.ecPolizaNumero" [readonly]="numeroPolizaReadonly">
+                                    [ngModel]="ordenMedica.caDetalleOrdenesMedicas.ecPolizaNumero" [readonly]="">
                                   <mat-error *ngIf="fbRadicar.get('ecPolizaNumero').hasError('pattern')">
                                     Este campo no permite caracteres consecutivos!
                                   </mat-error>
