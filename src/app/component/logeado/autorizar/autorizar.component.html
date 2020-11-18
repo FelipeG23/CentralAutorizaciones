@@ -210,9 +210,16 @@
                             <td mat-cell *matCellDef="let element"> {{element.nombreCompleto}} </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="valorProcedimiento">
+                        <!--
+                            <ng-container matColumnDef="valorProcedimiento">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor procedimiento</th>
                             <td class="text-center" mat-cell *matCellDef="let element"> ${{element.valorPrestacional > 0 ? element.valorPrestacional : ' 0 '}} </td>
+                        </ng-container>
+                        -->
+
+                        <ng-container matColumnDef="valorProcedimiento">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor procedimiento</th>
+                            <td class="" mat-cell *matCellDef="let element" currencyMask> {{element.valorPrestacional > 0 ? (element.valorPrestacional | currency:'COP':'$ ') : '0' | currency:'COP':'$ ' }} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="enProceso">
@@ -235,22 +242,9 @@
                 <ng-container *ngIf="citasPorAutorizar == null || citasPorAutorizar.length === 0">
                     <br>
                     <p class="text-center">No se encontraron citas por autorizar</p>
-                </ng-container>
-                <mat-paginator #paginatorCitas [pageSizeOptions]="pageSizeOptions" (ngModelChange)="setPageSizeOptions($event)"
-                [length]="length"
-                [pageSize]="pageSize"
-                [pageSizeOptions]="pageSizeOptions"
-                (page)="pageEvent = $event"
-                showFirstLastButtons></mat-paginator>               
+                </ng-container>   
+                <mat-paginator #paginatorCitas  [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
                 <br>
-            </div>
-
-
-            <div *ngIf="pageEvent">
-                <h5>Page Change Event Properties</h5>
-                <div>List length: {{pageEvent.length}}</div>
-                <div>Page size: {{pageEvent.pageSize}}</div>
-                <div>Page index: {{pageEvent.pageIndex}}</div>
             </div>
 
 
@@ -291,7 +285,7 @@
 
                         <ng-container matColumnDef="fechaCita">
                             <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Cita</th>
-                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.fechaCita}} {{element.horaCita}} </td>
+                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.fechacita}} {{element.horacita}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="tipTipIDav">
@@ -330,12 +324,24 @@
                 </ng-container>
                 <ng-container *ngIf="citasAutorizadas == null || citasAutorizadas.length === 0">
                     <br>
-                    <p class="text-center">No se encontraron citas autorizadas</p>
+                    <p class="text-center">Por favor espere</p>
                 </ng-container>
-                <mat-paginator #paginatorCitasAutorizadas [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                <mat-paginator #paginatorCitas [pageSizeOptions]="pageSizeOptions" 
+                    [length]="length"
+                    [pageSize]="pageSize"
+                    [pageSizeOptions]="pageSizeOptions"
+                    (page)=setPageSizeOptions($event)
+                    showFirstLastButtons></mat-paginator> 
                 <br>
             </div>
 
-
-
+            <!--
+            <div *ngIf = "pageEvent">
+                <h5>Page Change Event</h5>
+                <div>List length: {{pageEvent.length}}</div>
+                <div>Page size: {{pageEvent.pageSize}}</div>
+                <div>Page index: {{pageEvent.pageIndex}}</div>
+             </div>
+             -->
+             
 <br> <br>

@@ -74,19 +74,28 @@
                 <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
                     <mat-card>
                         <mat-card-header>
-                            <mat-card-title>Fecha de asignación</mat-card-title>
-                            <mat-card-subtitle>{{ datosCambio.myVar.data.CITA }}
+                            <mat-card-title>Asegurador</mat-card-title>
+                            <mat-card-subtitle>{{ datosCambio.myVar.data.ASEGURADOR }} - {{ datosCambio.myVar.data.NOMBREASEGURADOR }}
                             </mat-card-subtitle>
                         </mat-card-header>
                     </mat-card>
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-12 col-md-12 col-lg-12 padding-0 mt-1">
+                <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
+                    <mat-card>
+                        <mat-card-header>
+                            <mat-card-title>Fecha de asignación</mat-card-title>
+                            <mat-card-subtitle>{{ datosCambio.myVar.data.FECHAAGENDAMIENTO }}
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                    </mat-card>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-6 padding-0">
                     <mat-card>
                         <mat-card-header>
                             <mat-card-title>Convenio</mat-card-title>
-                            <mat-card-subtitle>{{ datosCambio.myVar.data.CONVENIO }}
+                            <mat-card-subtitle>{{ datosCambio.myVar.data.NOMBRECONVENIO }}
                             </mat-card-subtitle>
                         </mat-card-header>
                     </mat-card>
@@ -95,63 +104,63 @@
         </div>
     </div>
     <div class="col-sm-6">
-    <form novalidate (ngSubmit)="onSubmit()" [formGroup]="cambioCitas" #myform="ngForm">
-        <div class="col-sm-12">
-          <mat-form-field class="w-100">
-            <input matInput placeholder="Número de póliza" type="text" formControlName="numeroPoliza"  [readonly]="numeroPolizaReadonly">
-            <!-- 
+        <form novalidate (ngSubmit)="onSubmit()" [formGroup]="cambioCitas" #myform="ngForm">
+            <div class="col-sm-12">
+                <mat-form-field class="w-100">
+                    <input matInput placeholder="Número de póliza" type="text" formControlName="numeroPoliza" [readonly]="numeroPolizaReadonly">
+                    <!-- 
                 <mat-error *ngIf="cambioCitas.get('numeroPoliza').hasError('required')">
             Este campo es obligatorio
             </mat-error>
             -->
-            </mat-form-field>
-        </div>
-                <div class="col-sm-12">
-        <mat-form-field class="w-100">
-          <mat-label>Tipo de cita</mat-label>
-          <mat-select formControlName="tipoCita">
-            <mat-option disabled value="Seleccione">
-              Seleccione un tipo de cita.
-            </mat-option>
-            <mat-option value="Presencial">
-              Presencial
-            </mat-option>
-            <mat-option value="Telemedicina">
-              Telemedicina
-            </mat-option>
-          </mat-select>
-          <!-- 
+                </mat-form-field>
+            </div>
+            <div class="col-sm-12">
+                <mat-form-field class="w-100">
+                    <mat-label>Tipo de cita</mat-label>
+                    <mat-select formControlName="tipoCita">
+                        <mat-option disabled value="Seleccione">
+                            Seleccione un tipo de cita.
+                        </mat-option>
+                        <mat-option value="Presencial">
+                            Presencial
+                        </mat-option>
+                        <mat-option value="Telemedicina">
+                            Telemedicina
+                        </mat-option>
+                    </mat-select>
+                    <!-- 
               <mat-error *ngIf="cambioCitas.get('tipoCita').hasError('required') ">
             Este campo es obligatorio
           </mat-error>
           -->
-          <!--
+                    <!--
           <mat-error *ngIf="cambioCitas.get('tipoCita').hasError('checkState')">
             No se puede cambiar al mismo estado de la cita
           </mat-error>   -->
-        </mat-form-field>
-      </div>
-      <div class="col-sm-12">
-        <mat-form-field class="w-100">
-          <mat-label>Seleccione el estado</mat-label>
-          <mat-select formControlName="estado">
-            <mat-option disabled value="Seleccione">
-              Seleccione un estado para la cita.
-            </mat-option>
-            <mat-option value="2">
-              Confirmada
-            </mat-option>
-            <mat-option value="4">
-              Cancelada por paciente
-            </mat-option>
-            <mat-option value="5">
-              Cancelada por médico
-            </mat-option>
-            <mat-option value="6">
-              Reprogramada
-            </mat-option>
-          </mat-select>
-        <!-- 
+                </mat-form-field>
+            </div>
+            <div class="col-sm-12">
+                <mat-form-field class="w-100">
+                    <mat-label>Seleccione el estado</mat-label>
+                    <mat-select formControlName="estado">
+                        <mat-option disabled value="Seleccione">
+                            Seleccione un estado para la cita.
+                        </mat-option>
+                        <mat-option value="2">
+                            Confirmada
+                        </mat-option>
+                        <mat-option value="4">
+                            Cancelada por paciente
+                        </mat-option>
+                        <mat-option value="5">
+                            Cancelada por médico
+                        </mat-option>
+                        <mat-option value="6">
+                            Reprogramada
+                        </mat-option>
+                    </mat-select>
+                    <!-- 
               <mat-error *ngIf="cambioCitas.get('estado').hasError('required')">
             Este campo es obligatorio
           </mat-error>
@@ -159,51 +168,47 @@
             No se puede cambiar al mismo estado de la cita
           </mat-error>
         -->
-        </mat-form-field>
-      </div>
-      <div class="col-sm-12">
-        <mat-form-field class="w-100">
-          <mat-label>Detalle estado</mat-label>
-          <mat-select formControlName="detalleEstado">
-            <mat-option disabled value="Seleccione">
-              Seleccione un detalle del estado.
-            </mat-option>
-            <mat-option value="Numero telefónico errado">
-              Número telefónico errado
-            </mat-option>
-            <mat-option value="Paciente confirma">
-              Paciente confirma
-            </mat-option>
-            <mat-option value="Paciente cancela">
-              Paciente cancela
-            </mat-option>
-            <mat-option value="Paciente no contesta, se deja un mensaje">
-              Paciente no contesta, se deja un mensaje
-            </mat-option>
-            <mat-option value="Otro">
-              Otro
-            </mat-option>
-          </mat-select>
-         <!-- <mat-error *ngIf="cambioCitas.get('detalleEstado').hasError('required')">
+                </mat-form-field>
+            </div>
+            <div class="col-sm-12">
+                <mat-form-field class="w-100">
+                    <mat-label>Detalle estado</mat-label>
+                    <mat-select formControlName="detalleEstado">
+                        <mat-option disabled value="Seleccione">
+                            Seleccione un detalle del estado.
+                        </mat-option>
+                        <mat-option value="Numero telefónico errado">
+                            Número telefónico errado
+                        </mat-option>
+                        <mat-option value="Paciente confirma">
+                            Paciente confirma
+                        </mat-option>
+                        <mat-option value="Paciente cancela">
+                            Paciente cancela
+                        </mat-option>
+                        <mat-option value="Paciente no contesta, se deja un mensaje">
+                            Paciente no contesta, se deja un mensaje
+                        </mat-option>
+                        <mat-option value="Otro">
+                            Otro
+                        </mat-option>
+                    </mat-select>
+                    <!-- <mat-error *ngIf="cambioCitas.get('detalleEstado').hasError('required')">
             Este campo es obligatorio
           </mat-error>
           <mat-error *ngIf="cambioCitas.get('tipoEstado').hasError('checkState')">
             No se puede cambiar al mismo estado de la cita
           </mat-error>  -->
-        </mat-form-field>
-      </div>
-      <div class="col-sm-12">
-        <mat-form-field class="w-100">
-          <mat-label>Observación</mat-label>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-12">
+                <mat-form-field class="w-100">
+                    <mat-label>Observación</mat-label>
 
-          <textarea matInput #messages
-                    formControlName="observacion"
-                    cdkTextareaAutosize
-                    cdkAutosizeMinRows="1"
-                    cdkAutosizeMaxRows="5"></textarea>
+                    <textarea matInput #messages formControlName="observacion" cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
 
-          <mat-hint align="end">{{messages.value.length}} / 600</mat-hint>
-      <!--    <mat-error *ngIf="cambioCitas.get('observacion').hasError('pattern')">
+                    <mat-hint align="end">{{messages.value.length}} / 600</mat-hint>
+                    <!--    <mat-error *ngIf="cambioCitas.get('observacion').hasError('pattern')">
             Este campo no permite caracteres especiales o valores repetidos
           </mat-error>  
           <mat-error *ngIf="cambioCitas.get('observacion').hasError('maxlength')">
@@ -212,21 +217,21 @@
           <mat-error *ngIf="cambioCitas.get('observacion').hasError('minlength')">
             Este campo solo acepta minimo 1 caracteres
           </mat-error>-->
-        </mat-form-field>
-      </div>
-           <div class="row mt-3">
-        <div class="col-sm-6">
-          <button mat-raised-button class="buttonCA-second" type="button" (click)="close()">CANCELAR</button>
-        </div>
-        <!-- 
+                </mat-form-field>
+            </div>
+            <div class="row mt-3">
+                <div class="col-sm-6">
+                    <button mat-raised-button class="buttonCA-second" type="button" (click)="close()">CANCELAR</button>
+                </div>
+                <!-- 
             <div class="col-sm-4">
           <button mat-raised-button class="buttonCA-second" type="button" (click)="openDialogInfoConvenio()">CONVENIOS</button>
         </div>
         -->
-        <div class="col-sm-4">
-          <button mat-raised-button class="buttonCA primary" type="submit" [disabled]="cambioCitas.invalid">GUARDAR</button>
-        </div>
-      </div>
+                <div class="col-sm-4">
+                    <button mat-raised-button class="buttonCA primary" type="submit" [disabled]="cambioCitas.invalid">GUARDAR</button>
+                </div>
+            </div>
         </form>
     </div>
 </div>

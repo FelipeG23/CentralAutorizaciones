@@ -68,6 +68,9 @@ export class CambiocitaComponent implements OnInit {
     this.detalleCitaService.consultarPoliza(this.datosCambio.myVar.data.pacNum).
       subscribe((poliza: CaPolizasPaciente) => {
         if (poliza !== null) {
+          console.log('Entra -> pacNum: '+ this.datosCambio.myVar.data.pacNum);
+          console.log('Entra2 -> Poliza: '+ poliza.ecPolizaNumero);
+
           this.cambioCitas.get('numeroPoliza').setValue(poliza.ecPolizaNumero);
         }
       })

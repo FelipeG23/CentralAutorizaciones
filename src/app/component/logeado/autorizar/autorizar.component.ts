@@ -23,6 +23,7 @@ import { CaPrestacionesOrdMed } from 'src/app/models/orden-medica/CaPrestaciones
 import { BloqueoService } from 'src/app/service/firebase/bloqueo.service';
 import { Bloqueo } from 'src/app/models/firebase/bloqueo';
 import { Userlock } from 'src/app/models/firebase/userlock';
+import { stringify } from 'querystring';
 
 export const MY_FORMATS = {
     parse: {
@@ -53,16 +54,25 @@ export const MY_FORMATS = {
     ],
 })
 export class AutorizarComponent implements OnInit {
+    page = 0;
+    size = 11;
+    length = 800;
+    pageSize = 10;
+    pageSizeOptions: number[] = [5, 10, 20];
+    pageEvent: PageEvent;
 
+    // order= 'fecha';
+    // asc=false
+    citasAuto: Array<any>;
     filtroOrdenes: FormGroup;
     options: any;
     spinnerCA: boolean;
-    icon: string = 'keyboard_arrow_down';
-    validar: boolean = false;
-    nameRequired: boolean = false;
+    icon = 'keyboard_arrow_down';
+    validar = false;
+    nameRequired = false;
     imageSrc: any;
     subir: boolean;
-    success: boolean = false;
+    success = false;
     result: any;
     progress: boolean;
     ordenesMedicas: any[];
@@ -84,9 +94,11 @@ export class AutorizarComponent implements OnInit {
     @ViewChild('paginatorPorRadicadar', { read: MatPaginator }) paginatorPorRadicadar: MatPaginator;
     @ViewChild('paginatorRadicadas', { read: MatPaginator }) paginatorRadicadas: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
+
+    // tslint:disable-next-line: max-line-length
     displayedColumnsRadicadas: string[] = ['estado', 'ormIdOrdmNumero', 'cgFechaProceso', 'tipTipIDav', 'documento', 'nombreCompleto', 'cita', 'enProceso', 'continuidad', 'autorizacion'];
     dataSourceRadicadas = new MatTableDataSource(this.ordenesMedicasRadicadas);
-    //@ViewChild('sortRadicadas', {read: MatSort}) sortRadicadas: MatSort;
+    // @ViewChild('sortRadicadas', {read: MatSort}) sortRadicadas: MatSort;
     dataSourceCitas = new MatTableDataSource(this.citasPorAutorizar);
     dataSourceCitasAutorizadas = new MatTableDataSource(this.citasAutorizadas);
     bloqueo: any;
@@ -97,22 +109,12 @@ export class AutorizarComponent implements OnInit {
     dataLock: Bloqueo = new Bloqueo();
     metodo: any;
     resultados: any;
-    
+
     valor: any;
-    validarName: boolean = false;
+    validarName = false;
     ordenMedica: any;
     listaCitasAutorizadas: any[];
 
-
-    // MatPaginator Inputs
-  length = 100;
-  pageSize = 10;
-  pageSizeOptions: number[] = [5, 10, 25, 100];
-
-  // MatPaginator Output
-  pageEvent: PageEvent;
-
-  
 
 
     constructor(private fb: FormBuilder,
@@ -130,31 +132,64 @@ export class AutorizarComponent implements OnInit {
         this.options = tipodocService.getTipoDoc();
         this.user = cookie.get('cenAuth');
         this.user = JSON.parse(atob(this.user));
+
     }
 
     ngOnInit() {
-
         moment.locale('es');
         moment.relativeTimeThreshold('m', 60);
         moment.relativeTimeThreshold('h', 24 * 26);
         this.initFilter();
         this.dataSource.sort = this.sort;
         this.dataSourceCitas.paginator = this.paginatorCitas;
-        console.log('prueba Diego', this.dataSourceCitas.paginator);
         
         this.dataSourceCitasAutorizadas.paginator = this.paginatorCitasAutorizadas;
         this.dataSource.paginator = this.paginatorPorRadicadar;
         this.dataSourceRadicadas.paginator = this.paginatorRadicadas;
         this.callSubmits();
-
-
+        this.onSubmitCitas();
     }
 
-    setPageSizeOptions(setPageSizeOptionsInput: string) {
-        if (setPageSizeOptionsInput) {
-          this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
+    onSubmitCitas(isList?) {
+        const months = this.filtroOrdenes.get('fechaFinal').value
+            .diff(this.filtroOrdenes.get('fecha').value, 'months');
+        if (!this.filtroOrdenes.invalid) {
+            this.spinnerService.show();
+            this.consultaService.getCitasPorAutorizar(this.filtroOrdenes.getRawValue()).subscribe(data => {
+                this.spinnerService.hide();
+                this.citasPorAutorizar = data;
+                this.consultaService.postCitasAutorizadas(this.page, this.size)
+                // this.consultaService.postCitasAutorizadas(this.paginatorCitas.pageIndex, this.paginatorCitas.pageSize + 1))
+                .subscribe((data: any) => {
+                // this.citasAutorizadas = data.sort((a, b) => b.fechaAutorizacion - a.fechaAutorizacion);
+                this.citasAutorizadas = data;
+                this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;
+                });
+            //    this.datosUsuarios = this.listaUsuariosRegistro.find(word => word._id === this.registro.id);
+                this.dataSourceCitas.data = this.citasPorAutorizar;
+                if (isList) {
+                    this.filtersApply();
+                }
+            }, err => {
+                this.citasPorAutorizar = [];
+                swal({
+                    title: 'Error',
+                    text: 'No se pudo consultar las citas, por favor consulte con soporte',
+                    icon: 'warning',
+                });
+                console.log(err);
+            });
         }
-      }
+    }
+
+    setPageSizeOptions(setPageSizeOptionsInput: any) {
+        this.citasAutorizadas = null;
+        this.consultaService.postCitasAutorizadas(setPageSizeOptionsInput.pageIndex, (setPageSizeOptionsInput.pageSize +1))
+                .subscribe((data: any) => {
+                this.citasAutorizadas = data;
+                this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;
+                });
+    }
 
     initFilter() {
         this.filtroOrdenes = this.fb.group({
@@ -167,11 +202,14 @@ export class AutorizarComponent implements OnInit {
             estadoAutorizacion: [null],
             tipoDocumento: [null],
             numeroDocumento: [null, [Validators.maxLength(20), Validators.pattern(/^[A-Za-z0-9\s]+$/)]],
+            // tslint:disable-next-line: max-line-length
             nombre: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/), ]],
+            // tslint:disable-next-line: max-line-length
             primerApellido: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/), ]],
+            // tslint:disable-next-line: max-line-length
             segundoApellido: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/), ]]
         });
-        
+
 
     }
 
@@ -184,7 +222,9 @@ export class AutorizarComponent implements OnInit {
         this.onSubmit([3]);
         this.filtroOrdenes.removeControl('fecha');
         this.filtroOrdenes.removeControl('fechaFinal');
+        // tslint:disable-next-line: max-line-length
         this.filtroOrdenes.setControl('fecha', new FormControl([{ disabled: true, value: moment(this.minDateValue) }, [Validators.required]]));
+        // tslint:disable-next-line: max-line-length
         this.filtroOrdenes.setControl('fechaFinal', new FormControl( [{ disabled: true, value: moment(this.maxDateValue) }, [Validators.required]]));
     }
 
@@ -245,7 +285,7 @@ export class AutorizarComponent implements OnInit {
 
             this.ordenesMedicasRadicadas = this.ordenesMedicasRadicadas.filter(data =>
                 data.documento.trim() == this.filtroOrdenes.value.numeroDocumento &&
-                data.tipTipIDav == tipoDoc)
+                data.tipTipIDav == tipoDoc);
             this.dataSourceRadicadas.data = this.ordenesMedicasRadicadas;
         } else if (this.filtroOrdenes.value.nombre && this.filtroOrdenes.value.primerApellido) {
             const nombre = this.filtroOrdenes.value.segundoApellido ?
@@ -261,7 +301,7 @@ export class AutorizarComponent implements OnInit {
             this.dataSource.data = this.ordenesMedicas;
 
             this.ordenesMedicasRadicadas = this.ordenesMedicasRadicadas.filter(data =>
-                data.nombreCompleto == nombre)
+                data.nombreCompleto == nombre);
             this.dataSourceRadicadas.data = this.ordenesMedicasRadicadas;
 
         } else if (this.filtroOrdenes.value.estadoAutorizacion) {
@@ -274,11 +314,11 @@ export class AutorizarComponent implements OnInit {
                 data.ormIdOrdmNumero == this.filtroOrdenes.value.numeroDerivacion);
             this.dataSource.data = this.ordenesMedicas;
             this.ordenesMedicasRadicadas = this.ordenesMedicasRadicadas.filter(data =>
-                data.ormIdOrdmNumero == this.filtroOrdenes.value.numeroDerivacion)
+                data.ormIdOrdmNumero == this.filtroOrdenes.value.numeroDerivacion);
             this.dataSourceRadicadas.data = this.ordenesMedicasRadicadas;
-        } else if (this.filtroOrdenes.value.fechaAbordaje){
+        } else if (this.filtroOrdenes.value.fechaAbordaje) {
             this.ordenesMedicasRadicadas = this.ordenesMedicasRadicadas.filter(data =>
-                data.fechaCitaCA == this.filtroOrdenes.value.fechaAbordaje)
+                data.fechaCitaCA == this.filtroOrdenes.value.fechaAbordaje);
             this.dataSourceRadicadas.data = this.ordenesMedicasRadicadas;
         }
     }
@@ -300,6 +340,10 @@ export class AutorizarComponent implements OnInit {
         return this.imageSrc;
     }
 
+    changeChecks() {
+       console.log('entra ');
+      }
+
     clear() {
         this.filtroOrdenes.reset();
         this.validar = false;
@@ -318,57 +362,9 @@ export class AutorizarComponent implements OnInit {
         }
     }
 
-    onSubmitCitas(isList?) {
-        const months = this.filtroOrdenes.get("fechaFinal").value
-            .diff(this.filtroOrdenes.get("fecha").value, 'months');
-        // if (months > 1) {
-        //     swal({
-        //         title: 'Error',
-        //         text: 'El filtro de fechas supera al de un mes',
-        //         icon: 'warning',
-        //     });
-        //     return;
-        // }
-        if (!this.filtroOrdenes.invalid) {
-            this.spinnerService.show();
-            this.consultaService.getCitasPorAutorizar(this.filtroOrdenes.getRawValue()).subscribe(data => {
-                this.spinnerService.hide();
-                this.citasPorAutorizar = data;
-
-                console.log(this.citasPorAutorizar);
-
-                
-
-                this.consultaService.postCitasAutorizadas()
-                .subscribe((data: any) => {
-                    
-                this.citasAutorizadas = data.sort((a, b) => b.fechaAutorizacion - a.fechaAutorizacion);                  
-                this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;                
-                  
-                });
-                
-
-            //    this.datosUsuarios = this.listaUsuariosRegistro.find(word => word._id === this.registro.id);                
-            
-                this.dataSourceCitas.data = this.citasPorAutorizar;
-                if (isList) {
-                    this.filtersApply();
-                }
-            }, err => {
-                this.citasPorAutorizar = [];
-                swal({
-                    title: 'Error',
-                    text: 'No se pudo consultar las citas, por favor consulte con soporte',
-                    icon: 'warning',
-                });
-                console.log(err);
-            });
-        }
-    }
-
     onSubmitPorRadicar(estados, isList?) {
-        const months = this.filtroOrdenes.get("fechaFinal").value
-            .diff(this.filtroOrdenes.get("fecha").value, 'months');
+        const months = this.filtroOrdenes.get('fechaFinal').value
+            .diff(this.filtroOrdenes.get('fecha').value, 'months');
         // if (months > 1) {
         //     swal({
         //         title: 'Error',
@@ -407,8 +403,8 @@ export class AutorizarComponent implements OnInit {
     }
 
     onSubmit(estados, isList?) {
-        const months = this.filtroOrdenes.get("fechaFinal").value
-            .diff(this.filtroOrdenes.get("fecha").value, 'months');
+        const months = this.filtroOrdenes.get('fechaFinal').value
+            .diff(this.filtroOrdenes.get('fecha').value, 'months');
         // if (months > 1) {
         //     swal({
         //         title: 'Error',
@@ -422,12 +418,12 @@ export class AutorizarComponent implements OnInit {
                 if (data.mensajeError == null) {
                     this.ordenesMedicasRadicadas = data;
                     this.ordenesMedicasRadicadas = this.ordenesMedicasRadicadas.filter(data => {
-                        if(data.prestaciones !== data.continuidad || data.continuidad === null || data.prestaciones === null  ){
-                            if(data.prestaciones !== data.autorizadas + data.continuidad) {
-                                return data
+                        if (data.prestaciones !== data.continuidad || data.continuidad === null || data.prestaciones === null  ) {
+                            if (data.prestaciones !== data.autorizadas + data.continuidad) {
+                                return data;
                             }
                         }
-                    })
+                    });
                     this.ordenesMedicasRadicadas = this.ordenesMedicasRadicadas.reverse();
 
                     this.dataSourceRadicadas.data = this.ordenesMedicasRadicadas;
@@ -470,6 +466,7 @@ export class AutorizarComponent implements OnInit {
             if (!continuidad) {
                 swal({
                     title: 'Información',
+                    // tslint:disable-next-line: max-line-length
                     text: 'Para realizar la Autorización, por favor realice la gestión de continuidad, para la orden ' + datoTraza.ormIdOrdmNumero,
                     icon: 'info',
                 });
@@ -483,7 +480,7 @@ export class AutorizarComponent implements OnInit {
                     caPrestacionesOrdMed.length > 0) {
                     caPrestacionesOrdMed = caPrestacionesOrdMed.filter((caPrestacion: CaPrestacionesOrdMed) => {
                         return caPrestacion.caGestionAutorizacion === null ||
-                            caPrestacion.caGestionAutorizacion.gauAutorizaServ === '3'
+                            caPrestacion.caGestionAutorizacion.gauAutorizaServ === '3';
                     });
                     if (caPrestacionesOrdMed !== undefined && caPrestacionesOrdMed !== null &&
                         caPrestacionesOrdMed.length > 0) {
@@ -502,18 +499,18 @@ export class AutorizarComponent implements OnInit {
                 }
             }, () => {
                 this.spinnerService.hide();
-            })
+            });
         }, () => {
             this.spinnerService.hide();
-        })
+        });
     }
 
     openDialogView(element) {
         if (localStorage.getItem('lock')) {
-            this.bloqueoService.unLockAll()
+            this.bloqueoService.unLockAll();
         }
         this.metodo = this.bloqueoService.search('locktresMenu', element.ormIdOrdmNumeroP).subscribe(data => {
-            this.unSubcribeFirebase()
+            this.unSubcribeFirebase();
             if (data.length) {
                 this.resultados = data;
                 swal({
@@ -567,10 +564,10 @@ export class AutorizarComponent implements OnInit {
         this.dataLock.UserActive.Documento = this.user.uid;
         this.dataLock.UserActive.Nombre = this.user.cn;
         if (localStorage.getItem('lock')) {
-            this.bloqueoService.unLockAll()
+            this.bloqueoService.unLockAll();
         }
         this.metodo = this.bloqueoService.search('lockRadica', this.dataLock.DateActive).subscribe(data => {
-            this.unSubcribeFirebase()
+            this.unSubcribeFirebase();
             if (data.length) {
                 this.resultados = data;
                 swal({
@@ -584,7 +581,7 @@ export class AutorizarComponent implements OnInit {
                 localStorage.setItem('orden', JSON.stringify(element.ormIdOrdmNumero));
                 this.router.navigate(['/radicar']);
             }
-        })
+        });
     }
 
     openDialogAutorizacion(datoCita, modulo) {
@@ -593,10 +590,10 @@ export class AutorizarComponent implements OnInit {
         this.dataLock.UserActive.Documento = this.user.uid;
         this.dataLock.UserActive.Nombre = this.user.cn;
         if (localStorage.getItem('lock')) {
-            this.bloqueoService.unLockAll()
+            this.bloqueoService.unLockAll();
         }
         this.metodo = this.bloqueoService.search('lockAutorizacion', this.dataLock.DateActive).subscribe(data => {
-            this.unSubcribeFirebase()
+            this.unSubcribeFirebase();
             if (data.length) {
                 this.resultados = data;
                 swal({
@@ -633,6 +630,5 @@ export class AutorizarComponent implements OnInit {
     }
 
 }
-
-
+// tslint:disable-next-line: max-line-length
 // *ngIf="dataSourceRadicadas?.prestaciones !== dataSourceRadicadas?.continuidad && dataSourceRadicadas?.prestaciones && dataSourceRadicadas?.continuidad "
