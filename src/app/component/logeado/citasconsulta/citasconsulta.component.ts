@@ -70,13 +70,13 @@ export class CitasconsultaComponent implements OnInit {
     fechaFin = new Date();
     msjExp: boolean;
     minDateValue = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
-    maxDateValue = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 8);
+    maxDateValue = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 6);
     minDate = new Date(this.date.getFullYear(), 0, 1);
     minDateIn = new Date(this.date.getFullYear(), 0, 1);
     maxDateIni = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 90);
-    maxDateFin = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 8);
+    maxDateFin = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 6);
     maxDateIniAutorizacion = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
-    maxDateFinAutorizacion = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 8);
+    maxDateFinAutorizacion = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 6);
     classCA: boolean;
     pageActual: number = 1;
     filters: any;
@@ -357,14 +357,14 @@ export class CitasconsultaComponent implements OnInit {
         this.actual = new Date();
         this.fechaFin.setDate((this.minDate.getFullYear(), this.minDate.getMonth(), this.filtroCitas.getRawValue().fecha.date()));
         this.filtroCitas.get('fechaFinal').setValue(this.fechaFin);
-        this.maxDateValue = new Date(this.minDate.getFullYear(), (this.fechaFin.getMonth()), (this.fechaFin.getDate() + 8));
+        this.maxDateValue = new Date(this.minDate.getFullYear(), (this.fechaFin.getMonth()), (this.fechaFin.getDate() + 6));
         this.minDate = new Date(this.fechaFin.getFullYear(), this.fechaFin.getMonth(), this.fechaFin.getDate());
-        this.maxDateFin = new Date(this.minDate.getFullYear(), this.minDate.getMonth(), this.minDate.getDate() + 8);
+        this.maxDateFin = new Date(this.minDate.getFullYear(), this.minDate.getMonth(), this.minDate.getDate() + 6);
         if ((this.fechaFin.getMonth() + 1) !== (this.filtroCitas.getRawValue().fecha.month() + 1)) {
             this.minDate.setMonth(((this.filtroCitas.getRawValue().fecha.month())));
             this.maxDateValue.setMonth(((this.filtroCitas.getRawValue().fecha.month())));
             if (this.actual.getMonth() !== this.filtroCitas.getRawValue().fecha.date()) {
-                this.maxDateFin = new Date(this.minDate.getFullYear(), this.minDate.getMonth(), this.minDate.getDate() + 8);
+                this.maxDateFin = new Date(this.minDate.getFullYear(), this.minDate.getMonth(), this.minDate.getDate() + 6);
                 console.log('this.maxDateValue - ' + this.maxDateValue);
                 console.log('this.maxDateFin - ' + this.maxDateFin);
             }
@@ -410,13 +410,16 @@ export class CitasconsultaComponent implements OnInit {
                     this.msjExp = false;
                 }
             } else {
-                this.filtroCitas.controls['fechaFinal'].setValue('');
+                console.log("Entro");
+            
+                //this.filtroCitas.controls['fechaFinal'].setValue('');
+                /*
                 swal({
                     title: 'Error',
                     text: 'Rango final cita no puede ser menor a Rango inicial cita, verifique',
                     icon: 'warning',
-                });
-                this.msjExp = true;
+                }); */
+                // this.msjExp = true;
             }
     }
 

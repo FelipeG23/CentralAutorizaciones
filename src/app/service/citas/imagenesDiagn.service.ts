@@ -37,7 +37,7 @@ export class ImagenesService {
       'estado': userData.estado,
       'nombreSede': userData.ubicacionesFilter
     };
-    return this.http.post<any>( environment.api + '/citas', this.params);
+    return this.http.post<any>( environment.api + '/citas/consultarCitas', this.params);
   }
 
   getCitasPorAutorizar(data) {

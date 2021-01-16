@@ -18,7 +18,7 @@ export class DiagnostivosService {
     }
 
     diagnosticos(): Observable<any> {
-        return this.http.get(environment.url + '/CentralAutoriza/rest/Catalogo/diagnosticos');
+        return this.http.get(environment.url + '/CentralAutorizav2/rest/Catalogo/diagnosticos');
     }
 
 

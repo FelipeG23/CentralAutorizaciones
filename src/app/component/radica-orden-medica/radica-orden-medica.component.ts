@@ -128,7 +128,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
 
   ngOnInit() {
 
-
+      
     this.setLists();
     this.fbRadicar = this.fb.group({
       ecPolizaNumero: [''],  //  Validators.pattern(/^(?!.*(.)\1{9})/),
@@ -144,10 +144,6 @@ export class RadicaOrdenMedicaComponent implements OnInit {
       pcaAgeCodigProfe: ['', [Validators.required, this.checkList(this.medicos)]]
     });
 
-   //console.log("Datos prueba Diego", this.convenio.id);
-
-
-
     const id = JSON.parse(localStorage.getItem('orden'));
     if (id === null) {
       this.router.navigate(['/ordenes']);
@@ -156,15 +152,29 @@ export class RadicaOrdenMedicaComponent implements OnInit {
       this.spinner.show();
       this.ordenService.getDetailOrden(id).subscribe(
         (data: OrdenMedica) => {
-          this.timer = setInterval(() => { this.alertUnlock() }, this.counter * 60000)
+          this.timer = setInterval(() => { this.alertUnlock() }, this.counter * 60000);
           this.ordenMedica = data;
+
+          console.log("Test 100", this.ordenMedica);
+          this.orden = this.ordenMedica.ormFilename;
+          console.log("Test 102", this.orden);
+
+
+          /*
+          var f:any;
+          f = this.subEspecialidades.find(i => i.id === this.ordenMedica.caDetalleOrdenesMedicas.serSerCodSubEspe.trim());
+          console.log("Test 200", f.descripcion);
           
+          this.ordenMedica.caDetalleOrdenesMedicas.serSerCodSubEspe = f.descripcion;
+          console.log("Test 400", this.ordenMedica.caDetalleOrdenesMedicas);
+         
+                    
           if (this.ordenMedica.conTipoConvenio === "A" || this.ordenMedica.conTipoConvenio === "S" ) {
                 this.numeroPolizaReadonly = false;
                 this.fbRadicar.controls['ecPolizaNumero'].setValidators([Validators.required]);
             } else {
               this.fbRadicar.controls['ecPolizaNumero'].setValidators([]);
-            }
+            }   */
 
 
           if (this.ordenMedica.caDetalleOrdenesMedicas === null) {
@@ -192,8 +202,18 @@ export class RadicaOrdenMedicaComponent implements OnInit {
     }
   }
 
+
   onSubmit() {
+
+    
+     // var code: any;
+
     const detalleOrdenMedica: DetalleOrdenMedica = Object.assign(new DetalleOrdenMedica(), this.fbRadicar.getRawValue());
+  
+    // this.adminOrdenMedica.caDetalleOrdenesMedicas = detalleOrdenMedica;
+     
+    // code = this.subEspecialidades.find(datosSubes => datosSubes.descripcion === this.adminOrdenMedica.caDetalleOrdenesMedicas.serSerCodSubEspe.trim());
+    // this.adminOrdenMedica.caDetalleOrdenesMedicas.serSerCodSubEspe = code.id;
     this.adminOrdenMedica.caDetalleOrdenesMedicas = detalleOrdenMedica;
     this.adminOrdenMedica.caDetalleOrdenesMedicas.ormIdOrdmNumero = this.ordenMedica.ormIdOrdmNumero;
     this.adminOrdenMedica.caDetalleOrdenesMedicas.pacPacTipoIdentCodigo = this.ordenMedica.pacPacTipoIdentCodigo;
@@ -201,13 +221,14 @@ export class RadicaOrdenMedicaComponent implements OnInit {
     this.adminOrdenMedica.caDetalleOrdenesMedicas.pacPacNumero = this.ordenMedica.pacPacNumero;
     this.adminOrdenMedica.caDetalleOrdenesMedicas.pcaAgeCodigRecep = this.sessionUser.uid;
     this.adminOrdenMedica.codUsrCita = this.sessionUser.uid;
-    this.adminOrdenMedica.dorFechaOrdenmString = this.fbRadicar.get('dorFechaOrdenmString').value;
+    this.adminOrdenMedica.dorFechaOrdenmString = "2020-11-20T05:00:00.000Z";
+
+    console.log(this.adminOrdenMedica.dorFechaOrdenmString);
+    
+
     this.adminOrdenMedica.ecPolizaNumero = this.fbRadicar.get('ecPolizaNumero').value;
     this.spinner.show();
     this.adminOrdenMedica.caDetalleOrdenesMedicas.diaAgrCodigo = this.fbRadicar.get('diaAgrCodigo').value.diaAgrCodigo;
-
-    
-  
     this.ordenService.createDetailOrden(this.adminOrdenMedica).subscribe(
       (data) => {
         this.spinner.hide();
@@ -263,8 +284,6 @@ export class RadicaOrdenMedicaComponent implements OnInit {
       this.consultaPrestaciones.prePreDesc.trim() !== '') {
       this.consultaPrestaciones.prePreDesc = this.consultaPrestaciones.prePreDesc.toUpperCase();
     }
-
-
 
 
     this.consultarordenService.consultaPrestaciones(this.consultaPrestaciones).subscribe(
@@ -430,6 +449,11 @@ export class RadicaOrdenMedicaComponent implements OnInit {
     this.fileSharePoint.pac = new PacienteSharePoint();
     this.fileSharePoint.pac.tipoDocId = this.ordenMedica.tipTipIDav;
     this.fileSharePoint.pac.numDocId = this.ordenMedica.pacPacRut;
+
+    // this.fileSharePoint.pac.tipoDocId = "RC";
+    // this.fileSharePoint.pac.numDocId = "1145934247";
+
+
     this.fileSharePoint.archivoGral = false;
     this.fileSharePoint.ormIdOrdmNumero = this.ordenMedica.ormIdOrdmNumero;
     this.fileSharePoint.fecha = this.ordenMedica.fechaRegistroFile;
@@ -447,12 +471,15 @@ export class RadicaOrdenMedicaComponent implements OnInit {
     this.serviciosService.getSubEspecialidades().subscribe(data => {
       this.subEspecialidades = data;
       this.subEspecialidadesAll = data;
+      
       this.filteredSubEspList = this.fbRadicar.get('serSerCodSubEspe').valueChanges
         .pipe(
           startWith(''),
           map(value => this._filter(value, this.subEspecialidades))
         );
     });
+
+    
     this.serviciosService.getServicios().subscribe(data => {
       this.servicios = data;
       this.serviciosAll = data;
@@ -675,6 +702,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
 
   changeDiagnostico() {
     const code = this.fbRadicar.get('serSerCodigo').value;
+    
     if (code) {
       this.cieService.getCieWithService(code).subscribe(data => {
         this.cies = data;
@@ -689,29 +717,23 @@ export class RadicaOrdenMedicaComponent implements OnInit {
     }
   }
 
-  // changeServs() {
-  //   const code = this.fbRadicar.get('serSerCodSubEspe').value;
-  //   this.fbRadicar.patchValue({ serSerCodigo: '' });
-  //   this.servicios = this.serviciosAll;
-  //   if (code) {
-  //     this.servicios = this.servicios.filter(ser => ser.otro === code.trim());
-  //   }
-
-  //   this.filteredServList = this.fbRadicar.get('serSerCodigo').valueChanges
-  //     .pipe(
-  //       startWith(''),
-  //       map(value => this._filter(value, this.servicios))
-  //     );
-  // }
-
+  /*
   changeServs() {
     const codeEsp = this.fbRadicar.get('serEspCodigo').value;
-    const code = this.fbRadicar.get('serSerCodSubEspe').value;
+    const codeserSerCodSubEspe = this.fbRadicar.get('serSerCodSubEspe').value;
+        
+    var code: any = {};
+
+    code = this.subEspecialidades.find(datosSubespecialidad => datosSubespecialidad.descripcion === codeserSerCodSubEspe.trim());
+    
     this.fbRadicar.patchValue({ servicio: '' });
+
+
     this.servicios = this.serviciosAll;
-    if (code) {
+    if (code.id) {
       // this.servicios = this.servicios.filter(ser => ser.otro === code);
-      this.servicios = this.servicios.filter(ser => ser.otro === code.trim() && ser.otros === codeEsp.trim());
+      this.servicios = this.servicios.filter(ser => ser.otro === code.id.trim() && ser.otros === codeEsp.trim());
+
     }
 
     this.filteredServList = this.fbRadicar.get('serSerCodigo').valueChanges
@@ -719,7 +741,27 @@ export class RadicaOrdenMedicaComponent implements OnInit {
         startWith(''),
         map(value => this._filter(value, this.servicios))
       );
+  } */
+
+
+ changeServs() {
+  const codeEsp = this.fbRadicar.get('serEspCodigo').value;
+  const code = this.fbRadicar.get('serSerCodSubEspe').value;
+  this.fbRadicar.patchValue({ servicio: '' });
+  this.servicios = this.serviciosAll;
+  if (code) {
+    // this.servicios = this.servicios.filter(ser => ser.otro === code);
+     this.servicios = this.servicios.filter(ser => ser.otro === code.trim() && ser.otros === codeEsp.trim());
   }
+
+  this.filteredServList = this.fbRadicar.get('serSerCodigo').valueChanges
+    .pipe(
+      startWith(''),
+      map(value => this._filter(value, this.servicios))
+    );
+}
+
+
 
   checkList(itemsChek): ValidatorFn {
     return (control: AbstractControl): { [key: string]: boolean } | null => {
@@ -762,6 +804,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
           }).afterClosed().subscribe(
             (data: any) => {
               if (data !== null) {
+                
                 this.ordenMedica.caDetalleOrdenesMedicas.serEspCodigo = data.codEspecialidad;
                 this.ordenMedica.caDetalleOrdenesMedicas.serSerCodSubEspe = data.codSubespecialidad;
                 this.ordenMedica.caDetalleOrdenesMedicas.serSerCodigo = data.codServicio;
@@ -824,6 +867,13 @@ export class RadicaOrdenMedicaComponent implements OnInit {
 unlockFirebase(){
   this.bloqueoService.unLock('lockRadica/');
   clearInterval(this.timer);
+}
+
+
+sidenavtoggle(){
+
+  alert("Hola mundo");
+
 }
 
 }

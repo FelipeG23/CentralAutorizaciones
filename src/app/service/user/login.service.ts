@@ -12,6 +12,6 @@ export class LoginService {
   constructor(private http: HttpClient) {}
 
   getLogin(userData) {
-    return this.http.post<any>( environment.url + '/CentralAutoriza/rest/Service/ingresar', userData);
+    return this.http.post<any>( environment.url + '/CentralAutorizav2/rest/Service/ingresar', userData);
   }
 }

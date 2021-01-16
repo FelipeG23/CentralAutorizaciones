@@ -39,7 +39,7 @@ export class EnvioCorreoimgService {
           'mail': dataPaciente.myVar.data.EMAIL
       };
       this.params.mail = 'centralautorizacionesfsfb@gmail.com';
-    return this.http.post<any>( environment.url + '/CentralAutoriza/rest/General/email', this.params);
+    return this.http.post<any>( environment.url + '/CentralAutorizav2/rest/General/email', this.params);
   }
 
   getEstado(id){

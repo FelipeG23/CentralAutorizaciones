@@ -12,14 +12,22 @@ export class UploadFileService {
   constructor(private http: HttpClient) { }
 
   uploadFiles(fileSharePoint:FileSharePoint) {
-    return this.http.post<any>( environment.url + '/CentralAutoriza/rest/SharePoint/subirDoc', fileSharePoint);
+    return this.http.post<any>( environment.url + '/CentralAutorizav2/rest/SharePoint/subirDoc', fileSharePoint);
   }
 
   downloadFile(fileSharePoint:FileSharePoint) {
-    return this.http.post( environment.url + '/CentralAutoriza/rest/SharePoint/buscarDoc', fileSharePoint, {responseType: 'blob'});
+
+    // fileSharePoint.ormIdOrdmNumero = 4746;
+    // fileSharePoint.nombreArchivo = "OM-52957812-4746.png";
+
+    console.log("Test 200", fileSharePoint);
+
+
+    
+    return this.http.post( environment.url + '/CentralAutorizav2/rest/SharePoint/buscarDoc', fileSharePoint, {responseType: 'blob'});
   }
 
   deleteFile(fileSharePoint:FileSharePoint) {
-    return this.http.post<any>( environment.url + '/CentralAutoriza/rest/SharePoint/eliminarDoc', fileSharePoint);
+    return this.http.post<any>( environment.url + '/CentralAutorizav2/rest/SharePoint/eliminarDoc', fileSharePoint);
   }
 }

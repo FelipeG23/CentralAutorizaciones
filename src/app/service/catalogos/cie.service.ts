@@ -14,13 +14,13 @@ export class CieService {
     this.params = {
       'codPrestacion': 'ANES'
     };
-    return this.http.post<any>( environment.url + '/CentralAutoriza/rest/Catalogo/CIE', this.params);
+    return this.http.post<any>( environment.url + '/CentralAutorizav2/rest/Catalogo/CIE', this.params);
   }
 
   getCieWithService(service: string) {
     this.params = {
       'codPrestacion': service
     };
-    return this.http.post<any>( environment.url + '/CentralAutoriza/rest/Catalogo/CIE', this.params);
+    return this.http.post<any>( environment.url + '/CentralAutorizav2/rest/Catalogo/CIE', this.params);
   }
 }

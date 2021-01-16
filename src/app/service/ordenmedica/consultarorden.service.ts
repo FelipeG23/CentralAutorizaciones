@@ -30,7 +30,7 @@ export class ConsultarordenService {
       'segundoApellido': data.segundoApellido,
       'codUsrCita': this.sessionUser.uid
     };
-    return this.http.post<any>(environment.url + '/CentralAutoriza/rest/ordenesMedicas/consultarOrdenMedica', this.params);
+    return this.http.post<any>(environment.url + '/CentralAutorizav2/rest/ordenesMedicas/consultarOrdenMedica', this.params);
   }
 
   filterOrdenes(data, estados) {
@@ -93,7 +93,7 @@ export class ConsultarordenService {
 
   consultaPrestaciones(consultaPrestaciones: CaPrestacionesOrdMed) {
     return this.http.post<CaPrestacionesOrdMed[]>(environment.url +
-      '/CentralAutoriza/rest/ordenesMedicas/consultaPrestaciones', consultaPrestaciones);
+      '/CentralAutorizav2/rest/ordenesMedicas/consultaPrestaciones', consultaPrestaciones);
   }
 
   convertDate(date: any) {
@@ -109,7 +109,7 @@ export class ConsultarordenService {
   }
 
   consultarPrestacion(prestacion: number): Observable<CaPrestacionesOrdMed> {
-    const url = environment.url + `/CentralAutoriza/rest/ordenesMedicas/consultarPrestacion/${prestacion}`;
+    const url = environment.url + `/CentralAutorizav2/rest/ordenesMedicas/consultarPrestacion/${prestacion}`;
     return this.http.get<CaPrestacionesOrdMed>(url);
   }
 

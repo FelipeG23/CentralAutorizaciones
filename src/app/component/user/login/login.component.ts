@@ -76,11 +76,11 @@ export class LoginComponent implements OnInit {
             this.recaptcha3.getToken().then(token => {
               this.formData = this.login.value;
               this.formData.recaptchaToken = token;
-              // console.log("datos", this.formData);
+              console.log("datos", this.formData);
 
               this.recaptcha3.verifiCaptcha(token)
               .subscribe(data => {
-                // console.log(data);
+              console.log(data);
 
               });
 

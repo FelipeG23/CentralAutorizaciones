@@ -71,7 +71,7 @@ export class CambiocitaimgService {
     
     console.log(this.params);
     //this.params.email = 'centralautorizacionesfsfb@gmail.com';
-    return this.http.post<any>( environment.url + '/CentralAutoriza/rest/ClienteCita/cambiarEstadoCita', this.params);
+    return this.http.post<any>( environment.url + '/CentralAutorizav2/rest/ClienteCita/cambiarEstadoCita', this.params);
   }
 
 }

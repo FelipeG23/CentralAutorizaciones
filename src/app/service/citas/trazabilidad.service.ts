@@ -11,17 +11,17 @@ export class TrazabilidadService {
 
   getTrazaId (dataTraza)  {
     return this.http.get<any>(
-      environment.url + '/CentralAutoriza/rest/ClienteCita/consultarTrazabilidadCita/' + dataTraza.cGIdCitaNumero);
+      environment.url + '/CentralAutorizav2/rest/ClienteCita/consultarTrazabilidadCita/' + dataTraza.cGIdCitaNumero);
   }
 
   getTraza (dataTraza)  {
     return this.http.post<any>(
-      environment.url + '/CentralAutoriza/rest/ClienteCita/consultarTrazabilidadCita', dataTraza);
+      environment.url + '/CentralAutorizav2/rest/ClienteCita/consultarTrazabilidadCita', dataTraza);
   }
 
   getTrazaOrden (dataTraza)  {
     return this.http.get<any>(
-      environment.url + '/CentralAutoriza/rest/ClienteCita/consultarTrazabilidadOrden/' + dataTraza.ormIdOrdmNumero);
+      environment.url + '/CentralAutorizav2/rest/ClienteCita/consultarTrazabilidadOrden/' + dataTraza.ormIdOrdmNumero);
   }
 
 

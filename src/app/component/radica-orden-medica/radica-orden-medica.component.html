@@ -116,7 +116,7 @@
                                     [ngModel]="ordenMedica.caDetalleOrdenesMedicas.serSerCodSubEspe">
                                   <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn2.bind(this)">
                                     <mat-option *ngFor="let subEspecialidad of filteredSubEspList | async"
-                                      [value]="subEspecialidad.id">
+                                      [value]="subEspecialidad.descripcion">
                                       {{ subEspecialidad.descripcion }}
                                     </mat-option>
                                   </mat-autocomplete>
@@ -465,3 +465,4 @@
     </mat-card>
   </div>
 </div>
+

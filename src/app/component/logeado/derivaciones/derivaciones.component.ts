@@ -68,11 +68,11 @@ export class DerivacionesComponent implements OnInit {
     success: boolean = false;
     result: any;
     progress: boolean;
-    ordenesMedicas: any[];
-    ordenesMedicasRadicadas: any[];
-    citasPorAutorizar: any[];
+    ordenesMedicas: any[]=null;
+    ordenesMedicasRadicadas: any[]=null;
+    citasPorAutorizar: any[]=null;
     date = new Date();
-    minDateValue = new Date(this.date.getFullYear(), 1, 1);
+    minDateValue = new Date(this.date.getFullYear(), this.date.getMonth()-3, this.date.getDate());
     maxDateValue = new Date(this.date.getFullYear() + 1, this.date.getMonth(), this.date.getDate());
     minDate = new Date(this.date.getFullYear(), 0, 1);
     maxDate = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
@@ -130,8 +130,8 @@ export class DerivacionesComponent implements OnInit {
 
     initFilter() {
         this.filtroOrdenes = this.fb.group({
-            fecha: [{ disabled: true, value: moment(this.minDateValue) }, [Validators.required]],
-            fechaFinal: [{ disabled: true, value: moment(this.maxDateValue) }, [Validators.required]],
+            fecha: [{ disabled: false, value: moment(this.minDateValue) }, [Validators.required]],
+            fechaFinal: [{ disabled: false, value: moment(this.maxDateValue) }, [Validators.required]],
             numeroDerivacion: [null,
                 [Validators.minLength(1), Validators.maxLength(10),
                 Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[0-9\s]+$/)]],

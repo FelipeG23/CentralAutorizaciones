@@ -35,7 +35,7 @@ export class ConsultaService {
       'estado': userData.estado,
       'nombreSede': userData.ubicacionesFilter
     };
-    return this.http.post<any>( environment.api + '/citas', this.params);
+    return this.http.post<any>( environment.api + '/citas/consultarCitas', this.params);
   }
 
   getCitasPorAutorizar(data) {
@@ -111,7 +111,7 @@ export class ConsultaService {
       'numDtipoDocIdocId': '',
     };
 
-    return this.http.post<any>( environment.api + '/citas', this.params);
+    return this.http.post<any>( environment.api + '/citas/consultarCitas', this.params);
   }
 
   postCitasAutorizadas(page: number, size: number): Observable<any> {

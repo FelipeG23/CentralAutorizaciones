@@ -87,7 +87,7 @@ export class OrdenmedicaComponent implements OnInit {
   ordenesMedicasRadicadas: any[];
   citasPorAutorizar: any[];
   date = new Date();
-  minDateValue = new Date(this.date.getFullYear(), 1, 1);
+  minDateValue = new Date(this.date.getFullYear(), this.date.getMonth()-3, this.date.getDate());
   maxDateValue = new Date(this.date.getFullYear() + 1, this.date.getMonth(), this.date.getDate());
   minDate = new Date(this.date.getFullYear(), 0, 1);
   maxDate = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
@@ -169,6 +169,112 @@ export class OrdenmedicaComponent implements OnInit {
         this.ordenMedica = data;
         this.jsonSize = 1;
         this.createFileSharePoint('');
+        console.log("Test 6", this.fileSharePoint);
+        
+        this.uploadFileService.uploadFiles(this.fileSharePoint).subscribe(data => {
+          this.caFile.nativeElement.value = "";
+          this.progress = false;
+          this.ordenMedica.filename = this.fileSharePoint.nombreArchivo;
+          this.bloqueoService.unLock('gestionDoc/');
+          swal({
+            title: 'Proceso exitoso!',
+            text: 'Se actualizó el documento exitosamente',
+            icon: 'success',
+          }).then(() => {
+            this.onSubmit();
+          });
+        }, error => {
+          
+          this.caFile.nativeElement.value = "";
+          this.bloqueoService.unLock('gestionDoc/');
+          swal({
+            title: 'Error',
+            text: 'No se pudo cargar el archivo, por favor consulte con soporte',
+            icon: 'warning',
+          }).then(() => {
+            this.onSubmit();
+          });
+          this.progress = false;
+          console.log(error);
+
+        })
+      } else {
+        swal({
+          text: data.mensajeError,
+          icon: 'warning',
+        });
+      }
+    }, err => {
+      // No se encontró información con los datos ingresados
+      // No se pudo consultar la derivación, por favor consulte con soporte
+      this.spinnerService.hide();
+      swal({
+        title: 'Error',
+        text: 'No se encontró información con los datos ingresados',
+        icon: 'warning',
+      });
+    });
+  }
+
+  
+  handleInputChange(e, ordenMedica, renovar) {
+
+    console.log("Test1", e);
+    console.log("Test 2", ordenMedica);
+    console.log("Test 3", renovar);
+
+    //ordenMedica.filename = "Diego.png";
+    
+    this.dataLock.UserActive = new Userlock();
+    this.dataLock.DateActive = ordenMedica !== undefined && ordenMedica !== null ? ordenMedica.ormIdOrdmNumero : '';
+    this.dataLock.UserActive.Documento = this.user.uid;
+    this.dataLock.UserActive.Nombre = this.user.cn;
+    this.ordenMedica = ordenMedica;
+
+    // this.metodo = this.bloqueoService.search('gestionDoc', this.dataLock.DateActive).subscribe(data => {
+    //   this.unSubcribeFirebase()
+    //   if(data.length){
+    //       this.resultados = data;
+    //       swal({
+    //         title: 'Derivación bloqueada',
+    //         text: `Esta derivación se encuentra bloqueada por  ${this.resultados[0].UserActive.Nombre}`,
+    //         icon: 'info',
+    //       });
+    //   } else {
+    // this.valor = this.bloqueoService.lock(this.dataLock, 'gestionDoc');
+    // console.log(this.valor);
+    // localStorage.setItem('lock', this.valor.key);
+    this.bloqueoService.lock(this.dataLock, 'gestionDoc');
+    const file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
+    const reader = new FileReader();
+    
+    if (renovar === 'renovar') {
+      console.log("Test 4");
+      
+      reader.onload = this._handleReaderLoadedRenovar.bind(this);
+    } else {
+      console.log("Test 5");
+
+      reader.onload = this._handleReaderLoaded.bind(this);
+    }
+    reader.readAsDataURL(file);
+    this.fileSharePoint.nombreArchivo = file.name;
+    // }
+    // });
+  }
+
+
+  /*
+ handleInputChange(e, ordenMedica, renovar) {
+
+  console.log(this.fileSharePoint);
+  
+  this.progress = true;
+    this.ordenService.crearOrdenMedica(this.filtroOrdenes.value).subscribe(data => {
+      this.spinnerService.hide();
+      if (data.mensajeError == null) {
+        this.ordenMedica = data;
+        this.jsonSize = 1;
         this.uploadFileService.uploadFiles(this.fileSharePoint).subscribe(data => {
           this.caFile.nativeElement.value = "";
           this.progress = false;
@@ -211,41 +317,9 @@ export class OrdenmedicaComponent implements OnInit {
         icon: 'warning',
       });
     });
-  }
 
-  handleInputChange(e, ordenMedica, renovar) {
-    this.dataLock.UserActive = new Userlock();
-    this.dataLock.DateActive = ordenMedica !== undefined && ordenMedica !== null ? ordenMedica.ormIdOrdmNumero : '';
-    this.dataLock.UserActive.Documento = this.user.uid;
-    this.dataLock.UserActive.Nombre = this.user.cn;
-    this.ordenMedica = ordenMedica;
 
-    // this.metodo = this.bloqueoService.search('gestionDoc', this.dataLock.DateActive).subscribe(data => {
-    //   this.unSubcribeFirebase()
-    //   if(data.length){
-    //       this.resultados = data;
-    //       swal({
-    //         title: 'Derivación bloqueada',
-    //         text: `Esta derivación se encuentra bloqueada por  ${this.resultados[0].UserActive.Nombre}`,
-    //         icon: 'info',
-    //       });
-    //   } else {
-    // this.valor = this.bloqueoService.lock(this.dataLock, 'gestionDoc');
-    // console.log(this.valor);
-    // localStorage.setItem('lock', this.valor.key);
-    this.bloqueoService.lock(this.dataLock, 'gestionDoc');
-    const file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
-    const reader = new FileReader();
-    if (renovar === 'renovar') {
-      reader.onload = this._handleReaderLoadedRenovar.bind(this);
-    } else {
-      reader.onload = this._handleReaderLoaded.bind(this);
-    }
-    reader.readAsDataURL(file);
-    this.fileSharePoint.nombreArchivo = file.name;
-    // }
-    // });
-  }
+ } */
 
   unSubcribeFirebase() {
     this.metodo.unsubscribe();

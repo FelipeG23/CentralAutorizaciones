@@ -15,7 +15,7 @@ export class TipodocService {
   constructor(private http: HttpClient) {}
 
   getTipoDoc() {
-    this.tipoDoc = this.http.get<any>( environment.url + '/CentralAutoriza/rest/Catalogo/TipDoc')
+    this.tipoDoc = this.http.get<any>( environment.url + '/CentralAutorizav2/rest/Catalogo/TipDoc')
       .pipe(
         map(data => data)
       );

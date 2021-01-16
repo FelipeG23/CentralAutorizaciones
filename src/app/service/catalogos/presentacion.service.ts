@@ -15,7 +15,7 @@ export class PresentacionService {
   constructor(private http: HttpClient) {}
 
   getPresentaciones() {
-    this.prestaciones = this.http.get<any>( environment.url + '/CentralAutoriza/rest/Catalogo/Prestacion')
+    this.prestaciones = this.http.get<any>( environment.url + '/CentralAutorizav2/rest/Catalogo/Prestacion')
       .pipe(
         map(data => data)
       );

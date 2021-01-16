@@ -18,6 +18,6 @@ export class ClasificacionService {
       'codigoEspec': '3',
       'codSubEspec': '006'
     };
-    return this.http.post<any>( environment.url + '/CentralAutoriza/rest/Catalogo/ClasifiConsult',this.params);
+    return this.http.post<any>( environment.url + '/CentralAutorizav2/rest/Catalogo/ClasifiConsult',this.params);
   }
 }

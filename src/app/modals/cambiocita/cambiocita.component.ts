@@ -43,7 +43,6 @@ export class CambiocitaComponent implements OnInit {
     console.log(this.datosCambio.myVar.data.tipoConvenio);
     
 
-   
     this.cambioCitas = this.fb.group({
       tipoCita: ['', [Validators.required]],
       estado: ['', [Validators.required, this.checkState(this.datosCambio.myVar.data.estadoCita)]],

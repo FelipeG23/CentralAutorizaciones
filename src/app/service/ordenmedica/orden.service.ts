@@ -24,56 +24,36 @@ export class OrdenService {
     private cookie: CookieService) { }
 
   getDetailOrden(ormIdOrdmNumero: number) {
-    return this.http.get<OrdenMedica>(environment.url + '/CentralAutoriza/rest/ordenesMedicas/detalleOrdenMedica/' + ormIdOrdmNumero);
+    return this.http.get<OrdenMedica>(environment.url + '/CentralAutorizav2/rest/ordenesMedicas/detalleOrdenMedica/' + ormIdOrdmNumero);
   }
 
   createDetailOrden(adminOrdenMedica: any) {
 
-    //  AdminOrdenMedica
+    adminOrdenMedica.caDetalleOrdenesMedicas.dorFechaOrdenmString = "2020-11-20T05:00:00.000Z"
+    adminOrdenMedica.caDetalleOrdenesMedicas.pcaAgeCodigProfe = "1014214457";
+    adminOrdenMedica.caDetalleOrdenesMedicas.ecPolizaNumero = "COMPENSAR";
+    adminOrdenMedica.ecPolizaNumero = "COMPENSAR";
 
     console.log("Test 10", adminOrdenMedica);
 
-    /*
-    var adminOrdenMedicas = {};
-    adminOrdenMedicas = {
-      'conConCodigo': "3205",
-      'diaAgrCodigo': "1       ",
-      'diaOtroAgr': "Autorizacion de prueba",    
-      'dorFechaOrdenmString': "2020-11-17T05:00:00.000Z",
-      'ecPolizaNumero': "SEGUROS BOLIVAR",
-      'ormIdOrdmNumero': 28947,
-      'pacPacNumero': 984386,
-      'pacPacRut': "1013276086",
-      'pacPacTipoIdentCodigo': "2",
-      'pcaAgeCodigProfe': "16692093",
-      'pcaAgeCodigRecep': "53101149",
-      'pcaAgeLugar': "IMAD",
-      'serEspCodigo': "9",
-      'serSerCodSubEspe': "012",
-      'serSerCodigo': "ORTOCHIA",
-      'codUsrCita': "53101149",
-    };
-
-    console.log(adminOrdenMedicas);  */
-    
-    
-    return this.http.post<any>(environment.url + '/CentralAutoriza/rest/ordenesMedicas/administrarOrdenMedica', adminOrdenMedica);
+ 
+    return this.http.post<any>(environment.url + '/CentralAutorizav2/rest/ordenesMedicas/administrarOrdenMedica', adminOrdenMedica);
   }
 
   createPrestaciones(prestaciones: CrearPrestacionesOrdMed) {
-    return this.http.post<CaPrestacionesOrdMed[]>(environment.url + '/CentralAutoriza/rest/ordenesMedicas/crearPrestaciones', prestaciones);
+    return this.http.post<CaPrestacionesOrdMed[]>(environment.url + '/CentralAutorizav2/rest/ordenesMedicas/crearPrestaciones', prestaciones);
   }
 
   registrarAutorizacion(caGestionAutorizacion: CaGestionAutorizacion) {
-    return this.http.post<Boolean>(environment.url + '/CentralAutoriza/rest/ordenesMedicas/registrarAutorizacion', caGestionAutorizacion);
+    return this.http.post<Boolean>(environment.url + '/CentralAutorizav2/rest/ordenesMedicas/registrarAutorizacion', caGestionAutorizacion);
   }
 
   finalizarOrden(finalizarOrdenMedica: FinalizarOrdenMedica) {
-    return this.http.post<Boolean>(environment.url + '/CentralAutoriza/rest/ordenesMedicas/finalizarOrden', finalizarOrdenMedica);
+    return this.http.post<Boolean>(environment.url + '/CentralAutorizav2/rest/ordenesMedicas/finalizarOrden', finalizarOrdenMedica);
   }
 
   obtenerMotivosEliminacion() {
-    return this.http.get<any>(environment.url + '/CentralAutoriza/rest/ordenesMedicas/motivoEliminacion');
+    return this.http.get<any>(environment.url + '/CentralAutorizav2/rest/ordenesMedicas/motivoEliminacion');
   }
 
   eliminarOrden(ormIdOrdmNumero: string,pcaAgeCodigRecep: string,razon: string) {
@@ -82,7 +62,7 @@ export class OrdenService {
       'pcaAgeCodigRecep': pcaAgeCodigRecep,
       'razon' : razon
     };
-    return this.http.post<Boolean>(environment.url + '/CentralAutoriza/rest/ordenesMedicas/eliminarOrden', this.params);
+    return this.http.post<Boolean>(environment.url + '/CentralAutorizav2/rest/ordenesMedicas/eliminarOrden', this.params);
   }
 
   crearOrdenMedica(data) {
@@ -95,7 +75,8 @@ export class OrdenService {
       'segundoApellido': data.segundoApellido,
       'codUsrCita': this.sessionUser.uid
     };
-    return this.http.post<any>(environment.url + '/CentralAutoriza/rest/ordenesMedicas/registrarOrdenMedica', this.params);
+    return this.http.post<any>(environment.url + '/CentralAutorizav2/rest/ordenesMedicas/registrarOrdenMedica', this.params);
   }
 
 }
+

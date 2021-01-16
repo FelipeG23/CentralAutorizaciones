@@ -12,7 +12,7 @@ export class GestionContinuidadService {
   constructor(private http: HttpClient) {}
 
   createGestionContinuidad(gestionContinuidad: GestionContinuidad): Observable<Object> {
-    return this.http.post<GestionContinuidad>( environment.url + '/CentralAutoriza/rest/ordenesMedicas/gestionContinuidad', gestionContinuidad);
+    return this.http.post<GestionContinuidad>( environment.url + '/CentralAutorizav2/rest/ordenesMedicas/gestionContinuidad', gestionContinuidad);
   }
 
 }

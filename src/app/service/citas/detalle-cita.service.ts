@@ -17,14 +17,14 @@ export class DetalleCitaService {
 
  
   registrarAutorizacion(caGestionAutorizacionCita: CaGestionAutorizacionCita) {
-    return this.http.post<Boolean>(environment.url + '/CentralAutoriza/rest/ClienteCita/registrarAutorizacion', caGestionAutorizacionCita);
+    return this.http.post<Boolean>(environment.url + '/CentralAutorizav2/rest/ClienteCita/registrarAutorizacion', caGestionAutorizacionCita);
   }
 
   registrarAutorizacionImg(caGestionAutorizacionCita: CaGestionAutorizacionCita) {
     let caGestionAutorizacionCitas = caGestionAutorizacionCita;
     caGestionAutorizacionCita.codUsrCita = "FSM04389",
     caGestionAutorizacionCita.pacNum = 548110;
-    return this.http.post<Boolean>(environment.url + '/CentralAutoriza/rest/ClienteCita/registrarAutorizacion', caGestionAutorizacionCita);
+    return this.http.post<Boolean>(environment.url + '/CentralAutorizav2/rest/ClienteCita/registrarAutorizacion', caGestionAutorizacionCita);
   }
 
   consultarValor(dataUser) {
@@ -32,15 +32,15 @@ export class DetalleCitaService {
   }
 
   consultarPoliza(pacNum: number): Observable<CaPolizasPaciente> {
-    const url = environment.url + `/CentralAutoriza/rest/ClienteCita/poliza/${pacNum}`;
+    const url = environment.url + `/CentralAutorizav2/rest/ClienteCita/poliza/${pacNum}`;
     return this.http.get<CaPolizasPaciente>(url);
   }
 
   registrarAutorizacionPrestacion(caGestionAutorizacion: CaGestionAutorizacion) {
-    return this.http.post<Boolean>(environment.url + '/CentralAutoriza/rest/ClienteCita/registrarAutorizacionPrestacion', caGestionAutorizacion);
+    return this.http.post<Boolean>(environment.url + '/CentralAutorizav2/rest/ClienteCita/registrarAutorizacionPrestacion', caGestionAutorizacion);
   }
 
   consultarDetalleCita(filtroDetalleCita: FiltroDetalleCita): Observable<DetalleCita> {
-    return this.http.post<DetalleCita>(environment.url + '/CentralAutoriza/rest/ClienteCita/consultarDetalleCitaPaciente', filtroDetalleCita);
+    return this.http.post<DetalleCita>(environment.url + '/CentralAutorizav2/rest/ClienteCita/consultarDetalleCitaPaciente', filtroDetalleCita);
   }
 }
