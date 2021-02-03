@@ -128,7 +128,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
 
   ngOnInit() {
 
-      
+
     this.setLists();
     this.fbRadicar = this.fb.group({
       ecPolizaNumero: [''],  //  Validators.pattern(/^(?!.*(.)\1{9})/),
@@ -205,13 +205,13 @@ export class RadicaOrdenMedicaComponent implements OnInit {
 
   onSubmit() {
 
-    
-     // var code: any;
+
+    // var code: any;
 
     const detalleOrdenMedica: DetalleOrdenMedica = Object.assign(new DetalleOrdenMedica(), this.fbRadicar.getRawValue());
-  
+
     // this.adminOrdenMedica.caDetalleOrdenesMedicas = detalleOrdenMedica;
-     
+
     // code = this.subEspecialidades.find(datosSubes => datosSubes.descripcion === this.adminOrdenMedica.caDetalleOrdenesMedicas.serSerCodSubEspe.trim());
     // this.adminOrdenMedica.caDetalleOrdenesMedicas.serSerCodSubEspe = code.id;
     this.adminOrdenMedica.caDetalleOrdenesMedicas = detalleOrdenMedica;
@@ -224,7 +224,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
     this.adminOrdenMedica.dorFechaOrdenmString = "2020-11-20T05:00:00.000Z";
 
     console.log(this.adminOrdenMedica.dorFechaOrdenmString);
-    
+
 
     this.adminOrdenMedica.ecPolizaNumero = this.fbRadicar.get('ecPolizaNumero').value;
     this.spinner.show();
@@ -471,7 +471,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
     this.serviciosService.getSubEspecialidades().subscribe(data => {
       this.subEspecialidades = data;
       this.subEspecialidadesAll = data;
-      
+
       this.filteredSubEspList = this.fbRadicar.get('serSerCodSubEspe').valueChanges
         .pipe(
           startWith(''),
@@ -479,7 +479,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
         );
     });
 
-    
+
     this.serviciosService.getServicios().subscribe(data => {
       this.servicios = data;
       this.serviciosAll = data;
@@ -629,10 +629,22 @@ export class RadicaOrdenMedicaComponent implements OnInit {
 
   displayFn2(id) {
     if (id) {
-      return this.subEspecialidades.filter(i => {
+      let objeto;
+
+      objeto = this.subEspecialidades.filter(i => {
         const b = i.id === id.trim();
         return b;
-      })[0].descripcion;
+      })[0];
+      if (objeto.descripcion == undefined) {
+        objeto = this.subEspecialidades.filter(i => {
+          const b = i.descripcion === id.trim();
+          return b;
+        })[0];
+        return objeto.descripcion;
+      } else {
+        return objeto.descripcion;
+      }
+
     }
   }
 
@@ -702,7 +714,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
 
   changeDiagnostico() {
     const code = this.fbRadicar.get('serSerCodigo').value;
-    
+
     if (code) {
       this.cieService.getCieWithService(code).subscribe(data => {
         this.cies = data;
@@ -744,22 +756,22 @@ export class RadicaOrdenMedicaComponent implements OnInit {
   } */
 
 
- changeServs() {
-  const codeEsp = this.fbRadicar.get('serEspCodigo').value;
-  const code = this.fbRadicar.get('serSerCodSubEspe').value;
-  this.fbRadicar.patchValue({ servicio: '' });
-  this.servicios = this.serviciosAll;
-  if (code) {
-    // this.servicios = this.servicios.filter(ser => ser.otro === code);
-     this.servicios = this.servicios.filter(ser => ser.otro === code.trim() && ser.otros === codeEsp.trim());
-  }
+  changeServs() {
+    const codeEsp = this.fbRadicar.get('serEspCodigo').value;
+    const code = this.fbRadicar.get('serSerCodSubEspe').value;
+    this.fbRadicar.patchValue({ servicio: '' });
+    this.servicios = this.serviciosAll;
+    if (code) {
+      // this.servicios = this.servicios.filter(ser => ser.otro === code);
+      this.servicios = this.servicios.filter(ser => ser.otro === code.trim() && ser.otros === codeEsp.trim());
+    }
 
-  this.filteredServList = this.fbRadicar.get('serSerCodigo').valueChanges
-    .pipe(
-      startWith(''),
-      map(value => this._filter(value, this.servicios))
-    );
-}
+    this.filteredServList = this.fbRadicar.get('serSerCodigo').valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filter(value, this.servicios))
+      );
+  }
 
 
 
@@ -804,7 +816,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
           }).afterClosed().subscribe(
             (data: any) => {
               if (data !== null) {
-                
+
                 this.ordenMedica.caDetalleOrdenesMedicas.serEspCodigo = data.codEspecialidad;
                 this.ordenMedica.caDetalleOrdenesMedicas.serSerCodSubEspe = data.codSubespecialidad;
                 this.ordenMedica.caDetalleOrdenesMedicas.serSerCodigo = data.codServicio;
@@ -840,40 +852,40 @@ export class RadicaOrdenMedicaComponent implements OnInit {
 
   alertUnlock(): string {
     if (this.cookie.check('lock')) {
-        swal({
-            title: 'Desbloqueo',
-            text: '¿Desea que se desbloquee la cita?',
-            icon: 'warning',
-            buttons: ['Continuar', 'Desbloquear'],
-            dangerMode: true
-        }).then((unLock) => {
-            this.timer = setInterval(() => { this.bloqueoService.unLockAll() }, 10 * 60000);
-            if (unLock !== null) {
-                this.bloqueoService.unLockAll();
-                clearInterval(this.timer);
-                swal('Se ha desbloqueado la cita correctamente', {
-                    icon: 'success',
-                });
-                this.router.navigate(['/autorizacion']);
-            } else {
-                clearInterval(this.timer);
-                this.timer = setInterval(() => { this.alertUnlock() }, this.counter * 60000);
-            }
-        });
+      swal({
+        title: 'Desbloqueo',
+        text: '¿Desea que se desbloquee la cita?',
+        icon: 'warning',
+        buttons: ['Continuar', 'Desbloquear'],
+        dangerMode: true
+      }).then((unLock) => {
+        this.timer = setInterval(() => { this.bloqueoService.unLockAll() }, 10 * 60000);
+        if (unLock !== null) {
+          this.bloqueoService.unLockAll();
+          clearInterval(this.timer);
+          swal('Se ha desbloqueado la cita correctamente', {
+            icon: 'success',
+          });
+          this.router.navigate(['/autorizacion']);
+        } else {
+          clearInterval(this.timer);
+          this.timer = setInterval(() => { this.alertUnlock() }, this.counter * 60000);
+        }
+      });
     }
     return 'true';
-}
+  }
 
-unlockFirebase(){
-  this.bloqueoService.unLock('lockRadica/');
-  clearInterval(this.timer);
-}
+  unlockFirebase() {
+    this.bloqueoService.unLock('lockRadica/');
+    clearInterval(this.timer);
+  }
 
 
-sidenavtoggle(){
+  sidenavtoggle() {
 
-  alert("Hola mundo");
+    alert("Hola mundo");
 
-}
+  }
 
 }

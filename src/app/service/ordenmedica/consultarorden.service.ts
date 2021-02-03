@@ -38,8 +38,8 @@ export class ConsultarordenService {
     
     const fechaInicial = this.convertDate(data.fecha);
     const fechaFinal = this.convertDate(data.fechaFinal);
-
-    
+    console.log("FECHA INICIAL");
+    console.log(fechaInicial);
     
     this.params = {
       'fechaInicial': fechaInicial,

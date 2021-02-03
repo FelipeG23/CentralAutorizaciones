@@ -39,7 +39,9 @@ import { CaPrestacionesOrdMed } from 'src/app/models/orden-medica/CaPrestaciones
   ],
 })
 export class OrdenmedicaComponent implements OnInit {
-
+  ordenesMedicasDerivaciones: any[];
+  ordenesMedicasRadicadas: any[];
+  citasPorAutorizar: any[];
   filtroOrdenes: FormGroup;
   options: any;
   spinnerCA: boolean;
@@ -83,11 +85,9 @@ export class OrdenmedicaComponent implements OnInit {
   success: boolean = false;
   result: any;
   //progress: boolean;
-  ordenesMedicasDerivaciones: any[];
-  ordenesMedicasRadicadas: any[];
-  citasPorAutorizar: any[];
+
   date = new Date();
-  minDateValue = new Date(this.date.getFullYear(), this.date.getMonth()-3, this.date.getDate());
+  minDateValue = new Date(this.date.getFullYear(), this.date.getMonth() - 3, this.date.getDate());
   maxDateValue = new Date(this.date.getFullYear() + 1, this.date.getMonth(), this.date.getDate());
   minDate = new Date(this.date.getFullYear(), 0, 1);
   maxDate = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
@@ -118,16 +118,16 @@ export class OrdenmedicaComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-        public dialog: MatDialog,
-        private consultaService: ConsultaService,
-        private consultarordenService: ConsultarordenService,
-        private firestore: AngularFirestore,
-        private cookie: CookieService,
-        private router: Router,
-        private spinnerService: NgxSpinnerService,
-        private tipodocService: TipodocService,
-        private renderer: Renderer2,
-        private bloqueoService: BloqueoService,
+    public dialog: MatDialog,
+    private consultaService: ConsultaService,
+    private consultarordenService: ConsultarordenService,
+    private firestore: AngularFirestore,
+    private cookie: CookieService,
+    private router: Router,
+    private spinnerService: NgxSpinnerService,
+    private tipodocService: TipodocService,
+    private renderer: Renderer2,
+    private bloqueoService: BloqueoService,
     private uploadFileService: UploadFileService,
     private ordenService: OrdenService) {
     this.options = tipodocService.getTipoDoc();
@@ -170,7 +170,7 @@ export class OrdenmedicaComponent implements OnInit {
         this.jsonSize = 1;
         this.createFileSharePoint('');
         console.log("Test 6", this.fileSharePoint);
-        
+
         this.uploadFileService.uploadFiles(this.fileSharePoint).subscribe(data => {
           this.caFile.nativeElement.value = "";
           this.progress = false;
@@ -184,7 +184,7 @@ export class OrdenmedicaComponent implements OnInit {
             this.onSubmit();
           });
         }, error => {
-          
+
           this.caFile.nativeElement.value = "";
           this.bloqueoService.unLock('gestionDoc/');
           swal({
@@ -216,7 +216,7 @@ export class OrdenmedicaComponent implements OnInit {
     });
   }
 
-  
+
   handleInputChange(e, ordenMedica, renovar) {
 
     console.log("Test1", e);
@@ -224,7 +224,7 @@ export class OrdenmedicaComponent implements OnInit {
     console.log("Test 3", renovar);
 
     //ordenMedica.filename = "Diego.png";
-    
+
     this.dataLock.UserActive = new Userlock();
     this.dataLock.DateActive = ordenMedica !== undefined && ordenMedica !== null ? ordenMedica.ormIdOrdmNumero : '';
     this.dataLock.UserActive.Documento = this.user.uid;
@@ -247,10 +247,10 @@ export class OrdenmedicaComponent implements OnInit {
     this.bloqueoService.lock(this.dataLock, 'gestionDoc');
     const file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
     const reader = new FileReader();
-    
+
     if (renovar === 'renovar') {
       console.log("Test 4");
-      
+
       reader.onload = this._handleReaderLoadedRenovar.bind(this);
     } else {
       console.log("Test 5");
@@ -609,7 +609,7 @@ export class OrdenmedicaComponent implements OnInit {
 
   onSubmitPorRadicar(estados, isList?) {
     const months = this.filtroOrdenesDerivaciones.get("fechaFinal").value
-        .diff(this.filtroOrdenesDerivaciones.get("fecha").value, 'months');
+      .diff(this.filtroOrdenesDerivaciones.get("fecha").value, 'months');
     // if (months > 1) {
     //     swal({
     //         title: 'Error',
@@ -620,253 +620,256 @@ export class OrdenmedicaComponent implements OnInit {
     // }
     // this.filtroOrdenes.patchValue({ 'fechaFinal': this.filtroOrdenes.get("fechaFinal").value.add(1, 'days') });
     if (!this.filtroOrdenesDerivaciones.invalid) {
-        this.consultarordenService.filterOrdenes(this.filtroOrdenesDerivaciones.getRawValue(), estados).subscribe(data => {
-            if (data.mensajeError == null) {
-                this.ordenesMedicasDerivaciones = data;
-                this.ordenesMedicasDerivaciones = this.ordenesMedicasDerivaciones.reverse();
-                this.dataSource.data = this.ordenesMedicasDerivaciones;
-           
-            } else {
-                swal({
-                    text: data.mensajeError,
-                    icon: 'warning',
-                });
-            }
-        }, err => {
-            this.ordenesMedicasDerivaciones = [];
-            swal({
-                title: 'Error',
-                text: 'No se pudo consultar la derivación, por favor consulte con soporte',
-                icon: 'warning',
-            });
-            console.log(err);
-            this.onSubmitDerivaciones([2, 3, 4]);
-        });
-    }
-}
+      this.filtroOrdenesDerivaciones.patchValue({fecha: moment(this.minDate)});
 
-
-onSubmitDerivaciones(estados, isList?) {
-  const months = this.filtroOrdenesDerivaciones.get("fechaFinal").value
-      .diff(this.filtroOrdenesDerivaciones.get("fecha").value, 'months');
-  // if (months > 1) {
-  //     swal({
-  //         title: 'Error',
-  //         text: 'El filtro de fechas supera al de un mes',
-  //         icon: 'warning',
-  //     });
-  //     return;
-  // }
-  if (!this.filtroOrdenesDerivaciones.invalid) {
       this.consultarordenService.filterOrdenes(this.filtroOrdenesDerivaciones.getRawValue(), estados).subscribe(data => {
-          if (data.mensajeError == null) {
-              this.ordenesMedicasRadicadas = data;
-              this.ordenesMedicasRadicadas = this.ordenesMedicasRadicadas.filter(data => {
-                  if(data.prestaciones !== data.continuidad || data.continuidad === null || data.prestaciones === null  ){
-                      if(data.prestaciones !== data.autorizadas + data.continuidad) {
-                          return data
-                      }
-                  }
-              })
-              this.ordenesMedicasRadicadas = this.ordenesMedicasRadicadas.reverse();
+        if (data.mensajeError == null) {
+          this.ordenesMedicasDerivaciones = data;
+          this.ordenesMedicasDerivaciones = this.ordenesMedicasDerivaciones.reverse();
+          this.dataSource.data = this.ordenesMedicasDerivaciones;
 
-              this.dataSourceRadicadas.data = this.ordenesMedicasRadicadas;
-          } else {
-              swal({
-                  text: data.mensajeError,
-                  icon: 'warning',
-              });
-          }
-      }, err => {
-          this.ordenesMedicasRadicadas = [];
+        } else {
           swal({
-              title: 'Error',
-              text: 'No se pudo consultar la derivación, por favor consulte con soporte',
-              icon: 'warning',
+            text: data.mensajeError,
+            icon: 'warning',
           });
-          console.log(err);
+        }
+      }, err => {
+        this.ordenesMedicasDerivaciones = [];
+        swal({
+          title: 'Error',
+          text: 'No se pudo consultar la derivación, por favor consulte con soporte',
+          icon: 'warning',
+        });
+        console.log(err);
+        this.onSubmitDerivaciones([2, 3, 4]);
       });
+    }
   }
-}
 
 
-validateNameDerivaciones(event) {
-  this.nameRequired = true;
-}
+  onSubmitDerivaciones(estados, isList?) {
+    const months = this.filtroOrdenesDerivaciones.get("fechaFinal").value
+      .diff(this.filtroOrdenesDerivaciones.get("fecha").value, 'months');
+    // if (months > 1) {
+    //     swal({
+    //         title: 'Error',
+    //         text: 'El filtro de fechas supera al de un mes',
+    //         icon: 'warning',
+    //     });
+    //     return;
+    // }
+    if (!this.filtroOrdenesDerivaciones.invalid) {
+      this.filtroOrdenesDerivaciones.patchValue({fecha: moment(this.minDateValue)});
+      this.consultarordenService.filterOrdenes(this.filtroOrdenesDerivaciones.getRawValue(), estados).subscribe(data => {
+        if (data.mensajeError == null) {
+          this.ordenesMedicasRadicadas = data;
+          this.ordenesMedicasRadicadas = this.ordenesMedicasRadicadas.filter(data => {
+            if (data.prestaciones !== data.continuidad || data.continuidad === null || data.prestaciones === null) {
+              if (data.prestaciones !== data.autorizadas + data.continuidad) {
+                return data
+              }
+            }
+          })
+          this.ordenesMedicasRadicadas = this.ordenesMedicasRadicadas.reverse();
 
-openDialogTraza(datoTraza): void {
-  this.dialog.open(TrazaOrdenComponent, {
+          this.dataSourceRadicadas.data = this.ordenesMedicasRadicadas;
+        } else {
+          swal({
+            text: data.mensajeError,
+            icon: 'warning',
+          });
+        }
+      }, err => {
+        this.ordenesMedicasRadicadas = [];
+        swal({
+          title: 'Error',
+          text: 'No se pudo consultar la derivación, por favor consulte con soporte',
+          icon: 'warning',
+        });
+        console.log(err);
+      });
+    }
+  }
+
+
+  validateNameDerivaciones(event) {
+    this.nameRequired = true;
+  }
+
+  openDialogTraza(datoTraza): void {
+    this.dialog.open(TrazaOrdenComponent, {
       height: '500px',
       data: datoTraza
-  });
-}
+    });
+  }
 
-openDialogAuto(datoTraza): void {
-  localStorage.setItem('ordenId', datoTraza.ormIdOrdmNumero);
-  this.spinnerService.show();
-  this.consultarordenService.validarGestionContinuidad(datoTraza.ormIdOrdmNumero).subscribe((continuidad: boolean) => {
+  openDialogAuto(datoTraza): void {
+    localStorage.setItem('ordenId', datoTraza.ormIdOrdmNumero);
+    this.spinnerService.show();
+    this.consultarordenService.validarGestionContinuidad(datoTraza.ormIdOrdmNumero).subscribe((continuidad: boolean) => {
       if (!continuidad) {
-          swal({
-              title: 'Información',
-              text: 'Para realizar la Autorización, por favor realice la gestión de continuidad, para la orden ' + datoTraza.ormIdOrdmNumero,
-              icon: 'info',
-          });
-          this.spinnerService.hide();
-          return;
+        swal({
+          title: 'Información',
+          text: 'Para realizar la Autorización, por favor realice la gestión de continuidad, para la orden ' + datoTraza.ormIdOrdmNumero,
+          icon: 'info',
+        });
+        this.spinnerService.hide();
+        return;
       }
       this.ordenService.getDetailOrden(datoTraza.ormIdOrdmNumero).subscribe(v => {
-          this.spinnerService.hide();
-          let caPrestacionesOrdMed: Array<CaPrestacionesOrdMed> = v.caPrestacionesOrdMed;
+        this.spinnerService.hide();
+        let caPrestacionesOrdMed: Array<CaPrestacionesOrdMed> = v.caPrestacionesOrdMed;
+        if (caPrestacionesOrdMed !== undefined && caPrestacionesOrdMed !== null &&
+          caPrestacionesOrdMed.length > 0) {
+          caPrestacionesOrdMed = caPrestacionesOrdMed.filter((caPrestacion: CaPrestacionesOrdMed) => {
+            return caPrestacion.caGestionAutorizacion === null ||
+              caPrestacion.caGestionAutorizacion.gauAutorizaServ === '3'
+          });
           if (caPrestacionesOrdMed !== undefined && caPrestacionesOrdMed !== null &&
-              caPrestacionesOrdMed.length > 0) {
-              caPrestacionesOrdMed = caPrestacionesOrdMed.filter((caPrestacion: CaPrestacionesOrdMed) => {
-                  return caPrestacion.caGestionAutorizacion === null ||
-                      caPrestacion.caGestionAutorizacion.gauAutorizaServ === '3'
-              });
-              if (caPrestacionesOrdMed !== undefined && caPrestacionesOrdMed !== null &&
-                  caPrestacionesOrdMed.length > 0) {
-                  const dialogRef = this.dialog.open(VerDerivacionesComponent, {
-                      height: '500px',
-                      data: datoTraza,
-                      disableClose: true
-                  });
-                  dialogRef.afterClosed().subscribe((data) => {
-                      // consultamos nuevamente las derivaciones radicadas
-                      this.ordenesMedicasRadicadas = null;
-                      this.initFilter();
-                      this.onSubmitDerivaciones([2, 3]);
-                  });
-              }
+            caPrestacionesOrdMed.length > 0) {
+            const dialogRef = this.dialog.open(VerDerivacionesComponent, {
+              height: '500px',
+              data: datoTraza,
+              disableClose: true
+            });
+            dialogRef.afterClosed().subscribe((data) => {
+              // consultamos nuevamente las derivaciones radicadas
+              this.ordenesMedicasRadicadas = null;
+              this.initFilter();
+              this.onSubmitDerivaciones([2, 3]);
+            });
           }
+        }
       }, () => {
-          this.spinnerService.hide();
+        this.spinnerService.hide();
       })
-  }, () => {
+    }, () => {
       this.spinnerService.hide();
-  })
-}
-
-
-openDialogView(element) {
-  if (localStorage.getItem('lock')) {
-      this.bloqueoService.unLockAll()
+    })
   }
-  this.metodo = this.bloqueoService.search('locktresMenu', element.ormIdOrdmNumeroP).subscribe(data => {
+
+
+  openDialogView(element) {
+    if (localStorage.getItem('lock')) {
+      this.bloqueoService.unLockAll()
+    }
+    this.metodo = this.bloqueoService.search('locktresMenu', element.ormIdOrdmNumeroP).subscribe(data => {
       this.unSubcribeFirebase()
       console.log(data.length)
       if (data.length) {
-          this.resultados = data;
-          swal({
-              title: 'La autorización bloqueada',
-              text: `Esta autorización se encuentra bloqueada por  ${this.resultados[0].UserActive.Nombre}`,
-              icon: 'info',
-          });
+        this.resultados = data;
+        swal({
+          title: 'La autorización bloqueada',
+          text: `Esta autorización se encuentra bloqueada por  ${this.resultados[0].UserActive.Nombre}`,
+          icon: 'info',
+        });
       } else {
-          this.dataLock.UserActive = new Userlock();
-          this.dataLock.DateActive = element !== undefined && element !== null ? element.ormIdOrdmNumeroP : '';
-          this.dataLock.UserActive.Documento = this.user.uid;
-          this.dataLock.UserActive.Nombre = this.user.cn;
-          this.valor = this.bloqueoService.lock(this.dataLock, 'locktresMenu');
-          localStorage.setItem('lock', this.valor.key);
-          localStorage.setItem('orden', JSON.stringify(element.ormIdOrdmNumero));
-          const dialogRef = this.dialog.open(VerRadicarComponent, {
-              height: '500px',
-              data: element
-          });
-          dialogRef.afterClosed().subscribe((data) => {
-              this.bloqueoService.unLockAll();
-              this.initFilter();
-              this.onSubmitDerivaciones([2, 3]);
-          });
-          // this.bloqueoService.unLock('lockDerivaciones/');
+        this.dataLock.UserActive = new Userlock();
+        this.dataLock.DateActive = element !== undefined && element !== null ? element.ormIdOrdmNumeroP : '';
+        this.dataLock.UserActive.Documento = this.user.uid;
+        this.dataLock.UserActive.Nombre = this.user.cn;
+        this.valor = this.bloqueoService.lock(this.dataLock, 'locktresMenu');
+        localStorage.setItem('lock', this.valor.key);
+        localStorage.setItem('orden', JSON.stringify(element.ormIdOrdmNumero));
+        const dialogRef = this.dialog.open(VerRadicarComponent, {
+          height: '500px',
+          data: element
+        });
+        dialogRef.afterClosed().subscribe((data) => {
+          this.bloqueoService.unLockAll();
+          this.initFilter();
+          this.onSubmitDerivaciones([2, 3]);
+        });
+        // this.bloqueoService.unLock('lockDerivaciones/');
       }
-  });
-}
+    });
+  }
 
-getTime(date) {
-  return 'Creadó ' + moment(date).fromNow();
-}
+  getTime(date) {
+    return 'Creadó ' + moment(date).fromNow();
+  }
 
-getNumberHours(date) {
-  if (moment(date).fromNow().includes('segundos')) {
+  getNumberHours(date) {
+    if (moment(date).fromNow().includes('segundos')) {
       return 0;
-  } else if (moment(date).fromNow().includes('minuto')) {
+    } else if (moment(date).fromNow().includes('minuto')) {
       return 0;
-  } else if (moment(date).fromNow().includes('una')) {
+    } else if (moment(date).fromNow().includes('una')) {
       return 1;
-  } else if (moment(date).fromNow().includes('mes')) {
+    } else if (moment(date).fromNow().includes('mes')) {
       return 100;
-  } else {
+    } else {
       return moment(date).fromNow().split(' ')[1];
+    }
   }
-}
 
-radicar(element) {
-  this.dataLock.UserActive = new Userlock();
-  this.dataLock.DateActive = element.ormIdOrdmNumero;
-  this.dataLock.UserActive.Documento = this.user.uid;
-  this.dataLock.UserActive.Nombre = this.user.cn;
-  if (localStorage.getItem('lock')) {
+  radicar(element) {
+    this.dataLock.UserActive = new Userlock();
+    this.dataLock.DateActive = element.ormIdOrdmNumero;
+    this.dataLock.UserActive.Documento = this.user.uid;
+    this.dataLock.UserActive.Nombre = this.user.cn;
+    if (localStorage.getItem('lock')) {
       this.bloqueoService.unLockAll()
-  }
-  this.metodo = this.bloqueoService.search('lockRadica', this.dataLock.DateActive).subscribe(data => {
+    }
+    this.metodo = this.bloqueoService.search('lockRadica', this.dataLock.DateActive).subscribe(data => {
       this.unSubcribeFirebase()
       if (data.length) {
-          this.resultados = data;
-          swal({
-              title: 'Autorización bloqueada',
-              text: `Esta autorización se encuentra bloqueada por  ${this.resultados[0].UserActive.Nombre}`,
-              icon: 'info',
-          });
+        this.resultados = data;
+        swal({
+          title: 'Autorización bloqueada',
+          text: `Esta autorización se encuentra bloqueada por  ${this.resultados[0].UserActive.Nombre}`,
+          icon: 'info',
+        });
       } else {
-          this.valor = this.bloqueoService.lock(this.dataLock, 'lockRadica');
-          localStorage.setItem('lock', this.valor.key);
-          localStorage.setItem('orden', JSON.stringify(element.ormIdOrdmNumero));
-          this.router.navigate(['/radicar']);
+        this.valor = this.bloqueoService.lock(this.dataLock, 'lockRadica');
+        localStorage.setItem('lock', this.valor.key);
+        localStorage.setItem('orden', JSON.stringify(element.ormIdOrdmNumero));
+        this.router.navigate(['/radicar']);
       }
-  })
-}
-
-openDialogAutorizacion(datoCita, modulo) {
-  this.dataLock.UserActive = new Userlock();
-  this.dataLock.DateActive = datoCita.idCita;
-  this.dataLock.UserActive.Documento = this.user.uid;
-  this.dataLock.UserActive.Nombre = this.user.cn;
-  if (localStorage.getItem('lock')) {
-      this.bloqueoService.unLockAll()
+    })
   }
-  this.metodo = this.bloqueoService.search('lockAutorizacion', this.dataLock.DateActive).subscribe(data => {
+
+  openDialogAutorizacion(datoCita, modulo) {
+    this.dataLock.UserActive = new Userlock();
+    this.dataLock.DateActive = datoCita.idCita;
+    this.dataLock.UserActive.Documento = this.user.uid;
+    this.dataLock.UserActive.Nombre = this.user.cn;
+    if (localStorage.getItem('lock')) {
+      this.bloqueoService.unLockAll()
+    }
+    this.metodo = this.bloqueoService.search('lockAutorizacion', this.dataLock.DateActive).subscribe(data => {
       this.unSubcribeFirebase()
       if (data.length) {
-          this.resultados = data;
-          swal({
-              title: 'Autorización bloqueada',
-              text: `Esta autorización se encuentra bloqueada por  ${this.resultados[0].UserActive.Nombre}`,
-              icon: 'info',
-          });
+        this.resultados = data;
+        swal({
+          title: 'Autorización bloqueada',
+          text: `Esta autorización se encuentra bloqueada por  ${this.resultados[0].UserActive.Nombre}`,
+          icon: 'info',
+        });
       } else {
-          this.valor = this.bloqueoService.lock(this.dataLock, 'lockAutorizacion');
-          localStorage.setItem('lock', this.valor.key);
-          const dialogRef = this.dialog.open(RegistrarautorizacionCitaComponent, {
-              data: { datoCita },
-              height: '500px',
-              disableClose: true
-          });
-          dialogRef.afterClosed().subscribe((caGestionAutorizacionCita: CaGestionAutorizacionCita) => {
-              if (caGestionAutorizacionCita != null) {
-                  this.citasPorAutorizar = null;
-                  // this.onSubmitCitas();
-                  this.bloqueoService.unLock('lockAutorizacion/');
-              }
-              if (caGestionAutorizacionCita === undefined) {
-                  this.bloqueoService.unLock('lockAutorizacion/');
-              }
-              this.initFilter();
-              this.onSubmitCitas();
-          });
+        this.valor = this.bloqueoService.lock(this.dataLock, 'lockAutorizacion');
+        localStorage.setItem('lock', this.valor.key);
+        const dialogRef = this.dialog.open(RegistrarautorizacionCitaComponent, {
+          data: { datoCita },
+          height: '500px',
+          disableClose: true
+        });
+        dialogRef.afterClosed().subscribe((caGestionAutorizacionCita: CaGestionAutorizacionCita) => {
+          if (caGestionAutorizacionCita != null) {
+            this.citasPorAutorizar = null;
+            // this.onSubmitCitas();
+            this.bloqueoService.unLock('lockAutorizacion/');
+          }
+          if (caGestionAutorizacionCita === undefined) {
+            this.bloqueoService.unLock('lockAutorizacion/');
+          }
+          this.initFilter();
+          this.onSubmitCitas();
+        });
       }
-  });
-}
+    });
+  }
 
 
 
