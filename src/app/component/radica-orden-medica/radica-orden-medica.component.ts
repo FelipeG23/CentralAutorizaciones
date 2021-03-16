@@ -82,7 +82,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
   filteredConvList: Observable<string[]>;
   medicos: any[] = [];
   filteredMedList: Observable<string[]>;
-  cies: any;
+  cies: any = [];
   viewDocument: any;
   ordenMedica: OrdenMedica;
   adminOrdenMedica: AdminOrdenMedica = new AdminOrdenMedica();
@@ -460,6 +460,16 @@ export class RadicaOrdenMedicaComponent implements OnInit {
   }
 
   private setLists() {
+    this.medicoService.getMedicos().subscribe(data => {
+
+      this.medicos = data;
+      this.filteredMedList = this.fbRadicar.get('pcaAgeCodigProfe').valueChanges
+        .pipe(
+          startWith(''),
+          map(value => this._filter(value, this.medicos))
+        );
+    });
+
     this.especialidadService.getEspecialidades().subscribe(data => {
       this.especialidades = data;
       this.filteredEspList = this.fbRadicar.get('serEspCodigo').valueChanges
@@ -506,14 +516,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
           map(value => this._filter(value, this.convenios))
         );
     });
-    this.medicoService.getMedicos().subscribe(data => {
-      this.medicos = data;
-      this.filteredMedList = this.fbRadicar.get('pcaAgeCodigProfe').valueChanges
-        .pipe(
-          startWith(''),
-          map(value => this._filter(value, this.medicos))
-        );
-    });
+
     this.diagnosticoService.diagnosticos().subscribe(data => {
       this.cies = data;
       this.filteredDiagnostico = this.fbRadicar.get('diaAgrCodigo').valueChanges
@@ -635,12 +638,23 @@ export class RadicaOrdenMedicaComponent implements OnInit {
         const b = i.id === id.trim();
         return b;
       })[0];
-      if (objeto.descripcion == undefined) {
+      if (objeto == undefined) {
         objeto = this.subEspecialidades.filter(i => {
           const b = i.descripcion === id.trim();
           return b;
         })[0];
+
+        if (objeto == undefined) {
+          objeto = this.subEspecialidades.filter(i => {
+            const b = i.otro === id.trim();
+            return b;
+          })[0];
+
+        }
+
+
         return objeto.descripcion;
+
       } else {
         return objeto.descripcion;
       }
@@ -650,28 +664,67 @@ export class RadicaOrdenMedicaComponent implements OnInit {
 
   displayFn3(id) {
     if (id) {
-      return this.servicios.filter(i => i.id === id.trim())[0].descripcion;
+
+
+      if (this.servicios != undefined) {
+        if (this.servicios.length > 0) {
+
+          return this.servicios.filter(i => i.id === id.trim())[0].descripcion;
+        }
+      }
+      return "";
     }
   }
 
   displayFn4(id) {
     if (id) {
-      return this.sedes.filter(i => {
-        const v = i.otro === id;
-        return v;
-      })[0].descripcion;
+
+      if (this.sedes != undefined) {
+        if (this.sedes.length > 0) {
+
+          let objeto;
+
+          objeto = this.sedes.filter(i => {
+            const b = i.id === id.trim();
+            return b;
+          })[0];
+          if (objeto == undefined) {
+            objeto = this.sedes.filter(i => {
+              const b = i.otro === id.trim();
+              return b;
+            })[0];
+            return objeto.descripcion;
+          } else {
+            return objeto.descripcion;
+          }
+
+        }
+      }
+      return "";
     }
   }
 
   displayFn5(id) {
     if (id) {
-      return this.convenios.filter(i => i.id === id.trim())[0].descripcion;
+
+      if (this.convenios != undefined) {
+        if (this.convenios.length > 0) {
+          return this.convenios.filter(i => i.id === id.trim())[0].descripcion;
+        }
+      }
+      return "";
     }
   }
 
   displayFn6(id) {
     if (id) {
-      return this.medicos.filter(i => i.id === id.trim())[0].descripcion;
+      if (this.medicos != undefined) {
+        if (this.medicos.length > 0) {
+          return this.medicos.filter(i => i.id === id.trim())[0].descripcion;
+        }
+      }
+      return "";
+
     }
   }
 

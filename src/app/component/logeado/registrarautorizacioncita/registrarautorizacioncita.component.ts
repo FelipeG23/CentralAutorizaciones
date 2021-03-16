@@ -70,6 +70,8 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   errorMatcherCostoPaciente = new CrossFieldErrorMatcherCostoPaciente();
   caPrestacionesOrdMed: CaPrestacionesOrdMed;
   prestacion: any;
+  datosCitaxId: any;
+
   detalleCita: DetalleCita;
   claseFormulario = 'col-sm-12';
   motivosNoAutoriza: any[];
@@ -119,9 +121,9 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
       }
       this.spinnerService.hide();
       this.detalleCita = detalleCita;
+      this.datosCitaxId = detalleCita;
 
-
-      if (this.detalleCita.tipoConvenio === "A" || this.detalleCita.tipoConvenio === "S" ) {
+      if (this.detalleCita.tipoConvenio === "A" || this.detalleCita.tipoConvenio === "S") {
         this.numeroPolizaReadonly = false;
         this.registrarAuto.controls['numeroPoliza'].setValidators([Validators.required]);
       } else {
@@ -137,8 +139,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
     const numeroPoliza = this.data.datoCita.numeroPoliza !== undefined && this.data.datoCita.numeroPoliza !== null ? this.data.datoCita.numeroPoliza.trim() : '';
     this.registrarAuto.get('numeroPoliza').setValue(numeroPoliza);
 
-    console.log("Prueba", numeroPoliza);
-    
+
 
     if (numeroPoliza === '') {
       this.detalleCitaService.consultarPoliza(this.data.datoCita.pacNum).
@@ -150,7 +151,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
         });
     }
 
-    
+
     if (this.data.datoCita.module !== undefined && this.data.datoCita.module !== null &&
       this.data.datoCita.module === 'derivacion') {
       this.consultarOrdenService.consultarPrestacion(this.data.datoCita.pomIdPrestOrdm).
@@ -187,7 +188,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   onSubmit() {
 
     console.log("datos Diego", this.data.datoCita.module);
-    
+
     if (this.data.datoCita.module == 'derivacion') {
       const caGestionAutorizacion: CaGestionAutorizacion = Object.assign(new CaGestionAutorizacion(), this.registrarAuto.value);
 
@@ -202,6 +203,9 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
       caGestionAutorizacion.nombrePaciente = this.data.datoCita.ordenMedica.nombreCompletoPaciente;
       caGestionAutorizacion.centroAtencion = this.data.datoCita.sedes[0].descripcion;
       this.spinnerService.show();
+
+
+
       this.ordenService.registrarAutorizacion(caGestionAutorizacion).subscribe(
         (data: boolean) => {
           this.spinnerService.hide();
@@ -212,6 +216,8 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
               icon: 'success',
             });
             this.dialogRef.close(caGestionAutorizacion);
+
+
           } else {
             swal({
               title: 'Error',
@@ -250,7 +256,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
 
       console.log(caGestionAutorizacionCita);
 
-       this.spinnerService.show();
+      this.spinnerService.show();
 
       this.detalleCitaService.registrarAutorizacion(caGestionAutorizacionCita).subscribe(
         (data: boolean) => {
@@ -263,6 +269,15 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
               icon: 'success',
             });
             this.dialogRef.close(caGestionAutorizacionCita);
+            console.log("ws nuevo");
+            this.ordenService.authorizationRegister(this.datosCitaxId, caGestionAutorizacionCita).subscribe(
+              (data) => {
+                console.log(data);
+                console.log("123654789");
+              });
+
+
+
           } else {
             swal({
               title: 'Error',
@@ -280,7 +295,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
             text: messageError,
             icon: 'warning',
           });
-        });  
+        });
     }
   }
 
@@ -457,7 +472,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
     const autorizar = group.get('gauAutorizaServ').value; // to get value in input tag
     if (group.get('numeroPoliza').value === null || group.get('numeroPoliza').value === '') {
       console.log("Entro Aqui");
-      
+
       return { requiredPoliza: true };
     } else {
       console.log("Entro Aqui");
@@ -509,12 +524,12 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   setFormRegistra() {
     this.registrarAuto = this.fb.group({
       gauNombreAutorizador: ['',
-      [Validators.required]],
+        [Validators.required]],
       gauTelefonoAutorizador: ['', [
         Validators.required, Validators.pattern(/^(?!.*(.)\1{4})/), Validators.minLength(7), Validators.maxLength(20)
       ]],
       gauAutorizaServ: ['', [Validators.required]],
- //   gauNombreAutorizador: ['', [Validators.required]],
+      //   gauNombreAutorizador: ['', [Validators.required]],
       mnaIdcodigo: [{ value: null, disabled: true }],
       omnDesc: [null, [
         Validators.minLength(7), Validators.maxLength(50)

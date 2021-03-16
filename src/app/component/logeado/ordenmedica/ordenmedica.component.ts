@@ -161,6 +161,10 @@ export class OrdenmedicaComponent implements OnInit {
 
   }
 
+  doFilter2 = (value: string) => {
+    this.dataSourceRadicadas.filter = value.trim().toLocaleLowerCase();
+  }
+
   onSubmitFile() {
     this.progress = true;
     this.ordenService.crearOrdenMedica(this.filtroOrdenes.value).subscribe(data => {
@@ -528,7 +532,9 @@ export class OrdenmedicaComponent implements OnInit {
     });
   }
 
-
+  doFilter = (value: string) => {
+    this.dataSource.filter = value.trim().toLocaleLowerCase();
+  }
   validateTypeDocument() {
     const value = this.filtroOrdenes.get('tipoDocumento').value;
     if (value === 'M' || value === 'A') {
@@ -620,7 +626,7 @@ export class OrdenmedicaComponent implements OnInit {
     // }
     // this.filtroOrdenes.patchValue({ 'fechaFinal': this.filtroOrdenes.get("fechaFinal").value.add(1, 'days') });
     if (!this.filtroOrdenesDerivaciones.invalid) {
-      this.filtroOrdenesDerivaciones.patchValue({fecha: moment(this.minDate)});
+      this.filtroOrdenesDerivaciones.patchValue({ fecha: moment(this.minDate) });
 
       this.consultarordenService.filterOrdenes(this.filtroOrdenesDerivaciones.getRawValue(), estados).subscribe(data => {
         if (data.mensajeError == null) {
@@ -660,9 +666,10 @@ export class OrdenmedicaComponent implements OnInit {
     //     return;
     // }
     if (!this.filtroOrdenesDerivaciones.invalid) {
-      this.filtroOrdenesDerivaciones.patchValue({fecha: moment(this.minDateValue)});
+      this.filtroOrdenesDerivaciones.patchValue({ fecha: moment(this.minDateValue) });
       this.consultarordenService.filterOrdenes(this.filtroOrdenesDerivaciones.getRawValue(), estados).subscribe(data => {
         if (data.mensajeError == null) {
+          console.log(data);
           this.ordenesMedicasRadicadas = data;
           this.ordenesMedicasRadicadas = this.ordenesMedicasRadicadas.filter(data => {
             if (data.prestaciones !== data.continuidad || data.continuidad === null || data.prestaciones === null) {

@@ -1,8 +1,18 @@
 {
-    "/GetAppointmenstList*":{
+    "/GetAppointmenstList*": {
         "target": "https://10.14.246.75:4434",
-        "secure" : false,
+        "secure": false,
         "loglevel": "debug",
         "changeOrigin": true
+    },
+    "/fsfb-apiWeb/*": {
+        "target": "http://52.247.56.140:8081",
+        "secure": false,
+        "loglevel": "debug"
+    },
+    "/service/*": {
+        "target": "http://10.1.0.95:7080",
+        "secure": false,
+        "loglevel": "debug"
     }
 }

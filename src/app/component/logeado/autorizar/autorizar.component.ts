@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-import {FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { TipodocService } from 'src/app/service/catalogos/tipodoc.service';
 import { trigger, transition, useAnimation } from '@angular/animations';
 import { fadeIn } from 'ng-animate';
@@ -80,7 +80,7 @@ export class AutorizarComponent implements OnInit {
     citasPorAutorizar: any[];
     citasAutorizadas: any[];
     date = new Date();
-    minDateValue = new Date(this.date.getFullYear(), this.date.getMonth()-3, this.date.getDate());
+    minDateValue = new Date(this.date.getFullYear(), this.date.getMonth() - 3, this.date.getDate());
     maxDateValue = new Date(this.date.getFullYear() + 1, this.date.getMonth(), this.date.getDate());
     minDate = new Date(this.date.getFullYear(), 0, 1);
     maxDate = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
@@ -142,7 +142,7 @@ export class AutorizarComponent implements OnInit {
         this.initFilter();
         this.dataSource.sort = this.sort;
         this.dataSourceCitas.paginator = this.paginatorCitas;
-        
+
         this.dataSourceCitasAutorizadas.paginator = this.paginatorCitasAutorizadas;
         this.dataSource.paginator = this.paginatorPorRadicadar;
         this.dataSourceRadicadas.paginator = this.paginatorRadicadas;
@@ -159,13 +159,13 @@ export class AutorizarComponent implements OnInit {
                 this.spinnerService.hide();
                 this.citasPorAutorizar = data;
                 this.consultaService.postCitasAutorizadas(this.page, this.size)
-                // this.consultaService.postCitasAutorizadas(this.paginatorCitas.pageIndex, this.paginatorCitas.pageSize + 1))
-                .subscribe((data: any) => {
-                // this.citasAutorizadas = data.sort((a, b) => b.fechaAutorizacion - a.fechaAutorizacion);
-                this.citasAutorizadas = data;
-                this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;
-                });
-            //    this.datosUsuarios = this.listaUsuariosRegistro.find(word => word._id === this.registro.id);
+                    // this.consultaService.postCitasAutorizadas(this.paginatorCitas.pageIndex, this.paginatorCitas.pageSize + 1))
+                    .subscribe((data: any) => {
+                        // this.citasAutorizadas = data.sort((a, b) => b.fechaAutorizacion - a.fechaAutorizacion);
+                        this.citasAutorizadas = data;
+                        this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;
+                    });
+                //    this.datosUsuarios = this.listaUsuariosRegistro.find(word => word._id === this.registro.id);
                 this.dataSourceCitas.data = this.citasPorAutorizar;
                 if (isList) {
                     this.filtersApply();
@@ -184,11 +184,11 @@ export class AutorizarComponent implements OnInit {
 
     setPageSizeOptions(setPageSizeOptionsInput: any) {
         this.citasAutorizadas = null;
-        this.consultaService.postCitasAutorizadas(setPageSizeOptionsInput.pageIndex, (setPageSizeOptionsInput.pageSize +1))
-                .subscribe((data: any) => {
+        this.consultaService.postCitasAutorizadas(setPageSizeOptionsInput.pageIndex, (setPageSizeOptionsInput.pageSize + 1))
+            .subscribe((data: any) => {
                 this.citasAutorizadas = data;
                 this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;
-                });
+            });
     }
 
     initFilter() {
@@ -203,11 +203,11 @@ export class AutorizarComponent implements OnInit {
             tipoDocumento: [null],
             numeroDocumento: [null, [Validators.maxLength(20), Validators.pattern(/^[A-Za-z0-9\s]+$/)]],
             // tslint:disable-next-line: max-line-length
-            nombre: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/), ]],
+            nombre: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/),]],
             // tslint:disable-next-line: max-line-length
-            primerApellido: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/), ]],
+            primerApellido: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/),]],
             // tslint:disable-next-line: max-line-length
-            segundoApellido: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/), ]]
+            segundoApellido: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/),]]
         });
 
 
@@ -225,7 +225,7 @@ export class AutorizarComponent implements OnInit {
         // tslint:disable-next-line: max-line-length
         this.filtroOrdenes.setControl('fecha', new FormControl([{ disabled: true, value: moment(this.minDateValue) }, [Validators.required]]));
         // tslint:disable-next-line: max-line-length
-        this.filtroOrdenes.setControl('fechaFinal', new FormControl( [{ disabled: true, value: moment(this.maxDateValue) }, [Validators.required]]));
+        this.filtroOrdenes.setControl('fechaFinal', new FormControl([{ disabled: true, value: moment(this.maxDateValue) }, [Validators.required]]));
     }
 
     validateTypeDocument() {
@@ -329,6 +329,9 @@ export class AutorizarComponent implements OnInit {
         reader.onload = this._handleReaderLoaded.bind(this);
         reader.readAsDataURL(file);
     }
+    doFilter = (value: string) => {
+        this.dataSource.filter = value.trim().toLocaleLowerCase();
+    }
 
     _handleReaderLoaded(e) {
         this.subir = true;
@@ -341,8 +344,8 @@ export class AutorizarComponent implements OnInit {
     }
 
     changeChecks() {
-       console.log('entra ');
-      }
+        console.log('entra ');
+    }
 
     clear() {
         this.filtroOrdenes.reset();
@@ -416,9 +419,10 @@ export class AutorizarComponent implements OnInit {
         if (!this.filtroOrdenes.invalid) {
             this.consultarordenService.filterOrdenes(this.filtroOrdenes.getRawValue(), estados).subscribe(data => {
                 if (data.mensajeError == null) {
+                    console.log(data);
                     this.ordenesMedicasRadicadas = data;
                     this.ordenesMedicasRadicadas = this.ordenesMedicasRadicadas.filter(data => {
-                        if (data.prestaciones !== data.continuidad || data.continuidad === null || data.prestaciones === null  ) {
+                        if (data.prestaciones !== data.continuidad || data.continuidad === null || data.prestaciones === null) {
                             if (data.prestaciones !== data.autorizadas + data.continuidad) {
                                 return data;
                             }

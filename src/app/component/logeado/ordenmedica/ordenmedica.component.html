@@ -33,7 +33,8 @@
           </div>
           <div class="col-sm-10">
             <mat-form-field class="w-3">
-              <input type="text" onblur="this.value = this.value.toUpperCase()" matInput placeholder="Nombre" formControlName="nombre" [required]="nameRequired" class="input-uppercase"
+              <input type="text" onblur="this.value = this.value.toUpperCase()" matInput placeholder="Nombre"
+                formControlName="nombre" [required]="nameRequired" class="input-uppercase"
                 (ngModelChange)="validateName($event)">
               <mat-icon matSuffix class="iconsCA">person</mat-icon>
               <mat-error *ngIf="filtroOrdenes.get('nombre').hasError('pattern')">
@@ -46,8 +47,8 @@
           </div>
           <div class="col-sm-10">
             <mat-form-field class="w-3">
-              <input type="text" onblur="this.value = this.value.toUpperCase()" [required]="nameRequired" matInput placeholder="Primer apellido"
-                formControlName="primerApellido" class="input-uppercase">
+              <input type="text" onblur="this.value = this.value.toUpperCase()" [required]="nameRequired" matInput
+                placeholder="Primer apellido" formControlName="primerApellido" class="input-uppercase">
               <mat-icon matSuffix class="iconsCA">person</mat-icon>
               <mat-error *ngIf="filtroOrdenes.get('primerApellido').hasError('pattern')">
                 Este campo no permite caracteres consecutivos!
@@ -59,7 +60,8 @@
           </div>
           <div class="col-sm-10">
             <mat-form-field class="w-3">
-              <input type="text" onblur="this.value = this.value.toUpperCase()" matInput placeholder="Segundo apellido" formControlName="segundoApellido" class="input-uppercase">
+              <input type="text" onblur="this.value = this.value.toUpperCase()" matInput placeholder="Segundo apellido"
+                formControlName="segundoApellido" class="input-uppercase">
               <mat-icon matSuffix class="iconsCA">person</mat-icon>
               <mat-error *ngIf="filtroOrdenes.get('segundoApellido').hasError('pattern')">
                 Este campo no permite caracteres consecutivos!
@@ -75,8 +77,8 @@
             <button mat-raised-button type="button" class="buttonCA-second" (click)="clear()">LIMPIAR</button>
           </div>
           <div class="col-sm-12 col-md-12 col-lg-4">
-            <button mat-raised-button class="buttonCA primary" type="submit" 
-              (click)="cambiar()" (click)="validateNumber()">FILTRAR</button>
+            <button mat-raised-button class="buttonCA primary" type="submit" (click)="cambiar()"
+              (click)="validateNumber()">FILTRAR</button>
           </div>
         </div>
       </form>
@@ -140,7 +142,8 @@
                   <mat-spinner>
                   </mat-spinner>
                 </div>
-                <div *ngIf="ordenesMedicas !== undefined && ordenesMedicas !== null && ordenesMedicas.length > 0  && ordenesMedicas[0].ormIdOrdmNumero != undefined">
+                <div
+                  *ngIf="ordenesMedicas !== undefined && ordenesMedicas !== null && ordenesMedicas.length > 0  && ordenesMedicas[0].ormIdOrdmNumero != undefined">
                   <mat-card class="pl-3 pr-3 bg-light" *ngFor="let ordenMedica of ordenesMedicas">
                     <input type="file" [hidden]="true" style="display: block" #caFile id="caFile"
                       (change)="handleInputChange($event, ordenMedica, '');" accept="image/*" capture="camera">
@@ -162,7 +165,7 @@
                           <button mat-menu-item (click)="download(ordenMedica)">
                             <span>Consultar</span>
                           </button>
-                          <button  *ngIf="ordenMedica.eomIdCodigo === 1" mat-menu-item (click)="caFileRenovar.click()">
+                          <button *ngIf="ordenMedica.eomIdCodigo === 1" mat-menu-item (click)="caFileRenovar.click()">
                             <span>Renovar</span>
                           </button>
                           <button *ngIf="ordenMedica.eomIdCodigo === 2" mat-menu-item (click)="delete(ordenMedica)">
@@ -174,7 +177,7 @@
                   </mat-card>
                 </div>
                 <input type="file" [hidden]="true" style="display: block" #caFile id="caFile"
-                      (change)="handleInputChange($event, ordenMedica, '');" accept="image/*" capture="camera">
+                  (change)="handleInputChange($event, ordenMedica, '');" accept="image/*" capture="camera">
                 <div style="margin-top: 1%;" class="col-sm-6 offset-sm-4">
                   <label for="caFile" class="text-success"><b>DOCUMENTO<mat-icon>camera_front</mat-icon></b></label>
                 </div>
@@ -197,70 +200,87 @@
 <div class="container">
 
   <div class="col-sm-12 col-md-12 col-lg-12 mt-5">
-      <div class="row">
-          <div class="col-sm-12">
-              <h3>Derivaciones por radicar</h3>
+    <div class="row">
+      <div class="col-sm-12">
+        <h3>Derivaciones por radicar</h3>
+      </div>
+      <div class="col-sm-12">
+        <ng-container *ngIf="!ordenesMedicasDerivaciones">
+          <br>
+          <mat-spinner style="margin: auto" [diameter]="60"></mat-spinner>
+          <br>
+        </ng-container>
+        <ng-container *ngIf="ordenesMedicasDerivaciones">
+
+          <div fxLayout fxLayoutAlign="center center">
+            <mat-form-field fxFlex="100%">
+
+              <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filtrar">
+
+              <span class="input-group-append" style="float:right;display: inline;margin-top: -19px;">
+                <i class="material-icons md-18" style="color: black">search</i>
+              </span>
+            </mat-form-field>
+
           </div>
-          <div class="col-sm-12">
-              <ng-container *ngIf="!ordenesMedicasDerivaciones">
-                  <br>
-                  <mat-spinner style="margin: auto" [diameter]="60"></mat-spinner>
-                  <br>
-              </ng-container>
-              <ng-container *ngIf="ordenesMedicasDerivaciones">
-                  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
-                      <ng-container matColumnDef="cgFechaProceso">
-                          <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha y hora abordaje derivación</th>
-                          <!-- <td mat-cell *matCellDef="let element"> {{element.cgFechaProceso | date:'yyyy/MM/dd HH:mm:ss'}} </td> -->
-                          
-                          <td class="text-center" mat-cell *matCellDef="let element">
-                              <ng-container *ngIf="getNumberHours(element.cgFechaProceso) <= 3">
-                                  <span class="color-time-green">{{element.cgFechaProceso | date:'yyyy/MM/dd HH:mm:ss'}}</span>
-                              </ng-container>
-                              <ng-container *ngIf="getNumberHours(element.cgFechaProceso) > 3 && getNumberHours(element.cgFechaProceso) <= 6">
-                                  <span class="color-time-yellow">{{element.cgFechaProceso | date:'yyyy/MM/dd HH:mm:ss'}}</span>
-                              </ng-container>
-                              <ng-container *ngIf="getNumberHours(element.cgFechaProceso) > 6">
-                                  <span class="color-time-red">{{element.cgFechaProceso | date:'yyyy/MM/dd HH:mm:ss'}}</span>
-                              </ng-container>
-                          </td>
-                          
-                      </ng-container>
 
-                      <ng-container matColumnDef="tipTipIDav">
-                          <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>doc paciente</th>
-                          <td class="text-center" mat-cell *matCellDef="let element"> {{element.tipTipIDav}} </td>
-                      </ng-container>
+          <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
-                      <ng-container matColumnDef="documento">
-                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Documento paciente</th>
-                          <td mat-cell *matCellDef="let element"> {{element.documento}} </td>
-                      </ng-container>
+            <ng-container matColumnDef="cgFechaProceso">
+              <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha y hora cita
+              </th>
+              <!-- <td mat-cell *matCellDef="let element"> {{element.cgFechaProceso | date:'yyyy/MM/dd HH:mm:ss'}} </td> -->
 
-                      <ng-container matColumnDef="nombreCompleto">
-                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre paciente</th>
-                          <td mat-cell *matCellDef="let element"> {{element.nombreCompleto}} </td>
-                      </ng-container>
+              <td class="text-center" mat-cell *matCellDef="let element">
+                <ng-container *ngIf="getNumberHours(element.cgFechaProceso) <= 3">
+                  <span class="color-time-green">{{element.cgFechaProceso | date:'yyyy/MM/dd HH:mm:ss'}}</span>
+                </ng-container>
+                <ng-container
+                  *ngIf="getNumberHours(element.cgFechaProceso) > 3 && getNumberHours(element.cgFechaProceso) <= 6">
+                  <span class="color-time-yellow">{{element.cgFechaProceso | date:'yyyy/MM/dd HH:mm:ss'}}</span>
+                </ng-container>
+                <ng-container *ngIf="getNumberHours(element.cgFechaProceso) > 6">
+                  <span class="color-time-red">{{element.cgFechaProceso | date:'yyyy/MM/dd HH:mm:ss'}}</span>
+                </ng-container>
+              </td>
 
-                      <ng-container matColumnDef="radicar">
-                          <th class="text-center" class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Radicar</th>
-                          <td class="text-center" mat-cell *matCellDef="let element">
-                              <button type="button"  (click)="radicar(element)" mat-raised-button class="buttonCA-table primary">
-                                  RADICAR
-                              </button></td>
-                      </ng-container>
+            </ng-container>
 
-                      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                  </table>
-              </ng-container>
-              <ng-container *ngIf="ordenesMedicasDerivaciones != null && ordenesMedicasDerivaciones.length === 0">
-                  <br>
-                  <p class="text-center">No se encontraron derivaciones por radicar</p>
-              </ng-container>
-              <mat-paginator #paginatorPorRadicadar [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-              <!-- <ng-container *ngFor="let ordenMedica of ordenesMedicas">
+            <ng-container matColumnDef="tipTipIDav">
+              <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>doc paciente</th>
+              <td class="text-center" mat-cell *matCellDef="let element"> {{element.tipTipIDav}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="documento">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Documento paciente</th>
+              <td mat-cell *matCellDef="let element"> {{element.documento}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="nombreCompleto">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre paciente</th>
+              <td mat-cell *matCellDef="let element"> {{element.nombreCompleto}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="radicar">
+              <th class="text-center" class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Radicar</th>
+              <td class="text-center" mat-cell *matCellDef="let element">
+                <button type="button" (click)="radicar(element)" mat-raised-button class="buttonCA-table primary">
+                  RADICAR
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </ng-container>
+        <ng-container *ngIf="ordenesMedicasDerivaciones != null && ordenesMedicasDerivaciones.length === 0">
+          <br>
+          <p class="text-center">No se encontraron derivaciones por radicar</p>
+        </ng-container>
+        <mat-paginator #paginatorPorRadicadar [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        <!-- <ng-container *ngFor="let ordenMedica of ordenesMedicas">
                 <mat-card class="card mt-2 pt-2 pb-0 pl-1 pr-3">
                   <div class="row">
                     <div class="col-sm-2 fix-button">
@@ -297,95 +317,116 @@
                   <br>
                 </mat-card>
               </ng-container> -->
-              <br>
-          </div>
-          <div class="col-sm-12 mt-3">
-              <h3>Derivaciones por autorizar</h3>
-          </div>
-          <div class="col-sm-12">
-              <ng-container *ngIf="!ordenesMedicasRadicadas">
-                  <br>
-                  <mat-spinner style="margin: auto" [diameter]="60"></mat-spinner>
-                  <br>
-              </ng-container>
-              <ng-container *ngIf="ordenesMedicasRadicadas">
-                  <table mat-table [dataSource]="dataSourceRadicadas" class="mat-elevation-z8" >
-
-                      <ng-container matColumnDef="estado">
-                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
-                          <td class="text-center" mat-cell *matCellDef="let element">
-                              <ng-container *ngIf="getNumberHours(element.cgFechaProceso) <= 3">
-                                  <span class="color-time-green">EN PROCESO</span>
-                              </ng-container>
-                              <ng-container *ngIf="getNumberHours(element.cgFechaProceso) > 3 && getNumberHours(element.cgFechaProceso) <= 6">
-                                  <span class="color-time-yellow">EN PROCESO</span>
-                              </ng-container>
-                              <ng-container *ngIf="getNumberHours(element.cgFechaProceso) > 6">
-                                  <span class="color-time-red">EN PROCESO</span>
-                              </ng-container>
-                          </td>
-                      </ng-container>
-
-                      <ng-container matColumnDef="ormIdOrdmNumero">
-                          <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Derivación</th>
-                          <td class="text-center" mat-cell *matCellDef="let element"> {{element.ormIdOrdmNumero}} </td>
-                      </ng-container>
-
-                      <ng-container matColumnDef="cgFechaProceso">
-                          <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha y hora reg derivación</th>
-                          <td class="text-center" mat-cell *matCellDef="let element"> {{element.cgFechaProceso | date:'yyyy/MM/dd HH:mm:ss'}} </td>
-                      </ng-container>
-
-                      <ng-container matColumnDef="tipTipIDav">
-                          <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Tipo doc paicente</th>
-                          <td class="text-center" mat-cell *matCellDef="let element"> {{element.tipTipIDav}} </td>
-                      </ng-container>
-
-                      <ng-container matColumnDef="documento">
-                          <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Documento paciente</th>
-                          <td mat-cell *matCellDef="let element"> {{element.documento}} </td>
-                      </ng-container>
-
-                      <ng-container matColumnDef="nombreCompleto">
-                          <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Nombre paciente</th>
-                          <td mat-cell *matCellDef="let element"> {{element.nombreCompleto}} </td>
-                      </ng-container>
-
-                      <ng-container matColumnDef="cita">
-                          <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Cita agendada</th>
-                          <td class="text-center" mat-cell *matCellDef="let element">{{element?.agendamiento ? 'SI' : 'NO'}}</td>
-                      </ng-container>
-
-                      <ng-container matColumnDef="enProceso">
-                          <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>En proceso</th>
-                          <td class="text-center" mat-cell *matCellDef="let element">{{element.enProceso !== '0' ? 'SI' : 'NO'}}</td>
-                      </ng-container>
-
-                      <ng-container matColumnDef="continuidad">
-                          <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Continuidad</th>
-                          <td class="text-center" mat-cell *matCellDef="let element"><button type="button" (click)="openDialogView(element)" mat-raised-button class="buttonCA-table primary">
-                              VER
-                          </button></td>
-                      </ng-container>
-
-                      <ng-container matColumnDef="autorizacion">
-                          <th class="text-center" class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Autorizar</th>
-                          <td class="text-center" mat-cell *matCellDef="let element"><button type="button" (click)="openDialogAuto(element)" mat-raised-button class="buttonCA-table primary">
-                              AUTORIZAR
-                          </button></td>
-                      </ng-container>
-
-                      <tr mat-header-row *matHeaderRowDef="displayedColumnsRadicadas"></tr>
-                      <tr mat-row *matRowDef="let row; columns: displayedColumnsRadicadas;"></tr>
-                  </table>
-              </ng-container>
-              <ng-container *ngIf="ordenesMedicasRadicadas != null && ordenesMedicasRadicadas.length === 0">
-                  <br>
-                  <p class="text-center">No encontraron derivaciones radicadas</p>
-              </ng-container>
-              <mat-paginator #paginatorRadicadas [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-          </div>
+        <br>
       </div>
+      <div class="col-sm-12 mt-3">
+        <h3>Derivaciones por autorizar</h3>
+      </div>
+      <div class="col-sm-12">
+        <ng-container *ngIf="!ordenesMedicasRadicadas">
+          <br>
+          <mat-spinner style="margin: auto" [diameter]="60"></mat-spinner>
+          <br>
+        </ng-container>
+
+        <ng-container *ngIf="ordenesMedicasRadicadas">
+
+
+          <div fxLayout fxLayoutAlign="center center">
+            <mat-form-field fxFlex="100%">
+
+              <input matInput type="text" (keyup)="doFilter2($event.target.value)" placeholder="Filtrar">
+
+              <span class="input-group-append" style="float:right;display: inline;margin-top: -19px;">
+                <i class="material-icons md-18" style="color: black">search</i>
+              </span>
+            </mat-form-field>
+
+          </div>
+
+          <table mat-table [dataSource]="dataSourceRadicadas" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="estado">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+              <td class="text-center" mat-cell *matCellDef="let element">
+                <ng-container *ngIf="getNumberHours(element.cgFechaProceso) <= 3">
+                  <span class="color-time-green">EN PROCESO</span>
+                </ng-container>
+                <ng-container
+                  *ngIf="getNumberHours(element.cgFechaProceso) > 3 && getNumberHours(element.cgFechaProceso) <= 6">
+                  <span class="color-time-yellow">EN PROCESO</span>
+                </ng-container>
+                <ng-container *ngIf="getNumberHours(element.cgFechaProceso) > 6">
+                  <span class="color-time-red">EN PROCESO</span>
+                </ng-container>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="ormIdOrdmNumero">
+              <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Derivación</th>
+              <td class="text-center" mat-cell *matCellDef="let element"> {{element.ormIdOrdmNumero}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="cgFechaProceso">
+              <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha y hora reg derivación</th>
+              <td class="text-center" mat-cell *matCellDef="let element"> {{element.cgFechaProceso | date:'yyyy/MM/dd
+                HH:mm:ss'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="tipTipIDav">
+              <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Tipo doc paicente</th>
+              <td class="text-center" mat-cell *matCellDef="let element"> {{element.tipTipIDav}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="documento">
+              <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Documento paciente</th>
+              <td mat-cell *matCellDef="let element"> {{element.documento}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="nombreCompleto">
+              <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Nombre paciente</th>
+              <td mat-cell *matCellDef="let element"> {{element.nombreCompleto}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="cita">
+              <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Cita agendada</th>
+              <td class="text-center" mat-cell *matCellDef="let element">{{element?.agendamiento ? 'SI' : 'NO'}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="enProceso">
+              <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>En proceso</th>
+              <td class="text-center" mat-cell *matCellDef="let element">{{element.enProceso !== '0' ? 'SI' : 'NO'}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="continuidad">
+              <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Continuidad</th>
+              <td class="text-center" mat-cell *matCellDef="let element"><button type="button"
+                  (click)="openDialogView(element)" mat-raised-button class="buttonCA-table primary">
+                  VER
+                </button></td>
+            </ng-container>
+
+            <ng-container matColumnDef="autorizacion">
+              <th class="text-center" class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Autorizar
+              </th>
+              <td class="text-center" mat-cell *matCellDef="let element"><button type="button"
+                  (click)="openDialogAuto(element)" mat-raised-button class="buttonCA-table primary">
+                  AUTORIZAR
+                </button></td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsRadicadas"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsRadicadas;"></tr>
+          </table>
+        </ng-container>
+        <ng-container *ngIf="ordenesMedicasRadicadas != null && ordenesMedicasRadicadas.length === 0">
+          <br>
+          <p class="text-center">No encontraron derivaciones radicadas</p>
+        </ng-container>
+        <mat-paginator #paginatorRadicadas [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
   </div>
   <br>
 </div>

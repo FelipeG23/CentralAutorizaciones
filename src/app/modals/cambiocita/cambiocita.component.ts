@@ -85,14 +85,21 @@ export class CambiocitaComponent implements OnInit {
         const est = this.getEstado(this.cambioCitas.value.estado);
         localStorage.setItem('trazaId', JSON.stringify(data));
         const id = JSON.parse(localStorage.getItem('trazaId'));
-        this.enviarMail(id);
+        try {
+         // this.enviarMail(id);
+        } catch (error) {
+        }
         swal({
           text: 'Datos actualizados!',
           icon: 'success',
         });
         this.dialogRef.close(est);
         // this.dialogRef.close('Vas a guardar?');
-        this.firestore.doc('userInfo/' + this.cookie.get('free')).delete();
+        try {
+          this.firestore.doc('userInfo/' + this.cookie.get('free')).delete();
+        } catch (error) {
+        }
+       
         clearInterval(parseInt(this.cookie.get('Intervalo')));
         clearInterval(parseInt(this.cookie.get('intervalTimeOut')));
       }, error => {

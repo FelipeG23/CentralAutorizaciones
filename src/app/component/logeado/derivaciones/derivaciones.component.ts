@@ -27,37 +27,37 @@ import { RegistrarautorizacionCitaComponent } from '../registrarautorizacioncita
 
 
 export const MY_FORMATS = {
-  parse: {
-      dateInput: 'LL',
-  },
-  display: {
-      dateInput: 'DD/MM/YYYY',
-      monthYearLabel: 'MMM YYYY',
-      dateA11yLabel: 'LL',
-      monthYearA11yLabel: 'MMMM YYYY',
-  },
+    parse: {
+        dateInput: 'LL',
+    },
+    display: {
+        dateInput: 'DD/MM/YYYY',
+        monthYearLabel: 'MMM YYYY',
+        dateA11yLabel: 'LL',
+        monthYearA11yLabel: 'MMMM YYYY',
+    },
 };
 
 
 @Component({
-  selector: 'app-derivaciones',
-  templateUrl: './derivaciones.component.html',
-  styleUrls: ['./derivaciones.component.less'],
-  animations: [
-    trigger('fadeIn', [transition('* => *', useAnimation(fadeIn, {
-        // Set the duration to 5seconds and delay to 2seconds
-        params: { timing: 5, delay: 2 }
-    }))])
-],
-providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'es-US' },
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-],
+    selector: 'app-derivaciones',
+    templateUrl: './derivaciones.component.html',
+    styleUrls: ['./derivaciones.component.less'],
+    animations: [
+        trigger('fadeIn', [transition('* => *', useAnimation(fadeIn, {
+            // Set the duration to 5seconds and delay to 2seconds
+            params: { timing: 5, delay: 2 }
+        }))])
+    ],
+    providers: [
+        { provide: MAT_DATE_LOCALE, useValue: 'es-US' },
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    ],
 })
 export class DerivacionesComponent implements OnInit {
 
-  filtroOrdenes: FormGroup;
+    filtroOrdenes: FormGroup;
     options: any;
     spinnerCA: boolean;
     icon: string = 'keyboard_arrow_down';
@@ -68,11 +68,11 @@ export class DerivacionesComponent implements OnInit {
     success: boolean = false;
     result: any;
     progress: boolean;
-    ordenesMedicas: any[]=null;
-    ordenesMedicasRadicadas: any[]=null;
-    citasPorAutorizar: any[]=null;
+    ordenesMedicas: any[] = null;
+    ordenesMedicasRadicadas: any[] = null;
+    citasPorAutorizar: any[] = null;
     date = new Date();
-    minDateValue = new Date(this.date.getFullYear(), this.date.getMonth()-3, this.date.getDate());
+    minDateValue = new Date(this.date.getFullYear(), this.date.getMonth() - 3, this.date.getDate());
     maxDateValue = new Date(this.date.getFullYear() + 1, this.date.getMonth(), this.date.getDate());
     minDate = new Date(this.date.getFullYear(), 0, 1);
     maxDate = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
@@ -117,6 +117,7 @@ export class DerivacionesComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log("aaaaaaaaaaaaaa");
         moment.locale('es');
         moment.relativeTimeThreshold('m', 60);
         moment.relativeTimeThreshold('h', 24 * 26);
@@ -139,9 +140,9 @@ export class DerivacionesComponent implements OnInit {
             estadoAutorizacion: [null],
             tipoDocumento: [null],
             numeroDocumento: [null, [Validators.maxLength(20), Validators.pattern(/^[A-Za-z0-9\s]+$/)]],
-            nombre: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/), ]],
-            primerApellido: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/), ]],
-            segundoApellido: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/), ]]
+            nombre: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/),]],
+            primerApellido: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/),]],
+            segundoApellido: ['', [Validators.pattern(/^(?!.*(.)\1{3})/), Validators.pattern(/^[^^`|~!@$%^&*()\+=[{\]}'<,.>?\/";\\:¿¬°¡_\-´#0-9]+$/),]]
         });
     }
 
@@ -155,7 +156,7 @@ export class DerivacionesComponent implements OnInit {
         this.filtroOrdenes.removeControl('fecha');
         this.filtroOrdenes.removeControl('fechaFinal');
         this.filtroOrdenes.setControl('fecha', new FormControl([{ disabled: true, value: moment(this.minDateValue) }, [Validators.required]]));
-        this.filtroOrdenes.setControl('fechaFinal', new FormControl( [{ disabled: true, value: moment(this.maxDateValue) }, [Validators.required]]));
+        this.filtroOrdenes.setControl('fechaFinal', new FormControl([{ disabled: true, value: moment(this.maxDateValue) }, [Validators.required]]));
     }
 
     validateTypeDocument() {
@@ -246,7 +247,7 @@ export class DerivacionesComponent implements OnInit {
             this.ordenesMedicasRadicadas = this.ordenesMedicasRadicadas.filter(data =>
                 data.ormIdOrdmNumero == this.filtroOrdenes.value.numeroDerivacion)
             this.dataSourceRadicadas.data = this.ordenesMedicasRadicadas;
-        } else if (this.filtroOrdenes.value.fechaAbordaje){
+        } else if (this.filtroOrdenes.value.fechaAbordaje) {
             this.ordenesMedicasRadicadas = this.ordenesMedicasRadicadas.filter(data =>
                 data.fechaCitaCA == this.filtroOrdenes.value.fechaAbordaje)
             this.dataSourceRadicadas.data = this.ordenesMedicasRadicadas;
@@ -259,6 +260,11 @@ export class DerivacionesComponent implements OnInit {
         reader.onload = this._handleReaderLoaded.bind(this);
         reader.readAsDataURL(file);
     }
+    doFilter = (value: string) => {
+        this.dataSource.filter = value.trim().toLocaleLowerCase();
+    }
+
+
 
     _handleReaderLoaded(e) {
         this.subir = true;
@@ -374,10 +380,11 @@ export class DerivacionesComponent implements OnInit {
         if (!this.filtroOrdenes.invalid) {
             this.consultarordenService.filterOrdenes(this.filtroOrdenes.getRawValue(), estados).subscribe(data => {
                 if (data.mensajeError == null) {
+
                     this.ordenesMedicasRadicadas = data;
                     this.ordenesMedicasRadicadas = this.ordenesMedicasRadicadas.filter(data => {
-                        if(data.prestaciones !== data.continuidad || data.continuidad === null || data.prestaciones === null  ){
-                            if(data.prestaciones !== data.autorizadas + data.continuidad) {
+                        if (data.prestaciones !== data.continuidad || data.continuidad === null || data.prestaciones === null) {
+                            if (data.prestaciones !== data.autorizadas + data.continuidad) {
                                 return data
                             }
                         }

@@ -116,7 +116,7 @@
                                     [ngModel]="ordenMedica.caDetalleOrdenesMedicas.serSerCodSubEspe">
                                   <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn2.bind(this)">
                                     <mat-option *ngFor="let subEspecialidad of filteredSubEspList | async"
-                                      [value]="subEspecialidad.descripcion">
+                                      [value]="subEspecialidad.id">
                                       {{ subEspecialidad.descripcion }}
                                     </mat-option>
                                   </mat-autocomplete>
@@ -134,7 +134,7 @@
                                 <mat-form-field class="w-100">
                                   <mat-label>Servicio</mat-label>
                                   <input type="text" matInput formControlName="serSerCodigo" [matAutocomplete]="auto3"
-                                   [ngModel]="ordenMedica.caDetalleOrdenesMedicas.serSerCodigo">
+                                    [ngModel]="ordenMedica.caDetalleOrdenesMedicas.serSerCodigo">
                                   <mat-autocomplete #auto3="matAutocomplete" [displayWith]="displayFn3.bind(this)">
                                     <mat-option *ngFor="let servicio of filteredServList | async" [value]="servicio.id">
                                       {{ servicio.descripcion }}
@@ -177,6 +177,9 @@
                                       {{medico.descripcion}}
                                     </mat-option>
                                   </mat-autocomplete>
+                                  <mat-spinner *ngIf="medicos.length == 0" matSuffix [diameter]="18" style="float: right; margin-left: 8px">
+                                  </mat-spinner>
+
                                   <mat-error *ngIf="fbRadicar.get('pcaAgeCodigProfe').hasError('required')">
                                     El medico es un campo obligatorio.
                                   </mat-error>
@@ -206,9 +209,9 @@
                               </div>
                               <div class="col-sm-12 col-md-12 col-lg-6">
                                 <mat-form-field class="w-100">
-                                  <input matInput placeholder="Numero póliza" formControlName="ecPolizaNumero"
-                                    #message minlength="1"
-                                    [ngModel]="ordenMedica.caDetalleOrdenesMedicas.ecPolizaNumero" [readonly]="">
+                                  <input matInput placeholder="Numero póliza" formControlName="ecPolizaNumero" #message
+                                    minlength="1" [ngModel]="ordenMedica.caDetalleOrdenesMedicas.ecPolizaNumero"
+                                    [readonly]="">
                                   <mat-error *ngIf="fbRadicar.get('ecPolizaNumero').hasError('pattern')">
                                     Este campo no permite caracteres consecutivos!
                                   </mat-error>
@@ -236,13 +239,14 @@
                                   <mat-label>
                                     <mat-icon>alarm</mat-icon> Diagnóstico
                                   </mat-label>
-                                  <input type="text" matInput formControlName="diaAgrCodigo"
-                                     [matAutocomplete]="auto">
+                                  <input type="text" matInput formControlName="diaAgrCodigo" [matAutocomplete]="auto">
                                   <mat-autocomplete [displayWith]="displayFnDiag" #auto="matAutocomplete">
                                     <mat-option *ngFor="let cie of filteredDiagnostico | async" [value]="cie">
                                       {{ cie.diaDiaDescripcion }}
                                     </mat-option>
                                   </mat-autocomplete>
+                                  <mat-spinner *ngIf="cies.length == 0" matSuffix [diameter]="18" style="float: right; margin-left: 8px">
+                                  </mat-spinner>
 
                                   <!-- <mat-select formControlName="diaAgrCodigo"
                                     [ngModel]="ordenMedica.caDetalleOrdenesMedicas.diaAgrCodigo">
@@ -387,10 +391,12 @@
                       <div class="col-sm-7">
                         <p class="mb-0"> <b class="text-primary f-2">Servicio:&nbsp;</b>
                           <span>{{ prestacion.serSerCodigo }} -
-                            {{ prestacion.serSerDesc }}</span></p>
+                            {{ prestacion.serSerDesc }}</span>
+                        </p>
                         <p class="mb-0"> <b class="text-primary f-2">CUP:&nbsp;</b>
                           <span>{{ prestacion.prePreCodigo }} -
-                            {{ prestacion.prePreDesc }}</span></p>
+                            {{ prestacion.prePreDesc }}</span>
+                        </p>
                       </div>
                       <div class="col-sm-4">
                         <span *ngIf="ordenMedica.eomIdCodigo >= 3">Fecha:
@@ -448,8 +454,8 @@
                 (click)="createPrestacion()" (click)="unlockFirebase()">GUARDAR</button>
               <button mat-raised-button class="buttonCA primary" [disabled]="validFinalStep()"
                 *ngIf="ordenMedica.eomIdCodigo == 3" (click)="finalizarOrden()">FINALIZAR</button>
-              <button mat-raised-button class="buttonCA primary" (click)="unlockFirebase()" *ngIf="ordenMedica.eomIdCodigo == 4"
-                matStepperNext>SIGUIENTE</button>
+              <button mat-raised-button class="buttonCA primary" (click)="unlockFirebase()"
+                *ngIf="ordenMedica.eomIdCodigo == 4" matStepperNext>SIGUIENTE</button>
             </div>
           </mat-step>
           <mat-step>
@@ -465,4 +471,3 @@
     </mat-card>
   </div>
 </div>
-
