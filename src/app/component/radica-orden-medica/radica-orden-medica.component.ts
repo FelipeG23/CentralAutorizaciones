@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
-import { EspecialidadService } from 'src/app/service/catalogos/especialidades.service';
+import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';import { EspecialidadService } from 'src/app/service/catalogos/especialidades.service';
 import { SedesService } from 'src/app/service/catalogos/sedes.service';
 import { ConvenioService } from 'src/app/service/catalogos/convenio.service';
 import { CieService } from 'src/app/service/catalogos/cie.service';
@@ -80,9 +79,11 @@ export class RadicaOrdenMedicaComponent implements OnInit {
   filteredSedeList: Observable<string[]>;
   convenios: any[] = [];
   filteredConvList: Observable<string[]>;
-  medicos: any[] = [];
+   medicos: Array<any> = [];
   filteredMedList: Observable<string[]>;
   cies: any = [];
+  progresoMed: boolean;
+  progresDiag: boolean;
   viewDocument: any;
   ordenMedica: OrdenMedica;
   adminOrdenMedica: AdminOrdenMedica = new AdminOrdenMedica();
@@ -128,7 +129,8 @@ export class RadicaOrdenMedicaComponent implements OnInit {
 
   ngOnInit() {
 
-
+	this.progresDiag = false;
+    this.progresoMed = false;
     this.setLists();
     this.fbRadicar = this.fb.group({
       ecPolizaNumero: [''],  //  Validators.pattern(/^(?!.*(.)\1{9})/),
@@ -252,7 +254,42 @@ export class RadicaOrdenMedicaComponent implements OnInit {
       }
     );
   }
+ 
+  onChangeMedicos(newValue) {
+    if (newValue != undefined) {
+      if (newValue.length > 3) {
+        this.progresoMed = true;
+        this.medicoService.getMedicosLike(newValue)
+          .subscribe(data => {
+            this.progresoMed = false;
+            this.medicos = data;
+            this.filteredMedList = data;
+          });
 
+      }
+
+    }
+
+
+  }
+
+
+  onChangeDiagnosticos(newValue) {
+    if (newValue != undefined) {
+      if (newValue.length > 3) {
+        this.progresDiag = true;
+        this.diagnosticoService.diagnosticosLike(newValue)
+          .subscribe(data => {
+            this.progresDiag = false;
+            this.filteredDiagnostico = data;
+            this.cies = data;
+          });
+
+      }
+
+    }
+  }
+  
   onSubmitPrestacion() {
     if ((this.fbOrdenMedica.get('serSerCodigo').value === null || this.fbOrdenMedica.get('serSerCodigo').value.trim() === '') &&
       (this.fbOrdenMedica.get('serSerDesc').value === null || this.fbOrdenMedica.get('serSerDesc').value.trim() === '')) {
@@ -460,15 +497,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
   }
 
   private setLists() {
-    this.medicoService.getMedicos().subscribe(data => {
-
-      this.medicos = data;
-      this.filteredMedList = this.fbRadicar.get('pcaAgeCodigProfe').valueChanges
-        .pipe(
-          startWith(''),
-          map(value => this._filter(value, this.medicos))
-        );
-    });
+   
 
     this.especialidadService.getEspecialidades().subscribe(data => {
       this.especialidades = data;
@@ -517,16 +546,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
         );
     });
 
-    this.diagnosticoService.diagnosticos().subscribe(data => {
-      this.cies = data;
-      this.filteredDiagnostico = this.fbRadicar.get('diaAgrCodigo').valueChanges
-        .pipe(
-          startWith(''),
-          map(value => {
-            return this._filterDiag(value, this.cies)
-          })
-        );
-    });
+
   }
 
   openDialogGestion(pomIdPrestOrdm: number): void {
