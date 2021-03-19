@@ -170,15 +170,14 @@
                                 <mat-form-field class="w-100">
                                   <mat-label>Médico tratante</mat-label>
                                   <input type="text" matInput formControlName="pcaAgeCodigProfe"
-                                    [matAutocomplete]="auto6" (ngModelChange)="onChangeMedicos($event)"
+                                    [matAutocomplete]="auto6"
                                     [ngModel]="ordenMedica.caDetalleOrdenesMedicas.pcaAgeCodigProfe">
                                   <mat-autocomplete #auto6="matAutocomplete" [displayWith]="displayFn6.bind(this)">
-                                    <mat-option *ngFor="let medico of filteredMedList" [value]="medico.id">
+                                    <mat-option *ngFor="let medico of filteredMedList | async" [value]="medico.id">
                                       {{medico.descripcion}}
                                     </mat-option>
                                   </mat-autocomplete>
-                                  <mat-spinner *ngIf="progresoMed" matSuffix [diameter]="18"
-                                    style="float: right; margin-left: 8px">
+                                  <mat-spinner *ngIf="medicos.length == 0" matSuffix [diameter]="18" style="float: right; margin-left: 8px">
                                   </mat-spinner>
 
                                   <mat-error *ngIf="fbRadicar.get('pcaAgeCodigProfe').hasError('required')">
@@ -200,7 +199,6 @@
                                       {{convenio.descripcion}}
                                     </mat-option>
                                   </mat-autocomplete>
-
                                   <mat-error *ngIf="fbRadicar.get('conConCodigo').hasError('required')">
                                     El convenio es un campo obligatorio.
                                   </mat-error>
@@ -241,14 +239,13 @@
                                   <mat-label>
                                     <mat-icon>alarm</mat-icon> Diagnóstico
                                   </mat-label>
-                                  <input (ngModelChange)="onChangeDiagnosticos($event)" type="text" matInput formControlName="diaAgrCodigo" [matAutocomplete]="auto">
+                                  <input type="text" matInput formControlName="diaAgrCodigo" [matAutocomplete]="auto">
                                   <mat-autocomplete [displayWith]="displayFnDiag" #auto="matAutocomplete">
-                                    <mat-option *ngFor="let cie of filteredDiagnostico" [value]="cie">
+                                    <mat-option *ngFor="let cie of filteredDiagnostico | async" [value]="cie">
                                       {{ cie.diaDiaDescripcion }}
                                     </mat-option>
                                   </mat-autocomplete>
-                                  <mat-spinner *ngIf="progresDiag" matSuffix [diameter]="18"
-                                    style="float: right; margin-left: 8px">
+                                  <mat-spinner *ngIf="cies.length == 0" matSuffix [diameter]="18" style="float: right; margin-left: 8px">
                                   </mat-spinner>
 
                                   <!-- <mat-select formControlName="diaAgrCodigo"
@@ -339,7 +336,7 @@
                               <input matInput placeholder="Ingrese un código de servicio"
                                 formControlName="serSerCodigo">
                               <mat-error *ngIf="fbOrdenMedica.get('serSerCodigo').hasError('minlength')">
-                                Mínimo ingrese 3 carácteres.
+                                Mínimo ingrese 2 carácteres.
                               </mat-error>
                             </mat-form-field>
                           </div>
