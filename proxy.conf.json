@@ -6,7 +6,7 @@
         "changeOrigin": true
     },
     "/fsfb-apiWeb/*": {
-        "target": "http://52.247.56.140:8081",
+        "target": "http://52.247.56.140:8081/",
         "secure": false,
         "loglevel": "debug"
     },

@@ -175,6 +175,9 @@ export class DerivacionesComponent implements OnInit {
             this.onSubmit([3], true);
         }
     }
+  
+
+
 
     filtersApply() {
         let tipoDoc;

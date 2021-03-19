@@ -12,6 +12,7 @@ const CACHE_KEY = 'httpConvenioCache';
     providedIn: 'root'
 })
 export class DiagnostivosService {
+    params: any;
 
 
     constructor(private http: HttpClient) {
@@ -21,6 +22,12 @@ export class DiagnostivosService {
         return this.http.get(environment.url + '/CentralAutorizav2/rest/Catalogo/diagnosticos');
     }
 
+    diagnosticosLike(busqueda) {
+        this.params = {
+            cn: busqueda.toUpperCase()
+        };
+        return this.http.post<any>(environment.url + '/CentralAutorizav2/rest/Catalogo/diagnosticosLike', this.params);
+    }
 
 
 }
