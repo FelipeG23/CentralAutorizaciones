@@ -225,7 +225,7 @@
           </div>
 
 
-          <table  (matSortChange)="sortData($event)" mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+          <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
             <ng-container matColumnDef="cgFechaProceso">
               <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha y hora cita
@@ -248,7 +248,7 @@
             </ng-container>
 
             <ng-container matColumnDef="tipTipIDav">
-              <th class="text-center" mat-sort-header="tipTipIDav" mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Documento</th>
+              <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>doc paciente</th>
               <td class="text-center" mat-cell *matCellDef="let element"> {{element.tipTipIDav}} </td>
             </ng-container>
 
@@ -368,7 +368,7 @@
             </ng-container>
 
             <ng-container matColumnDef="cgFechaProceso">
-              <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha y hora reg derivación</th>
+              <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header>Fecha y hora de la cita</th>
               <td class="text-center" mat-cell *matCellDef="let element"> {{element.cgFechaProceso | date:'yyyy/MM/dd
                 HH:mm:ss'}} </td>
             </ng-container>
