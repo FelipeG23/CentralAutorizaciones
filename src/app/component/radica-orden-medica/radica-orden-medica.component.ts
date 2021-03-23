@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';import { EspecialidadService } from 'src/app/service/catalogos/especialidades.service';
+import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl, FormControl } from '@angular/forms'; import { EspecialidadService } from 'src/app/service/catalogos/especialidades.service';
 import { SedesService } from 'src/app/service/catalogos/sedes.service';
 import { ConvenioService } from 'src/app/service/catalogos/convenio.service';
 import { CieService } from 'src/app/service/catalogos/cie.service';
@@ -79,7 +79,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
   filteredSedeList: Observable<string[]>;
   convenios: any[] = [];
   filteredConvList: Observable<string[]>;
-   medicos: Array<any> = [];
+  medicos: Array<any> = [];
   filteredMedList: Observable<string[]>;
   cies: any = [];
   progresoMed: boolean;
@@ -129,7 +129,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
 
   ngOnInit() {
 
-	this.progresDiag = false;
+    this.progresDiag = false;
     this.progresoMed = false;
     this.setLists();
     this.fbRadicar = this.fb.group({
@@ -254,7 +254,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
       }
     );
   }
- 
+
   onChangeMedicos(newValue) {
     if (newValue != undefined) {
       if (newValue.length > 3) {
@@ -289,7 +289,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
 
     }
   }
-  
+
   onSubmitPrestacion() {
     if ((this.fbOrdenMedica.get('serSerCodigo').value === null || this.fbOrdenMedica.get('serSerCodigo').value.trim() === '') &&
       (this.fbOrdenMedica.get('serSerDesc').value === null || this.fbOrdenMedica.get('serSerDesc').value.trim() === '')) {
@@ -497,7 +497,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
   }
 
   private setLists() {
-   
+
 
     this.especialidadService.getEspecialidades().subscribe(data => {
       this.especialidades = data;
@@ -652,32 +652,42 @@ export class RadicaOrdenMedicaComponent implements OnInit {
 
   displayFn2(id) {
     if (id) {
-      let objeto;
 
-      objeto = this.subEspecialidades.filter(i => {
-        const b = i.id === id.trim();
-        return b;
-      })[0];
-      if (objeto == undefined) {
-        objeto = this.subEspecialidades.filter(i => {
-          const b = i.descripcion === id.trim();
-          return b;
-        })[0];
+      if (id != undefined) {
+        if (id.descripcion != undefined) {
+          return id.descripcion;
+        } else {
 
-        if (objeto == undefined) {
+          let objeto;
           objeto = this.subEspecialidades.filter(i => {
-            const b = i.otro === id.trim();
+            const b = i.id === id.trim();
             return b;
           })[0];
+          if (objeto == undefined) {
+            objeto = this.subEspecialidades.filter(i => {
+              const b = i.descripcion === id.trim();
+              return b;
+            })[0];
+
+            if (objeto == undefined) {
+              objeto = this.subEspecialidades.filter(i => {
+                const b = i.otro === id.trim();
+                return b;
+              })[0];
+
+            }
+
+
+            return objeto.descripcion;
+
+          } else {
+            return objeto.descripcion;
+          }
 
         }
 
-
-        return objeto.descripcion;
-
-      } else {
-        return objeto.descripcion;
       }
+
 
     }
   }
@@ -699,27 +709,39 @@ export class RadicaOrdenMedicaComponent implements OnInit {
   displayFn4(id) {
     if (id) {
 
-      if (this.sedes != undefined) {
-        if (this.sedes.length > 0) {
+      if (id != undefined) {
+        if (id.descripcion != undefined) {
 
-          let objeto;
+          return id.descripcion;
+          
+        } else {
+          if (this.sedes != undefined) {
+            if (this.sedes.length > 0) {
 
-          objeto = this.sedes.filter(i => {
-            const b = i.id === id.trim();
-            return b;
-          })[0];
-          if (objeto == undefined) {
-            objeto = this.sedes.filter(i => {
-              const b = i.otro === id.trim();
-              return b;
-            })[0];
-            return objeto.descripcion;
-          } else {
-            return objeto.descripcion;
+              let objeto;
+
+              objeto = this.sedes.filter(i => {
+                const b = i.id === id.trim();
+                return b;
+              })[0];
+              if (objeto == undefined) {
+                objeto = this.sedes.filter(i => {
+                  const b = i.otro === id.trim();
+                  return b;
+                })[0];
+                return objeto.descripcion;
+              } else {
+                return objeto.descripcion;
+              }
+
+            }
           }
-
         }
+
       }
+
+
+
       return "";
     }
   }

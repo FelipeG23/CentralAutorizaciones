@@ -20,7 +20,7 @@ import { AppComponent } from './app.component';
 import { MaterialModule } from './meterial';
 import { LoginComponent } from './component/user/login/login.component';
 import { CitasconsultaComponent } from './component/logeado/citasconsulta/citasconsulta.component';
-import {MatDatepickerModule, MatExpansionModule, MatRadioModule, MatSort} from '@angular/material';
+import {MatDatepickerModule, MatExpansionModule, MatRadioModule, MatSort, MatSortModule, MatTableModule} from '@angular/material';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { NavbarSecondaryComponent } from './components/navbar-secondary/navbar-secondary.component';
 import { CambiocitaComponent } from './modals/cambiocita/cambiocita.component';

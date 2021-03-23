@@ -116,7 +116,7 @@
                                     [ngModel]="ordenMedica.caDetalleOrdenesMedicas.serSerCodSubEspe">
                                   <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayFn2.bind(this)">
                                     <mat-option *ngFor="let subEspecialidad of filteredSubEspList | async"
-                                      [value]="subEspecialidad.id">
+                                      [value]="subEspecialidad">
                                       {{ subEspecialidad.descripcion }}
                                     </mat-option>
                                   </mat-autocomplete>
@@ -154,7 +154,7 @@
                                   <input type="text" matInput formControlName="pcaAgeLugar" [matAutocomplete]="auto4"
                                     [ngModel]="ordenMedica.caDetalleOrdenesMedicas.pcaAgeLugar">
                                   <mat-autocomplete #auto4="matAutocomplete" [displayWith]="displayFn4.bind(this)">
-                                    <mat-option *ngFor="let sede of filteredSedeList | async " [value]="sede.otro">
+                                    <mat-option *ngFor="let sede of filteredSedeList | async " [value]="sede">
                                       {{sede.descripcion}}
                                     </mat-option>
                                   </mat-autocomplete>
