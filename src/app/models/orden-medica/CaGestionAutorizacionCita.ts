@@ -7,6 +7,7 @@ export class CaGestionAutorizacionCita {
 	gauTelefonoAutorizador: string;
 	gauAutorizaServ: string;
 	mnaIdcodigo: number;
+	mnaIdcodigos: number;
 	omnDesc: string;
 	gauCodigoAutorizacion: string;
 	gauFechaAutorizacion: string;

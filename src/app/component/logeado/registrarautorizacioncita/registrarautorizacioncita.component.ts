@@ -194,6 +194,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
 
       if (caGestionAutorizacion.gauAutorizaServ !== '2') {
         caGestionAutorizacion.mnaIdcodigo = null;
+        caGestionAutorizacion.mnaIdcodigos = null;
         caGestionAutorizacion.omnDesc = null;
       }
       caGestionAutorizacion.pomIdPrestOrdm = this.data.datoCita.pomIdPrestOrdm;
@@ -243,6 +244,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
 
       if (caGestionAutorizacionCita.gauAutorizaServ !== '2') {
         caGestionAutorizacionCita.mnaIdcodigo = null;
+        caGestionAutorizacionCita.mnaIdcodigos = null;
         caGestionAutorizacionCita.omnDesc = null;
       }
       caGestionAutorizacionCita.fechaCita = this.data.datoCita.fechaCita;
@@ -399,6 +401,35 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
     }
   }
 
+  selectionChangeConvenio(matSelectChange: MatSelectChange) {
+    this.registrarAuto.get('gauFechaAutorizacion').setValue(null);
+    this.registrarAuto.get('gauFechaVencAutorizacion').setValue(null);
+    this.registrarAuto.get('gauVigenciaAutorizacion').setValue(null);
+    this.registrarAuto.get('gauCostoConvenio').setValue(0);
+    this.registrarAuto.get('gauCostoPac').setValue(0);
+    this.registrarAuto.get('gauCodigoAutorizacion').setValue(null);
+
+    this.registrarAuto.get('gauFechaAutorizacion').enable();
+    this.registrarAuto.get('gauFechaVencAutorizacion').enable();
+    this.registrarAuto.get('gauVigenciaAutorizacion').enable();
+    this.registrarAuto.get('gauCostoConvenio').enable();
+    this.registrarAuto.get('gauCostoPac').enable();
+    this.registrarAuto.get('gauCodigoAutorizacion').enable();
+    this.registrarAuto.get('gauCostoPac').enable();
+
+    if (matSelectChange.value === '1') {
+      this.registrarAuto.get('mnaIdcodigos').setValue(null);
+      this.registrarAuto.get('mnaIdcodigos').enable();
+      this.registrarAuto.get('gauCostoConvenio').enable();
+    }
+
+    if (matSelectChange.value === '2') {
+      this.registrarAuto.get('mnaIdcodigos').setValue(null);
+      this.registrarAuto.get('mnaIdcodigos').disable();
+      this.registrarAuto.get('gauCostoConvenio').disable();
+    }
+  }
+
   selectionChangemotivoNo(matSelectChange: MatSelectChange) {
     if (matSelectChange.value !== '4') {
       this.registrarAuto.get('omnDesc').disable();
@@ -424,7 +455,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   validateRequiredMotivoAutoriza(group: FormGroup) {
     const autorizar = group.get('gauAutorizaServ').value; // to get value in input tag
     if (autorizar === '2') {
-      if (group.get('mnaIdcodigo').value === null || group.get('mnaIdcodigo').value.trim() === '') {
+      if (group.get('mnaIdcodigo' && 'mnaIdcodigos').value === null || group.get('mnaIdcodigo' && 'mnaIdcodigos').value.trim() === '') {
         return { requiredMotivo: true };
       } else {
         return null;
@@ -508,7 +539,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   }
 
   validateRequiredOtroMotivo(group: FormGroup) {
-    const otro = group.get('mnaIdcodigo').value; // to get value in input tag
+    const otro = group.get('mnaIdcodigo' && 'mnaIdcodigos').value; // to get value in input tag
     if (otro === '4') {
       if (group.get('omnDesc').value === null || group.get('omnDesc').value === '') {
         return { requiredOtroMotivo: true };
@@ -531,6 +562,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
       gauAutorizaServ: ['', [Validators.required]],
       //   gauNombreAutorizador: ['', [Validators.required]],
       mnaIdcodigo: [{ value: null, disabled: true }],
+      mnaIdcodigos: [{ value: null, disabled: true }],
       omnDesc: [null, [
         Validators.minLength(7), Validators.maxLength(50)
       ]],

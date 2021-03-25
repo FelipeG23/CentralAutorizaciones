@@ -178,11 +178,11 @@
                   </mat-card>
                 </div>
               </div>
-               <div class="row">
+              <div class="row">
                 <div class="col-sm-12 col-md-12 col-lg-12 padding-0">
                   <mat-card>
                     <mat-card-header>
-                      <mat-card-title>Convenio</mat-card-title>
+                      <mat-card-title>Convenio Actual</mat-card-title>
                       <mat-card-subtitle> {{ detalleCita.convenio }}</mat-card-subtitle>
                     </mat-card-header>
                   </mat-card>
@@ -400,6 +400,38 @@
                   </mat-error>
                 </mat-form-field>
               </div>
+
+              <div class="col-sm-12 col-md-12 col-lg-4">
+                <mat-form-field class="w-100">
+                  <mat-label>Cambio convenio</mat-label>
+                  <mat-select (selectionChange)="selectionChangeConvenio($event)" formControlName="gauAutorizaServ">
+                    <mat-option value="1">
+                      Si
+                    </mat-option>
+                    <mat-option value="2">
+                      No
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="registrarAuto.get('gauAutorizaServ').hasError('required')">
+                    Este campo es obligatorio.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-12 col-lg-8">
+                <mat-form-field class="w-100">
+                  <mat-label>Motivo no autoriza</mat-label>
+                  <mat-select formControlName="mnaIdcodigos" (selectionChange)="selectionChangemotivoNo($event)"  [errorStateMatcher]="errorMatcherMotivo">
+                    <mat-option *ngFor="let motivo of motivosNoAutoriza"  [value]="motivo.id">
+                      {{motivo.descripcion}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="registrarAuto.hasError('requiredMotivo')">
+                    Este campo es obligatorio.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              
+
               <div class="col-sm-12 col-md-12 col-lg-4">
                 <mat-form-field class="w-100">
                   <input matInput placeholder="Valor procedimiento" type="text" formControlName="gauValorPrestacion"
