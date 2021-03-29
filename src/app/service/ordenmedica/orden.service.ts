@@ -27,14 +27,11 @@ export class OrdenService {
   }
 
   createDetailOrden(adminOrdenMedica: any) {
+    try {
+      adminOrdenMedica.caDetalleOrdenesMedicas.serSerCodSubEspe = adminOrdenMedica.caDetalleOrdenesMedicas.serSerCodSubEspe.id;
+    } catch (error) {
 
-    adminOrdenMedica.caDetalleOrdenesMedicas.dorFechaOrdenmString = "2020-11-20T05:00:00.000Z"
-    adminOrdenMedica.caDetalleOrdenesMedicas.pcaAgeCodigProfe = "1014214457";
-    adminOrdenMedica.caDetalleOrdenesMedicas.ecPolizaNumero = "COMPENSAR";
-    adminOrdenMedica.ecPolizaNumero = "COMPENSAR";
-
-    console.log("Test 10", adminOrdenMedica);
-
+    }
 
     return this.http.post<any>(environment.url + '/CentralAutorizav2/rest/ordenesMedicas/administrarOrdenMedica', adminOrdenMedica);
   }

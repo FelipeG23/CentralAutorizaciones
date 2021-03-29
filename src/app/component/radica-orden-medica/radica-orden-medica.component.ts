@@ -223,11 +223,13 @@ export class RadicaOrdenMedicaComponent implements OnInit {
     this.adminOrdenMedica.caDetalleOrdenesMedicas.pacPacNumero = this.ordenMedica.pacPacNumero;
     this.adminOrdenMedica.caDetalleOrdenesMedicas.pcaAgeCodigRecep = this.sessionUser.uid;
     this.adminOrdenMedica.codUsrCita = this.sessionUser.uid;
-    this.adminOrdenMedica.dorFechaOrdenmString = "2020-11-20T05:00:00.000Z";
-
-    console.log(this.adminOrdenMedica.dorFechaOrdenmString);
-
-
+    this.adminOrdenMedica.dorFechaOrdenmString = moment(this.fbRadicar.get('dorFechaOrdenmString').value).format("yyyy-MM-DDTHH:mm:ss");
+    try {
+      this.adminOrdenMedica.caDetalleOrdenesMedicas.pcaAgeLugar = this.fbRadicar.get('pcaAgeLugar').value.id;
+    } catch (error) {
+      this.adminOrdenMedica.caDetalleOrdenesMedicas.pcaAgeLugar = this.ordenMedica.caDetalleOrdenesMedicas.pcaAgeLugar;
+    }
+   ; 
     this.adminOrdenMedica.ecPolizaNumero = this.fbRadicar.get('ecPolizaNumero').value;
     this.spinner.show();
     this.adminOrdenMedica.caDetalleOrdenesMedicas.diaAgrCodigo = this.fbRadicar.get('diaAgrCodigo').value.diaAgrCodigo;
@@ -713,7 +715,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
         if (id.descripcion != undefined) {
 
           return id.descripcion;
-          
+
         } else {
           if (this.sedes != undefined) {
             if (this.sedes.length > 0) {
@@ -984,3 +986,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
   }
 
 }
+function moment__WEBPACK_IMPORTED_MODULE_33__(value: any) {
+  throw new Error('Function not implemented.');
+}
+

@@ -204,18 +204,18 @@ export class VerDerivacionesComponent implements OnInit {
     this.dataLock.DateActive = datoCita.pomIdPrestOrdm;
     this.dataLock.UserActive.Documento = this.user.uid;
     this.dataLock.UserActive.Nombre = this.user.cn;
-    if(localStorage.getItem('lock')){
+    if (localStorage.getItem('lock')) {
       this.bloqueoService.unLockAll()
     }
     this.metodo = this.bloqueoService.search('lockDerivaciones', this.dataLock.DateActive).subscribe(data => {
       this.unSubcribeFirebase()
-      if(data.length){
-          this.resultados = data;
-          swal({
-            title: 'La autorización bloqueada',
-            text: `Esta autorización se encuentra bloqueada por  ${this.resultados[0].UserActive.Nombre}`,
-            icon: 'info',
-          });
+      if (data.length) {
+        this.resultados = data;
+        swal({
+          title: 'La autorización bloqueada',
+          text: `Esta autorización se encuentra bloqueada por  ${this.resultados[0].UserActive.Nombre}`,
+          icon: 'info',
+        });
       } else {
         this.valor = this.bloqueoService.lock(this.dataLock, 'lockDerivaciones');
         localStorage.setItem('lock', this.valor.key);
@@ -247,13 +247,13 @@ export class VerDerivacionesComponent implements OnInit {
 
             this.bloqueoService.unLock('lockDerivaciones/');
           }
-        });   
+        });
       }
     })
   }
 
   selectCard(prestacion) {
-    
+
   }
 
 
@@ -272,7 +272,20 @@ export class VerDerivacionesComponent implements OnInit {
     });
     this.sedesService.getSedes().subscribe(data => {
       this.sedes = data;
-      this.sedes = this.sedes.filter(data => data.otro === this.ordenMedica.caDetalleOrdenesMedicas.pcaAgeLugar.trim())
+
+      if (this.ordenMedica.caDetalleOrdenesMedicas.pcaAgeLugar == undefined) {
+
+        this.sedes = this.sedes.filter(data => data.id === '01');
+
+      } else {
+        this.sedes = this.sedes.filter(data => data.otro === this.ordenMedica.caDetalleOrdenesMedicas.pcaAgeLugar.trim())
+        if (this.sedes.length == 0) {
+          this.sedes = data;
+          this.sedes = this.sedes.filter(data => data.id === this.ordenMedica.caDetalleOrdenesMedicas.pcaAgeLugar.trim())
+
+        }
+      }
+
     });
     this.convenioService.getConvenio().subscribe(data => {
       this.convenios = data;
@@ -299,11 +312,11 @@ export class VerDerivacionesComponent implements OnInit {
     }
   }
 
-  unSubcribeFirebase(){
+  unSubcribeFirebase() {
     this.metodo.unsubscribe();
   }
 
-  unlock(){
+  unlock() {
     this.bloqueoService.unLock('lockDerivaciones/');
   }
 }

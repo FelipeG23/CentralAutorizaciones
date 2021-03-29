@@ -11,7 +11,7 @@ import { GestionContinuidadService } from 'src/app/service/citas/gestioncontinui
 import { RespuestaGestionContinuidad } from 'src/app/models/gestion-continuidad/RespuestaGestionContinuidad';
 import { AuthenticatedService } from 'src/app/service/user/authenticated.service';
 import { CaPrestacionesOrdMed } from 'src/app/models/orden-medica/CaPrestacionesOrdMed';
-import {BloqueoService} from '../../service/firebase/bloqueo.service';
+import { BloqueoService } from '../../service/firebase/bloqueo.service';
 
 @Component({
   selector: 'app-ver-radicar',
@@ -27,6 +27,7 @@ export class VerRadicarComponent implements OnInit {
   nombreCompleto: any;
   tipoDoc: string;
   numeroDoc: string;
+  elegirPrestacion: boolean;
 
 
   constructor(private fb: FormBuilder,
@@ -40,6 +41,7 @@ export class VerRadicarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.elegirPrestacion = false;
     this.continuidad = this.fb.group({
       gcoIdCodigoEstado: [null, [Validators.required]],
       gcoDirecPaciente: [false, [Validators.required]],
@@ -63,7 +65,7 @@ export class VerRadicarComponent implements OnInit {
           const v = caP.caTrazaGestContinuidad == null || caP.caTrazaGestContinuidad.gcoIdCodigoEstado <= 0;
           return v;
         });
-        if(caPrestacionesOrdMed.length === 0) {
+        if (caPrestacionesOrdMed.length === 0) {
           swal({
             title: 'Gestión de continuidad completa!',
             text: 'Este paciente ya completó la gestión de continuidad!',
@@ -96,56 +98,62 @@ export class VerRadicarComponent implements OnInit {
       this.gestionContinuidad.gcoIdCodigoMotivo = null;
     }
     const prestacion = this.ordenMedica.caPrestacionesOrdMed.filter(v => v.pomIdPrestOrdm === this.idPres)[0];
-    console.log(prestacion);
-    this.gestionContinuidad.pomIdPrestOrdm = this.idPres;
-    this.gestionContinuidad.pcaAgeCodigRecep = this.authenticatedService.getUser().uid;
-    this.gestionContinuidad.nombrePaciente = this.nombreCompleto.toString().split(' ')[0];
-    this.gestionContinuidad.prePreDesc = prestacion.prePreDesc;
-    this.gestionContinuidad.prePreCodigo = prestacion.prePreCodigo;
-    this.gestionContinuidad.serSerCodigo = prestacion.serSerCodigo;
-    this.gestionContinuidad.serSerDesc = prestacion.serSerDesc;
-    this.spinnerService.show();
-    this.gestionContinuidadService.createGestionContinuidad(this.gestionContinuidad).subscribe(
-      (data: RespuestaGestionContinuidad) => {
-        this.spinnerService.hide();
-        if (data.success) {
-          swal({
-            title: 'Proceso exitoso!',
-            text: data.respMensaje,
-            icon: 'success',
-          });
-          // proceso exitoso gestion continuidad
-          let caPrestacionesOrdMed = this.ordenMedica.caPrestacionesOrdMed;
-          caPrestacionesOrdMed = caPrestacionesOrdMed.filter((caP: CaPrestacionesOrdMed) => {
-            const v = caP.pomIdPrestOrdm !== this.gestionContinuidad.pomIdPrestOrdm;
-            return v;
-          });
+    if (prestacion != undefined) {
+      this.gestionContinuidad.pomIdPrestOrdm = this.idPres;
+      this.gestionContinuidad.pcaAgeCodigRecep = this.authenticatedService.getUser().uid;
+      this.gestionContinuidad.nombrePaciente = this.nombreCompleto.toString().split(' ')[0];
+      this.gestionContinuidad.prePreDesc = prestacion.prePreDesc;
+      this.gestionContinuidad.prePreCodigo = prestacion.prePreCodigo;
+      this.gestionContinuidad.serSerCodigo = prestacion.serSerCodigo;
+      this.gestionContinuidad.serSerDesc = prestacion.serSerDesc;
+      this.spinnerService.show();
+      this.gestionContinuidadService.createGestionContinuidad(this.gestionContinuidad).subscribe(
+        (data: RespuestaGestionContinuidad) => {
+          this.spinnerService.hide();
+          if (data.success) {
+            swal({
+              title: 'Proceso exitoso!',
+              text: data.respMensaje,
+              icon: 'success',
+            });
+            // proceso exitoso gestion continuidad
+            let caPrestacionesOrdMed = this.ordenMedica.caPrestacionesOrdMed;
+            caPrestacionesOrdMed = caPrestacionesOrdMed.filter((caP: CaPrestacionesOrdMed) => {
+              const v = caP.pomIdPrestOrdm !== this.gestionContinuidad.pomIdPrestOrdm;
+              return v;
+            });
 
-          if(caPrestacionesOrdMed.length === 0) {
-            this.close();
-            this.unlock();
-            return;
+            if (caPrestacionesOrdMed.length === 0) {
+              this.close();
+              this.unlock();
+              return;
+            }
+
+            this.ordenMedica.caPrestacionesOrdMed = caPrestacionesOrdMed;
+
+            // this.dialogRef.close(this.gestionContinuidad);
+          } else {
+            swal({
+              title: 'Error',
+              text: data.respMensaje,
+              icon: 'warning',
+            });
           }
-
-          this.ordenMedica.caPrestacionesOrdMed = caPrestacionesOrdMed;
-
-          // this.dialogRef.close(this.gestionContinuidad);
-        } else {
+        }, err => {
+          this.spinnerService.hide();
           swal({
             title: 'Error',
-            text: data.respMensaje,
+            text: 'La solicitud no pudo ser completada, por favor consulte a soporte',
             icon: 'warning',
           });
         }
-      }, err => {
-        this.spinnerService.hide();
-        swal({
-          title: 'Error',
-          text: 'La solicitud no pudo ser completada, por favor consulte a soporte',
-          icon: 'warning',
-        });
-      }
-    );
+      );
+
+    }else{
+      this.elegirPrestacion = true;
+    }
+
+
 
   }
 
@@ -188,7 +196,7 @@ export class VerRadicarComponent implements OnInit {
     }
   }
 
-  unlock(){
+  unlock() {
     this.bloqueoService.unLockAll();
   }
 

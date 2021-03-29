@@ -6,7 +6,7 @@ export class DetalleOrdenMedica {
 	serEspCodigo: string;	
 	serSerCodSubEspe: string;	
 	serSerCodigo: string;	
-	pcaAgeLugar: string;	
+	pcaAgeLugar: any;	
 	diaAgrCodigo: string;	
 	diaOtroAgr: string;	
 	conConCodigo: string;
