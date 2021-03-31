@@ -40,6 +40,8 @@ import { CaPrestacionesOrdMed } from 'src/app/models/orden-medica/CaPrestaciones
   ],
 })
 export class OrdenmedicaComponent implements OnInit {
+  page = 0;
+
   ordenesMedicasDerivaciones: any[]= [];
   ordenesMedicasRadicadas: any[]= [];
   citasPorAutorizar: any[] = [];
@@ -634,7 +636,7 @@ export class OrdenmedicaComponent implements OnInit {
     if (!this.filtroOrdenesDerivaciones.invalid) {
       this.filtroOrdenesDerivaciones.patchValue({ fecha: moment(this.minDate) });
 
-      this.consultarordenService.filterOrdenes(this.filtroOrdenesDerivaciones.getRawValue(), estados).subscribe(data => {
+      this.consultarordenService.filterOrdenes(this.filtroOrdenesDerivaciones.getRawValue(), estados, this.page).subscribe(data => {
         if (data.mensajeError == null) {
           this.ordenesMedicasDerivaciones = data;
           this.ordenesMedicasDerivaciones = this.ordenesMedicasDerivaciones.reverse();
@@ -673,7 +675,7 @@ export class OrdenmedicaComponent implements OnInit {
     // }
     if (!this.filtroOrdenesDerivaciones.invalid) {
       this.filtroOrdenesDerivaciones.patchValue({ fecha: moment(this.minDateValue) });
-      this.consultarordenService.filterOrdenes(this.filtroOrdenesDerivaciones.getRawValue(), estados).subscribe(data => {
+      this.consultarordenService.filterOrdenes(this.filtroOrdenesDerivaciones.getRawValue(), estados, this.page).subscribe(data => {
         if (data.mensajeError == null) {
           console.log(data);
           this.ordenesMedicasRadicadas = data;
