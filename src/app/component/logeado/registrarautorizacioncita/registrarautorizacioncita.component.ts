@@ -23,6 +23,7 @@ import { DetalleCita } from 'src/app/models/detalle-cita';
 import { ConsultaService } from 'src/app/service/citas/consulta.service';
 import { MotivoNoAutorizaService } from 'src/app/service/catalogos/motivoNoAutoriza.service';
 import { BloqueoService } from 'src/app/service/firebase/bloqueo.service';
+import { CaGestionAutorizacionCitaWS } from 'src/app/models/orden-medica/CaGestionAutorizacionCitaWS';
 
 
 export const MY_FORMATS = {
@@ -239,6 +240,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
 
     } else {
       const caGestionAutorizacionCita: CaGestionAutorizacionCita = Object.assign(new CaGestionAutorizacionCita(), this.registrarAuto.value);
+      let caGestionAutorizacionCitaWS: CaGestionAutorizacionCitaWS = Object.assign(new CaGestionAutorizacionCitaWS(), this.registrarAuto.value);
 
       console.log(caGestionAutorizacionCita);
 
@@ -256,6 +258,9 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
       caGestionAutorizacionCita.centroAtencion = this.detalleCita.nombreCentroAten;
       caGestionAutorizacionCita.pcaAgeCodigoRecep = this.authenticatedService.getUser().uid;
 
+
+
+
       console.log(caGestionAutorizacionCita);
 
       this.spinnerService.show();
@@ -271,14 +276,30 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
               icon: 'success',
             });
             this.dialogRef.close(caGestionAutorizacionCita);
+
+
+            if (caGestionAutorizacionCitaWS.gauAutorizaServ !== '2') {
+              caGestionAutorizacionCitaWS.mnaIdcodigo = null;
+              caGestionAutorizacionCitaWS.mnaIdcodigos = null;
+              caGestionAutorizacionCitaWS.omnDesc = null;
+            }
+            caGestionAutorizacionCitaWS.fechaCita = this.data.datoCita.fechaCita;
+            caGestionAutorizacionCitaWS.horaCita = this.data.datoCita.horaCita;
+            caGestionAutorizacionCitaWS.codUsrCita = this.data.datoCita.codUsrCita;
+            caGestionAutorizacionCitaWS.pacNum = this.data.datoCita.pacNum;
+            caGestionAutorizacionCitaWS.gauVigenciaAutorizacion = this.registrarAuto.get('gauVigenciaAutorizacion').value;
+            caGestionAutorizacionCitaWS.nombrePaciente = this.data.datoCita.nombreCompleto;
+            caGestionAutorizacionCitaWS.centroAtencion = this.detalleCita.nombreCentroAten;
+            caGestionAutorizacionCitaWS.pcaAgeCodigoRecep = this.authenticatedService.getUser().uid;
+            caGestionAutorizacionCitaWS.idCita = this.datosCitaxId.idCita;
+            caGestionAutorizacionCitaWS.nroFormulario = this.datosCitaxId.nroFormulario;
+            caGestionAutorizacionCitaWS.codigoPrestacion = this.datosCitaxId.codigoPrestacion;
+            caGestionAutorizacionCitaWS.codConvenio = this.datosCitaxId.codConvenio[0];
             console.log("ws nuevo");
-            this.ordenService.authorizationRegister(this.datosCitaxId, caGestionAutorizacionCita).subscribe(
+            this.detalleCitaService.registrarAutorizacionWsBus(caGestionAutorizacionCitaWS).subscribe(
               (data) => {
                 console.log(data);
-                console.log("123654789");
               });
-
-
 
           } else {
             swal({

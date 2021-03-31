@@ -7,6 +7,7 @@ import { CaPolizasPaciente } from '../../models/caPolizasPaciente';
 import { CaGestionAutorizacion } from 'src/app/models/orden-medica/CaGestionAutorizacion';
 import { FiltroDetalleCita } from 'src/app/models/filtro-detalle.cita';
 import { DetalleCita } from 'src/app/models/detalle-cita';
+import { CaGestionAutorizacionCitaWS } from 'src/app/models/orden-medica/CaGestionAutorizacionCitaWS';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,10 @@ export class DetalleCitaService {
  
   registrarAutorizacion(caGestionAutorizacionCita: CaGestionAutorizacionCita) {
     return this.http.post<Boolean>(environment.url + '/CentralAutorizav2/rest/ClienteCita/registrarAutorizacion', caGestionAutorizacionCita);
+  }
+
+  registrarAutorizacionWsBus(caGestionAutorizacionCita: CaGestionAutorizacionCitaWS) {
+    return this.http.post<Boolean>(environment.url + '/CentralAutorizav2/rest/ClienteCita/registrarAutorizacionWsBus', caGestionAutorizacionCita);
   }
 
   registrarAutorizacionImg(caGestionAutorizacionCita: CaGestionAutorizacionCita) {

@@ -1,4 +1,4 @@
-export class CaGestionAutorizacionCita {
+export class CaGestionAutorizacionCitaWS {
 	horaCita: string;
 	fechaCita: string;
 	codUsrCita: string;
@@ -22,5 +22,8 @@ export class CaGestionAutorizacionCita {
 	numeroPoliza: string;
 	nombrePaciente: string;
 	centroAtencion: string;
-	
+	idCita: string;
+	nroFormulario: string;
+	codigoPrestacion: string;
+	codConvenio: string;
 }
