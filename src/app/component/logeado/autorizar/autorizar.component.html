@@ -243,7 +243,14 @@
                     <br>
                     <p class="text-center">No se encontraron citas por autorizar</p>
                 </ng-container>   
-                <mat-paginator #paginatorCitas  [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+               <!-- <mat-paginator #paginatorCitas  [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                <br>-->
+                <mat-paginator #paginatorCitasPorAutorizar [pageSizeOptions]="pageSizeOptions" 
+                    [length]="length"
+                    [pageSize]="pageSize"
+                    [pageSizeOptions]="pageSizeOptions"
+                    (page)=setPageSizeOptionsAutorizar($event) 
+                    showFirstLastButtons></mat-paginator> 
                 <br>
             </div>
 
@@ -326,7 +333,7 @@
                     <br>
                     <p class="text-center">Por favor espere</p>
                 </ng-container>
-                <mat-paginator #paginatorCitas [pageSizeOptions]="pageSizeOptions" 
+                <mat-paginator #paginatorCitasPorAutorizar2 [pageSizeOptions]="pageSizeOptions" 
                     [length]="length"
                     [pageSize]="pageSize"
                     [pageSizeOptions]="pageSizeOptions"

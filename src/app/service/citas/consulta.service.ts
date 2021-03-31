@@ -51,6 +51,25 @@ export class ConsultaService {
     return this.http.put<any>( environment.api + '/citas/' + citaId + '/update-asistencia', estado);
   }
 
+  postCitasPorAutorizar(data ,page: number): Observable<any> {
+    if(page>0){
+      this.params = {
+        'fechaInicial': this.convertDate(data.fecha[0].value),
+        'fechaFinal': this.convertDate(data.fechaFinal[0].value),
+        'page': page
+      };
+      
+    }else{
+      this.params = {
+        'fechaInicial': this.convertDate(data.fecha),
+        'fechaFinal': this.convertDate(data.fechaFinal),
+        'page': page
+      };
+      
+    }
+    return this.http.post<any>(environment.api + '/citas/porautorizarPaginate', this.params);
+  }
+
   convertDate(date: any) {
     let newDate = date.date();
     if (date.date() < 10) {

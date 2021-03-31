@@ -33,7 +33,7 @@ export class ConsultarordenService {
     return this.http.post<any>(environment.url + '/CentralAutorizav2/rest/ordenesMedicas/consultarOrdenMedica', this.params);
   }
 
-  filterOrdenes(data, estados) {
+  /*filterOrdenes(data, estados) {
 
     
     const fechaInicial = this.convertDate(data.fecha);
@@ -55,6 +55,30 @@ export class ConsultarordenService {
     
     
     return this.http.post<any>(environment.api + '/OrdenMedica/getOrdenes', this.params);
+  }*/
+
+  filterOrdenes(data, estados, page) {
+
+    
+    const fechaInicial = this.convertDate(data.fecha);
+    const fechaFinal = this.convertDate(data.fechaFinal);
+
+    
+    this.params = {
+      'fechaInicial': fechaInicial,
+      'fechaFinal': fechaFinal,
+      'estados': estados,
+      'pacPacTipoIdentCodigo': data.tipoDocumento,
+      'pacPacRut': data.numeroDocumento,
+      'cauDescUsuario': this.sessionUser.cn,
+      'nombres': data.nombre,
+      'primerApellido': data.primerApellido,
+      'segundoApellido': data.segundoApellido,
+      'codUsrCita': this.sessionUser.uid
+    };
+    
+    
+    return this.http.post<any>(environment.api + '/OrdenMedica/getOrdenesPaginate/'+page, this.params);
   }
 
   filterOrdenesMedicas(data, estados) {
