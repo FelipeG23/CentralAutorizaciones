@@ -12,7 +12,7 @@ export class ConsultaService {
   params;
   minDateValue = new Date();
   constructor(private http: HttpClient) {}
-  getCitas(userData, lista) {
+  getCitas(userData, lista, page) {
     let convenios;
     if (lista !== '') {
       convenios = lista.map(data => data.id);
@@ -35,9 +35,9 @@ export class ConsultaService {
       'estado': userData.estado,
       'nombreSede': userData.ubicacionesFilter
     };
-    return this.http.post<any>( environment.api + '/citas/consultarCitas', this.params);
+    return this.http.post<any>( environment.api + '/citas/consultarCitasPaginate/' + page, this.params);
   }
-
+  
   getCitasPorAutorizar(data) {
     this.params = {
       'fechaInicial': this.convertDate(data.fecha),

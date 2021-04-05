@@ -65,6 +65,7 @@ export const MY_FORMATS = {
 export class CitasconsultaComponent implements OnInit {
     filtroCitas: FormGroup;
     pageEvent: PageEvent;
+    page : number = 0;
     options: any;
     date = new Date();
     fechaFin = new Date();
@@ -78,7 +79,7 @@ export class CitasconsultaComponent implements OnInit {
     maxDateIniAutorizacion = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
     maxDateFinAutorizacion = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 6);
     classCA: boolean;
-    pageActual: number = 1;
+    pageActual: number = 0;
     filters: any;
     validar: boolean = false;
     nameRequired: boolean = false;
@@ -254,7 +255,7 @@ export class CitasconsultaComponent implements OnInit {
         }
         if (!this.filtroCitas.invalid) {
             this.spinner.show();
-            this.consulta.getCitas(this.filtroCitas.getRawValue(), this.conveniosLista).subscribe(data => {
+            this.consulta.getCitas(this.filtroCitas.getRawValue(), this.conveniosLista, this.page).subscribe(data => {
                 this.spinner.hide();
                 if (Object.keys(data).length > 0) {
                     this.jsonSize = Object.keys(data).length;
@@ -280,6 +281,15 @@ export class CitasconsultaComponent implements OnInit {
             });
         }
     }
+    setPageSizeOptionsCitas(setPageSizeOptionsInput: any) {
+        this.page = this.page + 1;
+        this.filters = null;
+        this.consulta.getCitas(this.filtroCitas.getRawValue(), this.conveniosLista, this.page)
+            .subscribe((data: any) => {
+                this.filters = data;
+            });
+    }
+
 
     clear() {
         this.listConvenios = new Filtrocitasconvenios();
