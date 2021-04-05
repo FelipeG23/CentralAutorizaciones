@@ -20,7 +20,6 @@ import { OrdenService } from 'src/app/service/ordenmedica/orden.service';
 import { EliminaromComponent } from 'src/app/modals/eliminarom/eliminarom.component';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
-import {Sort} from '@angular/material/sort';
 import { ConsultaService } from 'src/app/service/citas/consulta.service';
 import { TrazaOrdenComponent } from 'src/app/modals/trazaorden/trazaorden.component';
 import { VerDerivacionesComponent } from 'src/app/modals/ver-derivaciones/ver-derivaciones.component';
@@ -40,11 +39,9 @@ import { CaPrestacionesOrdMed } from 'src/app/models/orden-medica/CaPrestaciones
   ],
 })
 export class OrdenmedicaComponent implements OnInit {
-  page = 0;
-
-  ordenesMedicasDerivaciones: any[]= [];
-  ordenesMedicasRadicadas: any[]= [];
-  citasPorAutorizar: any[] = [];
+  ordenesMedicasDerivaciones: any[];
+  ordenesMedicasRadicadas: any[];
+  citasPorAutorizar: any[];
   filtroOrdenes: FormGroup;
   options: any;
   spinnerCA: boolean;
@@ -163,11 +160,6 @@ export class OrdenmedicaComponent implements OnInit {
 
 
   }
-
-  sortData(sort: Sort){
-    alert("")
-  }
-
 
   doFilter2 = (value: string) => {
     this.dataSourceRadicadas.filter = value.trim().toLocaleLowerCase();
@@ -636,7 +628,7 @@ export class OrdenmedicaComponent implements OnInit {
     if (!this.filtroOrdenesDerivaciones.invalid) {
       this.filtroOrdenesDerivaciones.patchValue({ fecha: moment(this.minDate) });
 
-      this.consultarordenService.filterOrdenes(this.filtroOrdenesDerivaciones.getRawValue(), estados, this.page).subscribe(data => {
+      this.consultarordenService.filterOrdenes(this.filtroOrdenesDerivaciones.getRawValue(), estados).subscribe(data => {
         if (data.mensajeError == null) {
           this.ordenesMedicasDerivaciones = data;
           this.ordenesMedicasDerivaciones = this.ordenesMedicasDerivaciones.reverse();
@@ -675,7 +667,7 @@ export class OrdenmedicaComponent implements OnInit {
     // }
     if (!this.filtroOrdenesDerivaciones.invalid) {
       this.filtroOrdenesDerivaciones.patchValue({ fecha: moment(this.minDateValue) });
-      this.consultarordenService.filterOrdenes(this.filtroOrdenesDerivaciones.getRawValue(), estados, this.page).subscribe(data => {
+      this.consultarordenService.filterOrdenes(this.filtroOrdenesDerivaciones.getRawValue(), estados).subscribe(data => {
         if (data.mensajeError == null) {
           console.log(data);
           this.ordenesMedicasRadicadas = data;

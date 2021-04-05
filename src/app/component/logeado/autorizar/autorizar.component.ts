@@ -56,9 +56,9 @@ export const MY_FORMATS = {
 export class AutorizarComponent implements OnInit {
     page = 0;
     size = 11;
-    length = 100;
-    pageSize = 20;
-    pageSizeOptions: number[] = [20];
+    length = 800;
+    pageSize = 10;
+    pageSizeOptions: number[] = [5, 10, 20];
     pageEvent: PageEvent;
 
     // order= 'fecha';
@@ -80,8 +80,8 @@ export class AutorizarComponent implements OnInit {
     citasPorAutorizar: any[];
     citasAutorizadas: any[];
     date = new Date();
-    minDateValue = new Date(this.date.getFullYear(), this.date.getMonth() - 3, this.date.getDate());
-    maxDateValue = new Date(this.date.getFullYear() + 1, this.date.getMonth(), this.date.getDate());
+    minDateValue = new Date(this.date.getFullYear(), this.date.getMonth() - 1, this.date.getDay() - this.date.getDay() + 1);
+    maxDateValue = new Date(this.date.getFullYear(), this.date.getMonth() + 5, this.date.getDay() + (30 - this.date.getDay() - 2));
     minDate = new Date(this.date.getFullYear(), 0, 1);
     maxDate = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
     maxDateFin = new Date(this.date.getFullYear() + 1, this.date.getMonth(), this.date.getDate());
@@ -151,42 +151,6 @@ export class AutorizarComponent implements OnInit {
     }
 
     onSubmitCitas(isList?) {
-        
-        const months = this.filtroOrdenes.get('fechaFinal').value
-            .diff(this.filtroOrdenes.get('fecha').value, 'months');
-        if (!this.filtroOrdenes.invalid) {
-            this.spinnerService.show();
-            this.consultaService.postCitasPorAutorizar(this.filtroOrdenes.getRawValue(), this.page).subscribe(data => {
-                this.spinnerService.hide();
-                this.citasPorAutorizar = data;
-                this.consultaService.postCitasAutorizadas(this.page, this.size)
-                    // this.consultaService.postCitasAutorizadas(this.paginatorCitas.pageIndex, this.paginatorCitas.pageSize + 1))
-                    
-                    .subscribe((data: any) => {
-                        // this.citasAutorizadas = data.sort((a, b) => b.fechaAutorizacion - a.fechaAutorizacion);
-                        this.citasAutorizadas = data;
-                        this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;
-                        
-                    });
-                //    this.datosUsuarios = this.listaUsuariosRegistro.find(word => word._id === this.registro.id);
-                this.dataSourceCitas.data = this.citasPorAutorizar;
-                if (isList) {
-                    this.filtersApply();
-                }
-            }, err => {
-                this.citasPorAutorizar = [];
-                swal({
-                    title: 'Error',
-                    text: 'No se pudo consultar las citas, por favor consulte con soporte',
-                    icon: 'warning',
-                });
-                console.log(err);
-            });
-        }
-    }
-
-    onSubmitCitasFiltrar(isList?) {
-        
         const months = this.filtroOrdenes.get('fechaFinal').value
             .diff(this.filtroOrdenes.get('fecha').value, 'months');
         if (!this.filtroOrdenes.invalid) {
@@ -196,12 +160,10 @@ export class AutorizarComponent implements OnInit {
                 this.citasPorAutorizar = data;
                 this.consultaService.postCitasAutorizadas(this.page, this.size)
                     // this.consultaService.postCitasAutorizadas(this.paginatorCitas.pageIndex, this.paginatorCitas.pageSize + 1))
-                    
                     .subscribe((data: any) => {
                         // this.citasAutorizadas = data.sort((a, b) => b.fechaAutorizacion - a.fechaAutorizacion);
                         this.citasAutorizadas = data;
                         this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;
-                        
                     });
                 //    this.datosUsuarios = this.listaUsuariosRegistro.find(word => word._id === this.registro.id);
                 this.dataSourceCitas.data = this.citasPorAutorizar;
@@ -226,15 +188,6 @@ export class AutorizarComponent implements OnInit {
             .subscribe((data: any) => {
                 this.citasAutorizadas = data;
                 this.dataSourceCitasAutorizadas.data = this.citasAutorizadas;
-            });
-    }
-
-    setPageSizeOptionsAutorizar(setPageSizeOptionsInput: any) {
-        this.citasPorAutorizar = null;
-        this.consultaService.postCitasPorAutorizar(this.filtroOrdenes.getRawValue(), setPageSizeOptionsInput.pageIndex)
-            .subscribe((data: any) => {
-                this.citasPorAutorizar = data;
-                this.dataSourceCitas.data = this.citasPorAutorizar;
             });
     }
 
@@ -286,7 +239,7 @@ export class AutorizarComponent implements OnInit {
 
     filterNative() {
         if (this.filtroOrdenes.valid) {
-            this.onSubmitCitasFiltrar(true);
+            this.onSubmitCitas(true);
             this.onSubmitPorRadicar([1, 2], true);
             this.onSubmit([3], true);
         }
@@ -556,6 +509,8 @@ export class AutorizarComponent implements OnInit {
         });
     }
 
+    //console.log(data);
+
     openDialogView(element) {
         if (localStorage.getItem('lock')) {
             this.bloqueoService.unLockAll();
@@ -635,6 +590,8 @@ export class AutorizarComponent implements OnInit {
         });
     }
 
+    
+
     openDialogAutorizacion(datoCita, modulo) {
         this.dataLock.UserActive = new Userlock();
         this.dataLock.DateActive = datoCita.idCita;
@@ -643,8 +600,10 @@ export class AutorizarComponent implements OnInit {
         if (localStorage.getItem('lock')) {
             this.bloqueoService.unLockAll();
         }
+        
         this.metodo = this.bloqueoService.search('lockAutorizacion', this.dataLock.DateActive).subscribe(data => {
             this.unSubcribeFirebase();
+            console.log(this.dataLock.DateActive);
             if (data.length) {
                 this.resultados = data;
                 swal({
