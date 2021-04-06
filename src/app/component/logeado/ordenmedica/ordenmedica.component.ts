@@ -669,7 +669,6 @@ export class OrdenmedicaComponent implements OnInit {
       this.filtroOrdenesDerivaciones.patchValue({ fecha: moment(this.minDateValue) });
       this.consultarordenService.filterOrdenes(this.filtroOrdenesDerivaciones.getRawValue(), estados).subscribe(data => {
         if (data.mensajeError == null) {
-          console.log(data);
           this.ordenesMedicasRadicadas = data;
           this.ordenesMedicasRadicadas = this.ordenesMedicasRadicadas.filter(data => {
             if (data.prestaciones !== data.continuidad || data.continuidad === null || data.prestaciones === null) {

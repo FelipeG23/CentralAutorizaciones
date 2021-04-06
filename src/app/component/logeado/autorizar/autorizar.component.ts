@@ -419,7 +419,6 @@ export class AutorizarComponent implements OnInit {
         if (!this.filtroOrdenes.invalid) {
             this.consultarordenService.filterOrdenes(this.filtroOrdenes.getRawValue(), estados).subscribe(data => {
                 if (data.mensajeError == null) {
-                    console.log(data);
                     this.ordenesMedicasRadicadas = data;
                     this.ordenesMedicasRadicadas = this.ordenesMedicasRadicadas.filter(data => {
                         if (data.prestaciones !== data.continuidad || data.continuidad === null || data.prestaciones === null) {

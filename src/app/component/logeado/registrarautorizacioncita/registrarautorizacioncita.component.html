@@ -417,12 +417,13 @@
                   </mat-error>
                 </mat-form-field>
               </div>
+              
               <div class="col-sm-12 col-md-12 col-lg-8">
                 <mat-form-field class="w-100">
-                  <mat-label>Motivo no autoriza</mat-label>
-                  <mat-select formControlName="mnaIdcodigos" (selectionChange)="selectionChangemotivoNo($event)"  [errorStateMatcher]="errorMatcherMotivo">
-                    <mat-option *ngFor="let motivo of motivosNoAutoriza"  [value]="motivo.id">
-                      {{motivo.descripcion}}
+                  <mat-label>Convenios</mat-label>
+                  <mat-select formControlName="mnaIdcodigos">
+                    <mat-option *ngFor="let item of cambiaConvenio"  [value]="item.id">
+                      {{item.descripcion}}
                     </mat-option>
                   </mat-select>
                   <mat-error *ngIf="registrarAuto.hasError('requiredMotivo')">

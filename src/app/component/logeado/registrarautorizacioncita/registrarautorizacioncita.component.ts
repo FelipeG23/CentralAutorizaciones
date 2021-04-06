@@ -9,6 +9,7 @@ import { CaGestionAutorizacionCita } from '../../../models/orden-medica/CaGestio
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { CookieService } from 'ngx-cookie-service';
+import { ConvenioService } from 'src/app/service/catalogos/convenio.service';
 import { InfoConvenioComponent } from 'src/app/modals/info-convenio/info-convenio.component';
 import { ErrorStateMatcher } from '@angular/material';
 import { GestionAutorizacionService } from 'src/app/service/citas/gestion-autorizacion.service';
@@ -68,6 +69,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   errorMatcherPoliza = new CrossFieldErrorMatcherNumeroPoliza();
   errorMatcherOtroMotivo = new CrossFieldErrorMatcherOtroMotivo();
   errorMatcherCostoConvenio = new CrossFieldErrorMatcherCostoConvenio();
+  errorMatcherConvenio = new CrossFieldErrorMatcherConvenio();
   errorMatcherCostoPaciente = new CrossFieldErrorMatcherCostoPaciente();
   caPrestacionesOrdMed: CaPrestacionesOrdMed;
   prestacion: any;
@@ -76,6 +78,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   detalleCita: DetalleCita;
   claseFormulario = 'col-sm-12';
   motivosNoAutoriza: any[];
+  cambiaConvenio: any[];
   nombre: any;
   documentoPersona: any;
   listaConvenios: any = {};
@@ -88,6 +91,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
     public dialogRef: MatDialogRef<RegistrarautorizacionCitaComponent>,
     public detalleCitaService: DetalleCitaService,
     public spinnerService: NgxSpinnerService,
+    private convenioService: ConvenioService,
     public authenticatedService: AuthenticatedService,
     private firestore: AngularFirestore,
     private cookie: CookieService,
@@ -174,6 +178,10 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
 
     this.motivoNoAutorizaService.getMotivoNoAutoriza().subscribe(data => {
       this.motivosNoAutoriza = data;
+    });
+
+    this.convenioService.getConvenio().subscribe(data => {
+      this.cambiaConvenio = data;
     });
 
   }
@@ -423,20 +431,9 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   }
 
   selectionChangeConvenio(matSelectChange: MatSelectChange) {
-    this.registrarAuto.get('gauFechaAutorizacion').setValue(null);
-    this.registrarAuto.get('gauFechaVencAutorizacion').setValue(null);
-    this.registrarAuto.get('gauVigenciaAutorizacion').setValue(null);
     this.registrarAuto.get('gauCostoConvenio').setValue(0);
-    this.registrarAuto.get('gauCostoPac').setValue(0);
-    this.registrarAuto.get('gauCodigoAutorizacion').setValue(null);
 
-    this.registrarAuto.get('gauFechaAutorizacion').enable();
-    this.registrarAuto.get('gauFechaVencAutorizacion').enable();
-    this.registrarAuto.get('gauVigenciaAutorizacion').enable();
     this.registrarAuto.get('gauCostoConvenio').enable();
-    this.registrarAuto.get('gauCostoPac').enable();
-    this.registrarAuto.get('gauCodigoAutorizacion').enable();
-    this.registrarAuto.get('gauCostoPac').enable();
 
     if (matSelectChange.value === '1') {
       this.registrarAuto.get('mnaIdcodigos').setValue(null);
