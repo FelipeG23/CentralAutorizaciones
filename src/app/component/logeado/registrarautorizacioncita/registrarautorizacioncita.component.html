@@ -404,15 +404,15 @@
               <div class="col-sm-12 col-md-12 col-lg-4">
                 <mat-form-field class="w-100">
                   <mat-label>Cambio convenio</mat-label>
-                  <mat-select (selectionChange)="selectionChangeConvenio($event)" formControlName="gauAutorizaServ">
-                    <mat-option value="1">
+                  <mat-select (selectionChange)="selectionChangeConvenio($event)" formControlName="gauAutorizaConv">
+                    <mat-option value="5">
                       Si
                     </mat-option>
-                    <mat-option value="2">
+                    <mat-option value="6">
                       No
                     </mat-option>
                   </mat-select>
-                  <mat-error *ngIf="registrarAuto.get('gauAutorizaServ').hasError('required')">
+                  <mat-error *ngIf="registrarAuto.get('gauAutorizaConv').hasError('required')">
                     Este campo es obligatorio.
                   </mat-error>
                 </mat-form-field>
@@ -421,7 +421,7 @@
               <div class="col-sm-12 col-md-12 col-lg-8">
                 <mat-form-field class="w-100">
                   <mat-label>Convenios</mat-label>
-                  <mat-select formControlName="mnaIdcodigos">
+                  <mat-select formControlName="IdConvenios">
                     <mat-option *ngFor="let item of cambiaConvenio"  [value]="item.id">
                       {{item.descripcion}}
                     </mat-option>

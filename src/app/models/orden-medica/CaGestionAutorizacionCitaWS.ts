@@ -8,6 +8,7 @@ export class CaGestionAutorizacionCitaWS {
 	gauAutorizaServ: string;
 	mnaIdcodigo: number;
 	mnaIdcodigos: number;
+	IdConvenios: number;
 	omnDesc: string;
 	gauCodigoAutorizacion: string;
 	gauFechaAutorizacion: string;

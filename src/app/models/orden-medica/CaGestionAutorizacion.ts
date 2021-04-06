@@ -4,8 +4,10 @@ export class CaGestionAutorizacion {
 	gauNombreAutorizador: string;
 	gauTelefonoAutorizador: string;
 	gauAutorizaServ: string;
+	gauAutorizaConv: string;
 	mnaIdcodigo: number;
 	mnaIdcodigos: number;
+	IdConvenios: number;
 	omnDesc: string;
 	gauCodigoAutorizacion: string;
 	gauFechaAutorizacion: string;

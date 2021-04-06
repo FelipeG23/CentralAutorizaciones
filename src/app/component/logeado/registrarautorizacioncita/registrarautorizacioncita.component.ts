@@ -55,6 +55,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   minDate = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
   maxDateAuto = new Date(this.date.getFullYear() + 1, this.date.getMonth(), this.date.getDate());
   resultado: any;
+  IdConvenios: any;
   validDates = false;
   valorCuota: boolean;
   errorMatcher = new CrossFieldErrorMatcher();
@@ -69,7 +70,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   errorMatcherPoliza = new CrossFieldErrorMatcherNumeroPoliza();
   errorMatcherOtroMotivo = new CrossFieldErrorMatcherOtroMotivo();
   errorMatcherCostoConvenio = new CrossFieldErrorMatcherCostoConvenio();
-  errorMatcherConvenio = new CrossFieldErrorMatcherConvenio();
+  /*errorMatcherConvenio = new CrossFieldErrorMatcherConvenio();*/
   errorMatcherCostoPaciente = new CrossFieldErrorMatcherCostoPaciente();
   caPrestacionesOrdMed: CaPrestacionesOrdMed;
   prestacion: any;
@@ -187,7 +188,12 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   }
 
   camino() {
-    if (this.registrarAuto.value.gauAutorizaServ === 1) {
+    if (this.registrarAuto.value.gauAutorizaServ === 1 && 5 && 6) {
+      this.caminoRegistroSi = true;
+    } else {
+      this.caminoRegistroNo = true;
+    }
+    if (this.registrarAuto.value.gauAutorizaConv === 1 && 5 && 6) {
       this.caminoRegistroSi = true;
     } else {
       this.caminoRegistroNo = true;
@@ -196,7 +202,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
 
   onSubmit() {
 
-    console.log("datos Diego", this.data.datoCita.module);
+    console.log(this.data);
 
     if (this.data.datoCita.module == 'derivacion') {
       const caGestionAutorizacion: CaGestionAutorizacion = Object.assign(new CaGestionAutorizacion(), this.registrarAuto.value);
@@ -206,6 +212,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
         caGestionAutorizacion.mnaIdcodigos = null;
         caGestionAutorizacion.omnDesc = null;
       }
+      caGestionAutorizacion.IdConvenios = this.data[0].codConvenio[0];
       caGestionAutorizacion.pomIdPrestOrdm = this.data.datoCita.pomIdPrestOrdm;
       caGestionAutorizacion.pacPacNumero = this.data.datoCita.ordenMedica.pacPacNumero;
       caGestionAutorizacion.gauVigenciaAutorizacion = this.registrarAuto.get('gauVigenciaAutorizacion').value;
@@ -213,8 +220,6 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
       caGestionAutorizacion.nombrePaciente = this.data.datoCita.ordenMedica.nombreCompletoPaciente;
       caGestionAutorizacion.centroAtencion = this.data.datoCita.sedes[0].descripcion;
       this.spinnerService.show();
-
-
 
       this.ordenService.registrarAutorizacion(caGestionAutorizacion).subscribe(
         (data: boolean) => {
@@ -250,7 +255,6 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
       const caGestionAutorizacionCita: CaGestionAutorizacionCita = Object.assign(new CaGestionAutorizacionCita(), this.registrarAuto.value);
       let caGestionAutorizacionCitaWS: CaGestionAutorizacionCitaWS = Object.assign(new CaGestionAutorizacionCitaWS(), this.registrarAuto.value);
 
-      console.log(caGestionAutorizacionCita);
 
       if (caGestionAutorizacionCita.gauAutorizaServ !== '2') {
         caGestionAutorizacionCita.mnaIdcodigo = null;
@@ -303,8 +307,6 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
             caGestionAutorizacionCitaWS.nroFormulario = this.datosCitaxId.nroFormulario;
             caGestionAutorizacionCitaWS.codigoPrestacion = this.datosCitaxId.codigoPrestacion;
             caGestionAutorizacionCitaWS.codConvenio = this.datosCitaxId.codConvenio[0];
-            caGestionAutorizacionCitaWS.gauValorPrestacion = this.registrarAuto.get('gauCostoPac').value;
-
             console.log("ws nuevo");
             this.detalleCitaService.registrarAutorizacionWsBus(caGestionAutorizacionCitaWS).subscribe(
               (data) => {
@@ -433,20 +435,15 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   }
 
   selectionChangeConvenio(matSelectChange: MatSelectChange) {
-    this.registrarAuto.get('gauCostoConvenio').setValue(0);
 
-    this.registrarAuto.get('gauCostoConvenio').enable();
-
-    if (matSelectChange.value === '1') {
-      this.registrarAuto.get('mnaIdcodigos').setValue(null);
-      this.registrarAuto.get('mnaIdcodigos').enable();
-      this.registrarAuto.get('gauCostoConvenio').enable();
+    if (matSelectChange.value === '5') {
+      this.registrarAuto.get('IdConvenios').setValue(null);
+      this.registrarAuto.get('IdConvenios').enable();
     }
 
-    if (matSelectChange.value === '2') {
-      this.registrarAuto.get('mnaIdcodigos').setValue(null);
-      this.registrarAuto.get('mnaIdcodigos').disable();
-      this.registrarAuto.get('gauCostoConvenio').disable();
+    if (matSelectChange.value === '6') {
+      this.registrarAuto.get('IdConvenios').setValue(null);
+      this.registrarAuto.get('IdConvenios').disable();
     }
   }
 
@@ -460,7 +457,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   }
 
   validateRequiredNumeroAut(group: FormGroup) {
-    const autorizar = group.get('gauAutorizaServ').value; // to get value in input tag
+    const autorizar = group.get('gauAutorizaServ' && 'gauAutorizaConv').value; // to get value in input tag
     if (autorizar === '1') {
       if (group.get('gauCodigoAutorizacion').value === null || group.get('gauCodigoAutorizacion').value.trim() === '') {
         return { requiredAut: true };
@@ -473,9 +470,9 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   }
 
   validateRequiredMotivoAutoriza(group: FormGroup) {
-    const autorizar = group.get('gauAutorizaServ').value; // to get value in input tag
+    const autorizar = group.get('gauAutorizaServ' && 'gauAutorizaConv').value; // to get value in input tag
     if (autorizar === '2') {
-      if (group.get('mnaIdcodigo' && 'mnaIdcodigos').value === null || group.get('mnaIdcodigo' && 'mnaIdcodigos').value.trim() === '') {
+      if (group.get('mnaIdcodigo' && 'IdConvenios').value === null || group.get('mnaIdcodigo' && 'IdConvenios').value.trim() === '') {
         return { requiredMotivo: true };
       } else {
         return null;
@@ -486,7 +483,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   }
 
   validateRequiredFechaAutorizacion(group: FormGroup) {
-    const autorizar = group.get('gauAutorizaServ').value; // to get value in input tag
+    const autorizar = group.get('gauAutorizaServ' && 'gauAutorizaConv').value; // to get value in input tag
     if (autorizar === '1') {
       if (group.get('gauFechaAutorizacion').value === null) {
         return { requiredFechaAut: true };
@@ -499,7 +496,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   }
 
   validateRequiredFechaVencimiento(group: FormGroup) {
-    const autorizar = group.get('gauAutorizaServ').value; // to get value in input tag
+    const autorizar = group.get('gauAutorizaServ' && 'gauAutorizaConv').value; // to get value in input tag
     if (autorizar === '1') {
       if (group.get('gauFechaVencAutorizacion').value === null) {
         return { requiredFechaVencimiento: true };
@@ -520,7 +517,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   }
 
   validateRequiredPoliza(group: FormGroup) {
-    const autorizar = group.get('gauAutorizaServ').value; // to get value in input tag
+    const autorizar = group.get('gauAutorizaServ' && 'gauAutorizaConv').value; // to get value in input tag
     if (group.get('numeroPoliza').value === null || group.get('numeroPoliza').value === '') {
       console.log("Entro Aqui");
 
@@ -533,7 +530,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   }
 
   validateRequiredCostoConvenio(group: FormGroup) {
-    const autorizar = group.get('gauAutorizaServ').value; // to get value in input tag
+    const autorizar = group.get('gauAutorizaServ' && 'gauAutorizaConv').value; // to get value in input tag
     if (autorizar === '1') {
       if (group.get('gauCostoConvenio').value === null || group.get('gauCostoConvenio').value === '') {
         return { requiredCostoConvenio: true };
@@ -546,7 +543,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   }
 
   validateRequiredCostoPaciente(group: FormGroup) {
-    const autorizar = group.get('gauAutorizaServ').value; // to get value in input tag
+    const autorizar = group.get('gauAutorizaServ' && 'gauAutorizaConv').value; // to get value in input tag
     if (autorizar === '1') {
       if (group.get('gauCostoPac').value === null || group.get('gauCostoPac').value === '') {
         return { requiredCostoPaciente: true };
@@ -559,7 +556,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
   }
 
   validateRequiredOtroMotivo(group: FormGroup) {
-    const otro = group.get('mnaIdcodigo' && 'mnaIdcodigos').value; // to get value in input tag
+    const otro = group.get('mnaIdcodigo' && 'IdConvenios').value; // to get value in input tag
     if (otro === '4') {
       if (group.get('omnDesc').value === null || group.get('omnDesc').value === '') {
         return { requiredOtroMotivo: true };
@@ -580,9 +577,12 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
         Validators.required, Validators.pattern(/^(?!.*(.)\1{4})/), Validators.minLength(7), Validators.maxLength(20)
       ]],
       gauAutorizaServ: ['', [Validators.required]],
+      gauAutorizaConv: ['', [Validators.required]],
+
+      
       //   gauNombreAutorizador: ['', [Validators.required]],
       mnaIdcodigo: [{ value: null, disabled: true }],
-      mnaIdcodigos: [{ value: null, disabled: true }],
+      IdConvenios: [{ value: null, disabled: true }],
       omnDesc: [null, [
         Validators.minLength(7), Validators.maxLength(50)
       ]],
@@ -625,6 +625,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
         subscribe((gestionAut: GestionAutorizacionCita) => {
           this.registrarAuto.get('gauTelefonoAutorizador').setValue(parseInt(gestionAut.gauTelefonoAutorizador));
           this.registrarAuto.get('gauAutorizaServ').setValue(gestionAut.gauAutorizaServ);
+          this.registrarAuto.get('gauAutorizaConv').setValue(gestionAut.gauAutorizaConv);
           this.registrarAuto.get('gauNombreAutorizador').setValue(gestionAut.gauNombreAutorizador);
           this.registrarAuto.get('gauObservaciones').setValue(gestionAut.ogaDescripcion);
         });
@@ -639,6 +640,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
       if (caAutorizacion !== undefined && caAutorizacion !== null) {
         this.registrarAuto.get('gauTelefonoAutorizador').setValue(parseInt(caAutorizacion.gauTelefonoAutorizador));
         this.registrarAuto.get('gauAutorizaServ').setValue(caAutorizacion.gauAutorizaServ);
+        this.registrarAuto.get('gauAutorizaConv').setValue(caAutorizacion.gauAutorizaConv);
         this.registrarAuto.get('gauNombreAutorizador').setValue(caAutorizacion.gauNombreAutorizador);
         this.registrarAuto.get('gauObservaciones').setValue(caAutorizacion.ogaDescripcion);
       }

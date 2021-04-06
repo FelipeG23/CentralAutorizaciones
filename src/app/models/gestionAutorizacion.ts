@@ -4,6 +4,7 @@ export interface GestionAutorizacionCita {
     gauNombreAutorizador: string;
     gauTelefonoAutorizador: string;
     gauAutorizaServ: string;
+    gauAutorizaConv: string;
     mnaIdCodigo: number;
     omnDesc: string;
     gauCodigoAutorizacion: string;
