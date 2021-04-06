@@ -893,7 +893,7 @@ export class RadicaOrdenMedicaComponent implements OnInit {
       sede: '',
       estado: ''
     }
-    this.consulta.getCitas(userData, '').subscribe(
+    this.consulta.getCitas(userData, '',0).subscribe(
       data => {
         this.spinner.hide();
         if (Object.keys(data).length > 0) {
