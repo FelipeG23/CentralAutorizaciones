@@ -87,10 +87,10 @@ export class OrdenmedicaComponent implements OnInit {
   //progress: boolean;
 
   date = new Date();
-  minDateValue = new Date(this.date.getFullYear(), this.date.getMonth() - 3, this.date.getDate());
-  maxDateValue = new Date(this.date.getFullYear() + 1, this.date.getMonth(), this.date.getDate());
-  minDate = new Date(this.date.getFullYear(), 0, 1);
-  maxDate = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
+  minDateValue = new Date(this.date.getFullYear(), this.date.getMonth() - 1, this.date.getDate());
+  maxDateValue = new Date(this.date.getFullYear(), this.date.getMonth() + 1, this.date.getDate());
+  minDate = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() - 7);
+  maxDate = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 7);
   maxDateFin = new Date(this.date.getFullYear() + 1, this.date.getMonth(), this.date.getDate());
   displayedColumns: string[] = ['cgFechaProceso', 'tipTipIDav', 'documento', 'nombreCompleto', 'radicar'];
   displayedColumnsCitas: string[] = ['cgFechaProceso', 'tipTipIDav', 'documento', 'nombreCompleto', 'enProceso', 'autorizar'];

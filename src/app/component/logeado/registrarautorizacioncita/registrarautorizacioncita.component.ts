@@ -202,8 +202,6 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
 
   onSubmit() {
 
-    console.log(this.data);
-
     if (this.data.datoCita.module == 'derivacion') {
       const caGestionAutorizacion: CaGestionAutorizacion = Object.assign(new CaGestionAutorizacion(), this.registrarAuto.value);
 
@@ -212,7 +210,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
         caGestionAutorizacion.mnaIdcodigos = null;
         caGestionAutorizacion.omnDesc = null;
       }
-      caGestionAutorizacion.IdConvenios = this.data[0].codConvenio[0];
+      caGestionAutorizacion.IdConvenios = this.data.codConvenio;
       caGestionAutorizacion.pomIdPrestOrdm = this.data.datoCita.pomIdPrestOrdm;
       caGestionAutorizacion.pacPacNumero = this.data.datoCita.ordenMedica.pacPacNumero;
       caGestionAutorizacion.gauVigenciaAutorizacion = this.registrarAuto.get('gauVigenciaAutorizacion').value;
