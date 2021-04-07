@@ -307,6 +307,7 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
             caGestionAutorizacionCitaWS.nroFormulario = this.datosCitaxId.nroFormulario;
             caGestionAutorizacionCitaWS.codigoPrestacion = this.datosCitaxId.codigoPrestacion;
             caGestionAutorizacionCitaWS.codConvenio = this.datosCitaxId.codConvenio[0];
+            caGestionAutorizacionCitaWS.gauValorPrestacion = this.registrarAuto.get('gauCostoPac').value;
             console.log("ws nuevo");
             this.detalleCitaService.registrarAutorizacionWsBus(caGestionAutorizacionCitaWS).subscribe(
               (data) => {
