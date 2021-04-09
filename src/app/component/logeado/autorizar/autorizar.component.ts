@@ -56,7 +56,7 @@ export const MY_FORMATS = {
 export class AutorizarComponent implements OnInit {
     page = 0;
     size = 11;
-    length = 800;
+    length = 150;
     pageSize = 10;
     pageSizeOptions: number[] = [5, 10, 20];
     pageEvent: PageEvent;
@@ -80,8 +80,8 @@ export class AutorizarComponent implements OnInit {
     citasPorAutorizar: any[];
     citasAutorizadas: any[];
     date = new Date();
-    minDateValue = new Date(this.date.getFullYear(), this.date.getMonth() - 1, this.date.getDay() - this.date.getDay() + 1);
-    maxDateValue = new Date(this.date.getFullYear(), this.date.getMonth() + 5, this.date.getDay() + (30 - this.date.getDay() - 2));
+    minDateValue = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDay() - (14 - this.date.getDay() + 1));
+    maxDateValue = new Date(this.date.getFullYear(), this.date.getMonth() + 2, this.date.getDay() + (30 - this.date.getDay() - 2));
     minDate = new Date(this.date.getFullYear(), 0, 1);
     maxDate = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate());
     maxDateFin = new Date(this.date.getFullYear() + 1, this.date.getMonth(), this.date.getDate());
