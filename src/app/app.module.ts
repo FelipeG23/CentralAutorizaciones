@@ -45,7 +45,7 @@ import { VerDerivacionesComponent } from './modals/ver-derivaciones/ver-derivaci
 import { DerivacionesComponent } from './component/logeado/derivaciones/derivaciones.component';
 import { ImagenesdiagnosticasComponent } from './component/logeado/imagenesdiagnosticas/imagenesdiagnosticas.component';
 import { CambiocitaImgComponent } from './modals/cambiocitaimg/cambiocitaimg.component';
-
+import { GestionBloqueos } from './component/logeado/gestionbloqueos/gestionbloqueos.component';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -88,7 +88,8 @@ export const customCurrencyMaskConfig = {
     VerRadicarComponent,
     VerDerivacionesComponent,
     DerivacionesComponent,
-    ImagenesdiagnosticasComponent
+    ImagenesdiagnosticasComponent,
+    GestionBloqueos
   ],
     imports: [
         BrowserModule,
@@ -123,7 +124,8 @@ export const customCurrencyMaskConfig = {
     SelectPrestacionComponent,
     VerDerivacionesComponent,
     SelectCitaComponent,
-    VerRadicarComponent
+    VerRadicarComponent,
+    GestionBloqueos
   ],
   providers: [
     MatDatepickerModule,

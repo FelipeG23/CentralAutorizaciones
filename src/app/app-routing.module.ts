@@ -10,6 +10,7 @@ import { RadicaOrdenMedicaComponent } from './component/radica-orden-medica/radi
 import { GestionContinuidadComponent } from './component/logeado/gestion-continuidad/gestion-continuidad.component';
 import { RegistrarautorizacionComponent } from './component/logeado/registrarautorizacion/registrarautorizacion.component';
 import { AutorizarComponent } from './component/logeado/autorizar/autorizar.component';
+import { GestionBloqueos } from './component/logeado/gestionbloqueos/gestionbloqueos.component';
 
 const routes: Routes = [
   {
@@ -54,6 +55,11 @@ const routes: Routes = [
   {
     path: 'imagenesdiagnosticas',
     component: ImagenesdiagnosticasComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'gestionbloqueos',
+    component: GestionBloqueos,
     canActivate: [AuthGuard]
   },
   {
