@@ -601,7 +601,7 @@ export class AutorizarComponent implements OnInit {
             this.unSubcribeFirebase();
             if (data.length) {
 
-                const TIEMPO_MAXIMO_DE_BLOQUEO_MINUTOS = 1;
+                const TIEMPO_MAXIMO_DE_BLOQUEO_MINUTOS = 20;
                 let bar: any = {};
                 let aux1: number;
                 console.log('Bloqueo, Por Favor Espere');
