@@ -756,7 +756,7 @@ export class OrdenmedicaComponent implements OnInit {
   }
 
 
-  openDialogView(element) {
+  /* openDialogView(element) {
     if (localStorage.getItem('lock')) {
       this.bloqueoService.unLockAll()
     }
@@ -776,6 +776,79 @@ export class OrdenmedicaComponent implements OnInit {
         this.dataLock.UserActive.Documento = this.user.uid;
         this.dataLock.UserActive.Nombre = this.user.cn;
         this.valor = this.bloqueoService.lock(this.dataLock, 'locktresMenu');
+        localStorage.setItem('lock', this.valor.key);
+        localStorage.setItem('orden', JSON.stringify(element.ormIdOrdmNumero));
+        const dialogRef = this.dialog.open(VerRadicarComponent, {
+          height: '500px',
+          data: element
+        });
+        dialogRef.afterClosed().subscribe((data) => {
+          this.bloqueoService.unLockAll();
+          this.initFilter();
+          this.onSubmitDerivaciones([2, 3]);
+        });
+        // this.bloqueoService.unLock('lockDerivaciones/');
+      }
+    });
+  }*/
+
+  openDialogView(element) {
+    if (localStorage.getItem('lock')) {
+      this.bloqueoService.unLockAll()
+    }
+    this.metodo = this.bloqueoService.search('locktresMenuPrueba', element.ormIdOrdmNumeroP).subscribe(data => {
+      this.unSubcribeFirebase()
+      console.log(data);
+      console.log(data.length)
+      if (data.length) {
+        const TIEMPO_MAXIMO_DE_BLOQUEO_MINUTOS = 1;
+        let bar: any = {};
+        let aux1: number;
+        console.log('Bloqueo, Por Favor Espere');
+        console.log('data1: ', data);
+        bar = data;
+        if (bar[0] !== undefined) {
+          let now1 = new Date().getTime();
+          aux1 = (now1 - bar[0].DateBlocked) / (1200000);
+        }
+        if( aux1 >= 1 ){
+          console.log('El Bloqueo Supero El Limite');
+          console.log('El Tiempo Es > 1: ', aux1, ' ', TIEMPO_MAXIMO_DE_BLOQUEO_MINUTOS);
+          this.bloqueoService.geyKeyByIdCita('locktresMenuPrueba',
+          element.ormIdOrdmNumeroP).subscribe(metaData => {
+              console.log('metadata', metaData);
+              this.bloqueoService.unLockByKey('locktresMenuPrueba', metaData[0].key);
+          }).unsubscribe();
+          this.dataLock.UserActive = new Userlock();
+        this.dataLock.DateActive = element !== undefined && element !== null ? element.ormIdOrdmNumeroP : '';
+        this.dataLock.UserActive.Documento = this.user.uid;
+        this.dataLock.UserActive.Nombre = this.user.cn;
+        this.valor = this.bloqueoService.lock(this.dataLock, 'locktresMenuPrueba');
+        localStorage.setItem('lock', this.valor.key);
+        localStorage.setItem('orden', JSON.stringify(element.ormIdOrdmNumero));
+        const dialogRef = this.dialog.open(VerRadicarComponent, {
+          height: '500px',
+          data: element
+        });
+        dialogRef.afterClosed().subscribe((data) => {
+          this.bloqueoService.unLockAll();
+          this.initFilter();
+          this.onSubmitDerivaciones([2, 3]);
+        });
+      }else{
+        this.resultados = data;
+        swal({
+          title: 'La autorización bloqueada',
+          text: `Esta autorización se encuentra bloqueada por  ${this.resultados[0].UserActive.Nombre}`,
+          icon: 'info',
+        });
+    }
+      } else {
+        this.dataLock.UserActive = new Userlock();
+        this.dataLock.DateActive = element !== undefined && element !== null ? element.ormIdOrdmNumeroP : '';
+        this.dataLock.UserActive.Documento = this.user.uid;
+        this.dataLock.UserActive.Nombre = this.user.cn;
+        this.valor = this.bloqueoService.lock(this.dataLock, 'locktresMenuPrueba');
         localStorage.setItem('lock', this.valor.key);
         localStorage.setItem('orden', JSON.stringify(element.ormIdOrdmNumero));
         const dialogRef = this.dialog.open(VerRadicarComponent, {
@@ -811,6 +884,58 @@ export class OrdenmedicaComponent implements OnInit {
   }
 
   radicar(element) {
+    console.log(element);
+    this.dataLock.UserActive = new Userlock();
+    this.dataLock.DateActive = element.ormIdOrdmNumero;
+    this.dataLock.UserActive.Documento = this.user.uid;
+    this.dataLock.UserActive.Nombre = this.user.cn;
+    if (localStorage.getItem('lock')) {
+      this.bloqueoService.unLockAll()
+    }
+    this.metodo = this.bloqueoService.search('lockRadicaPrueba', this.dataLock.DateActive).subscribe(data => {
+      this.unSubcribeFirebase()
+      if (data.length) {
+        const TIEMPO_MAXIMO_DE_BLOQUEO_MINUTOS = 1;
+                let bar: any = {};
+                let aux1: number;
+                console.log('Bloqueo, Por Favor Espere');
+                console.log('data1: ', data);
+                bar = data;
+                if (bar[0] !== undefined) {
+                    let now1 = new Date().getTime();
+                    aux1 = (now1 - bar[0].DateBlocked) / (1200000);
+                }
+                console.log('Tiempo: ', aux1);
+                if( aux1 >= 1 ){
+                  console.log('El Bloqueo Supero El Limite');
+                  console.log('El Tiempo Es > 1: ', aux1, ' ', TIEMPO_MAXIMO_DE_BLOQUEO_MINUTOS);
+                  this.bloqueoService.geyKeyByIdCita('lockRadicaPrueba',
+                  this.dataLock.DateActive).subscribe(metaData => {
+                      console.log('metadata', metaData);
+                      this.bloqueoService.unLockByKey('lockRadicaPrueba', metaData[0].key);
+                  }).unsubscribe();
+                  this.valor = this.bloqueoService.lock(this.dataLock, 'lockRadicaPrueba');
+                  localStorage.setItem('lock', this.valor.key);
+                  localStorage.setItem('orden', JSON.stringify(element.ormIdOrdmNumero));
+                  this.router.navigate(['/radicar']);
+                }else{
+                    this.resultados = data;
+                    swal({
+                    title: 'Autorización bloqueada',
+                    text: `Esta autorización se encuentra bloqueada por  ${this.resultados[0].UserActive.Nombre}`,
+                    icon: 'info',
+                  });
+                  }
+         } else {
+        this.valor = this.bloqueoService.lock(this.dataLock, 'lockRadicaPrueba');
+        localStorage.setItem('lock', this.valor.key);
+        localStorage.setItem('orden', JSON.stringify(element.ormIdOrdmNumero));
+        this.router.navigate(['/radicar']);
+      }
+    })
+  }
+
+  /*radicar(element) {
     this.dataLock.UserActive = new Userlock();
     this.dataLock.DateActive = element.ormIdOrdmNumero;
     this.dataLock.UserActive.Documento = this.user.uid;
@@ -834,7 +959,7 @@ export class OrdenmedicaComponent implements OnInit {
         this.router.navigate(['/radicar']);
       }
     })
-  }
+  }*/
 
   openDialogAutorizacion(datoCita, modulo) {
     this.dataLock.UserActive = new Userlock();

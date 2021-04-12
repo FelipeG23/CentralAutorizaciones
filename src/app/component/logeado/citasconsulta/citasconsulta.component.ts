@@ -182,6 +182,95 @@ export class CitasconsultaComponent implements OnInit {
         if(localStorage.getItem('lock')){
             this.bloqueoService.unLockAll()
         }
+        this.metodo = this.bloqueoService.search('userInfoPrueba', this.dataLock.DateActive).subscribe(data => {
+            this.unSubcribeFirebase()
+            if(data.length){
+                const TIEMPO_MAXIMO_DE_BLOQUEO_MINUTOS = 1;
+                let bar: any = {};
+                let aux1: number;
+                console.log('Bloqueo, Por Favor Espere');
+                console.log('data1: ', data);
+                bar = data;
+                if (bar[0] !== undefined) {
+                    let now1 = new Date().getTime();
+                    aux1 = (now1 - bar[0].DateBlocked) / (1200000);
+                }
+                console.log('Tiempo: ', aux1);
+                if( aux1 >= 1 ){
+                    console.log('El Bloqueo Supero El Limite');
+                    console.log('El Tiempo Es > 1: ', aux1, ' ', TIEMPO_MAXIMO_DE_BLOQUEO_MINUTOS);
+                    this.bloqueoService.geyKeyByIdCita('userInfoPrueba',
+                    this.dataLock.DateActive).subscribe(metaData => {
+                        console.log('metadata', metaData);
+                        this.bloqueoService.unLockByKey('userInfoPrueba', metaData[0].key);
+                    }).unsubscribe();
+                    this.valor = this.bloqueoService.lock(this.dataLock, 'userInfoPrueba');
+                localStorage.setItem('lock', this.valor.key);
+                this.timer = setInterval(() => { this.alertUnlock(); }, this.counter * 1200000);
+                const dialogRef = this.dialog.open(CambiocitaComponent, {
+                    data: {
+                        myVar: { data: datoCambio },
+                    },
+                    height: '500px'
+                });
+                dialogRef.afterClosed().subscribe(result => {
+                    clearInterval(this.timer);
+                    this.bloqueoService.unLock('userInfoPrueba/');
+                    if (result != null) {
+                        datoCambio.estadoCita = result;
+                        this.filters.sort((a, b) => (a.estadoCita > b.estadoCita ? 1 : -1));
+                        this.bloqueoService.unLock('userInfoPrueba/');
+                        clearInterval(this.timer);
+                    }
+                    if (result === undefined) {
+                        this.bloqueoService.unLock('userInfoPrueba/');
+                        clearInterval(this.timer);
+                    }
+                });
+            }else{
+                this.resultados = data;
+                swal({
+                    title: 'Cita bloqueada',
+                    text: `Esta cita se encuentra bloqueada por  ${this.resultados[0].UserActive.Nombre}`,
+                    icon: 'info',
+                  });
+                }
+            } else {
+                this.valor = this.bloqueoService.lock(this.dataLock, 'userInfoPrueba');
+                localStorage.setItem('lock', this.valor.key);
+                this.timer = setInterval(() => { this.alertUnlock(); }, this.counter * 1200000);
+                const dialogRef = this.dialog.open(CambiocitaComponent, {
+                    data: {
+                        myVar: { data: datoCambio },
+                    },
+                    height: '500px'
+                });
+                dialogRef.afterClosed().subscribe(result => {
+                    clearInterval(this.timer);
+                    this.bloqueoService.unLock('userInfoPrueba/');
+                    if (result != null) {
+                        datoCambio.estadoCita = result;
+                        this.filters.sort((a, b) => (a.estadoCita > b.estadoCita ? 1 : -1));
+                        this.bloqueoService.unLock('userInfoPrueba/');
+                        clearInterval(this.timer);
+                    }
+                    if (result === undefined) {
+                        this.bloqueoService.unLock('userInfoPrueba/');
+                        clearInterval(this.timer);
+                    }
+                });
+            }
+        });
+    }
+
+    /* openDialog(datoCambio): void {
+        this.dataLock.UserActive = new Userlock();
+        this.dataLock.DateActive = datoCambio.pacNum
+        this.dataLock.UserActive.Documento = this.user.uid;
+        this.dataLock.UserActive.Nombre = this.user.cn;
+        if(localStorage.getItem('lock')){
+            this.bloqueoService.unLockAll()
+        }
         this.metodo = this.bloqueoService.search('userInfo', this.dataLock.DateActive).subscribe(data => {
             this.unSubcribeFirebase()
             if(data.length){
@@ -217,7 +306,7 @@ export class CitasconsultaComponent implements OnInit {
                 });
             }
         });
-    }
+    } */
     
 
     openDialogTraza(datoTraza): void {
@@ -283,7 +372,8 @@ export class CitasconsultaComponent implements OnInit {
     }
     setPageSizeOptionsCitas(setPageSizeOptionsInput: any) {
         this.page = this.page + 1;
-        this.filters = null;
+        // Comentada ya que aumenta el rendimiento de la pagina
+        //this.filters = null;
         this.consulta.getCitas(this.filtroCitas.getRawValue(), this.conveniosLista, this.page)
             .subscribe((data: any) => {
                 this.filters = data;

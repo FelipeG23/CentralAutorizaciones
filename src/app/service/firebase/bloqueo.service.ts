@@ -25,16 +25,19 @@ export class BloqueoService {
   }
 
   lock(dataLock, module) {
-    return this.db.list('/' + module).push({'DateActive': dataLock.DateActive,
+    var fecha = new Date().getTime();
+    return this.db.list('/' + module).push({
+      'DateActive': dataLock.DateActive,
       'UserActive': {
         'Documento': dataLock.UserActive.Documento,
-        'Nombre': dataLock.UserActive.Nombre
-        }
+        'Nombre': dataLock.UserActive.Nombre, 
+        },
+        'DateBlocked': fecha
       });
   }
 
   search(module, idCita){
-    return this.db.list('/' + module,  ref => ref.orderByChild('DateActive').equalTo(idCita)).valueChanges();
+    return this.db.list('/' + module,  ref => ref.orderByChild('DateActive').equalTo(idCita).limitToLast(1)).valueChanges();
   }
   
   unLock(module): void {
@@ -43,13 +46,25 @@ export class BloqueoService {
   }
 
   unLockAll(){
-    const listaBloqueos = ['userInfo/', 'gestionDoc/', 'lockDerivaciones/', 'lockRadica/', 'lockAutorizacion/', 'locktresMenu/'];
+    const listaBloqueos = ['userInfoPrueba/', 'gestionDoc/', 'lockDerivaciones/', 'lockRadicaPrueba/', 'lockAutorizacionPrueba/', 'locktresMenuPrueba/'];
     for(let list of listaBloqueos){
       
       this.unLock(list)
     }
     // this.cookie.delete('lock');
     localStorage.removeItem('lock');
+  }
+
+  geyKeyByIdCita(module, idCita){
+    return this.db.list('/' + module,  ref => ref.orderByChild('DateActive')
+      .equalTo(idCita))
+      .snapshotChanges();
+  }
+  unLockByKey(module, key): void {
+    this.db.object('/' + module + '/' + key).remove();
+  }
+ unlockByKeyPromise = (module, key)=>{
+      //return new Promise();
   }
 
 }

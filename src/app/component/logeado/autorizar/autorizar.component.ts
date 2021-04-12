@@ -589,9 +589,93 @@ export class AutorizarComponent implements OnInit {
         });
     }
 
+    openDialogAutorizacion(datoCita, modulo) {
+        this.dataLock.UserActive = new Userlock();
+        this.dataLock.DateActive = datoCita.idCita;
+        this.dataLock.UserActive.Documento = this.user.uid;
+        this.dataLock.UserActive.Nombre = this.user.cn;
+        if (localStorage.getItem('lock')) {
+            this.bloqueoService.unLockAll();
+        }
+        this.metodo = this.bloqueoService.search('lockAutorizacionPrueba', this.dataLock.DateActive).subscribe(data => {
+            this.unSubcribeFirebase();
+            if (data.length) {
+
+                const TIEMPO_MAXIMO_DE_BLOQUEO_MINUTOS = 1;
+                let bar: any = {};
+                let aux1: number;
+                console.log('Bloqueo, Por Favor Espere');
+                console.log('data1: ', data);
+                bar = data;
+                if (bar[0] !== undefined) {
+                    let now1 = new Date().getTime();
+                    aux1 = (now1 - bar[0].DateBlocked) / (1200000);
+                }
+                console.log('Tiempo: ', aux1);
+                if( aux1 >= 1 ){
+                    console.log('El Bloqueo Supero El Limite');
+                    console.log('El Tiempo Es > 1: ', aux1, ' ', TIEMPO_MAXIMO_DE_BLOQUEO_MINUTOS);
+                    this.bloqueoService.geyKeyByIdCita('lockAutorizacionPrueba',
+                    this.dataLock.DateActive).subscribe(metaData => {
+                        console.log('metadata', metaData);
+                        this.bloqueoService.unLockByKey('lockAutorizacionPrueba', metaData[0].key);
+                    }).unsubscribe();
+                    this.valor = this.bloqueoService.lock(this.dataLock, 'lockAutorizacionPrueba');
+                    localStorage.setItem('lock', this.valor.key);
+                    const dialogRef = this.dialog.open(RegistrarautorizacionCitaComponent, {
+                        data: { datoCita },
+                        height: '500px',
+                        disableClose: true
+                    });
+                    dialogRef.afterClosed().subscribe((caGestionAutorizacionCita: CaGestionAutorizacionCita) => {
+                        if (caGestionAutorizacionCita != null) {
+                            this.citasPorAutorizar = null;
+                            // this.onSubmitCitas();
+                            this.bloqueoService.unLock('lockAutorizacionPrueba/');
+                        }
+                        if (caGestionAutorizacionCita === undefined) {
+                            this.bloqueoService.unLock('lockAutorizacionPrueba/');
+                        }
+                        this.initFilter();
+                        this.onSubmitCitas();
+                    });
+
+
+                }else{
+                    this.resultados = data;
+                    swal({
+                        title: 'Autorización bloqueada',
+                        text: `Esta autorización se encuentra bloqueada por  ${this.resultados[0].UserActive.Nombre}`,
+                        icon: 'info',
+                    });
+                }
+            } else {
+                this.valor = this.bloqueoService.lock(this.dataLock, 'lockAutorizacionPrueba');
+                localStorage.setItem('lock', this.valor.key);
+                const dialogRef = this.dialog.open(RegistrarautorizacionCitaComponent, {
+                    data: { datoCita },
+                    height: '500px',
+                    disableClose: true
+                });
+                dialogRef.afterClosed().subscribe((caGestionAutorizacionCita: CaGestionAutorizacionCita) => {
+                    if (caGestionAutorizacionCita != null) {
+                        this.citasPorAutorizar = null;
+                        // this.onSubmitCitas();
+                        this.bloqueoService.unLock('lockAutorizacionPrueba/');
+                    }
+                    if (caGestionAutorizacionCita === undefined) {
+                        this.bloqueoService.unLock('lockAutorizacionPrueba/');
+                    }
+                    this.initFilter();
+                    this.onSubmitCitas();
+                });
+            }
+        });
+    }
+
     
 
-    openDialogAutorizacion(datoCita, modulo) {
+    /*openDialogAutorizacion(datoCita, modulo) {
         this.dataLock.UserActive = new Userlock();
         this.dataLock.DateActive = datoCita.idCita;
         this.dataLock.UserActive.Documento = this.user.uid;
@@ -632,7 +716,7 @@ export class AutorizarComponent implements OnInit {
                 });
             }
         });
-    }
+    }*/
 
     unSubcribeFirebase() {
         this.metodo.unsubscribe();

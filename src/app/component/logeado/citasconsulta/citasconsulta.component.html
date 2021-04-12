@@ -248,8 +248,8 @@
                             <span><b>{{ jsonSize }}</b> Resultados</span>
                         </div>
                         <div class="col-sm-4 col-md-4 col-lg-4">
-                            <mat-icon>calendar_today</mat-icon>
-                            <span>{{ fechaHoy1 }} - {{ horaHoy }}</span>
+                            <!-- <mat-icon>calendar_today</mat-icon>
+                            <span>{{ fechaHoy1 }} - {{ horaHoy }}</span> -->
                         </div>
                         <div class="col-sm-4 col-md-4 col-lg-4">
                             <mat-icon>room</mat-icon>
@@ -316,17 +316,16 @@
                     </mat-card>
                 </div>
             </div>
-            <mat-card class="card mt-2 pt-2 pb-0 pl-1 pr-3" *ngIf="filters">
-                <mat-paginator #paginatorCitasPorAutorizar2 [pageSizeOptions]="pageSizeOptions" 
+            <!-- <mat-card class="card mt-2 pt-2 pb-0 pl-1 pr-3" *ngIf="filters"> --> 
+                <mat-paginator #paginatorCitasPorAutorizar2 [pageSizeOptions]="pageSizeOptions" *ngIf="filters"
+                    [pageSize]="pageSize" 
+                    [pageIndex]="page"
                     [length]="100"
-                    [pageSize]="10"
                     [pageSizeOptions]="[5, 10, 20]"
                     (page)=setPageSizeOptionsCitas($event)
-                    showFirstLastButtons></mat-paginator> 
-
-                    <!-- <pagination-controls (pageChange)="pageActual = $event;"></pagination-controls> -->
-                
-            </mat-card>
+                    showFirstLastButtons></mat-paginator>
+                    <!-- <pagination-controls (pageChange)=setPageSizeOptionsCitas($event)></pagination-controls>
+            </mat-card> -->
         </div>
     </div>
 </div>
