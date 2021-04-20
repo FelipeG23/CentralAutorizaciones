@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/database';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -16,23 +18,28 @@ export class BloqueoService {
   prueba: any;
   task: any;
   taskEnd: void;
+  cTime: number;
+  timeBlocked: number;
 
   constructor(private firestore: AngularFirestore,
               private db: AngularFireDatabase,
-              private cookie: CookieService) {
+              private cookie: CookieService,
+              private http: HttpClient) {
     // this.user = cookie.get('cenAuth');
     // this.user = JSON.parse(atob(this.user));
   }
 
   lock(dataLock, module) {
-    var fecha = new Date().getTime();
+    if(this.timeBlocked == undefined){
+      this.timeBlocked = (new Date).getTime();
+    }
     return this.db.list('/' + module).push({
       'DateActive': dataLock.DateActive,
       'UserActive': {
         'Documento': dataLock.UserActive.Documento,
         'Nombre': dataLock.UserActive.Nombre, 
         },
-        'DateBlocked': fecha
+        'DateBlocked': this.timeBlocked
       });
   }
 
@@ -65,6 +72,24 @@ export class BloqueoService {
   }
  unlockByKeyPromise = (module, key)=>{
       //return new Promise();
+  }
+  obtenerCitasBloqueadas(module){
+    return this.db.list<any>('/' + module,  ref => ref.orderByChild('DateBloqued')).valueChanges();
+  }
+
+  getCurrentTime() {
+    return this.http.get<any>( environment.api + '/utils/getTime');
+  }
+
+  compareCurrentAndBlockedTime(){
+    this.getCurrentTime().subscribe(time => {
+      console.log(time.time);
+      this.cTime = time.time;
+      return this.cTime - 1618605227916;
+    })
+  }
+  setTimeBlocked(time:number){
+    this.timeBlocked = time;
   }
 
 }

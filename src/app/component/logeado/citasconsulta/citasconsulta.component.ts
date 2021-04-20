@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { PageEvent, MatDialog } from '@angular/material';
+import { PageEvent, MatDialog, MatPaginator } from '@angular/material';
 import { CookieService } from 'ngx-cookie-service';
 import { CambiocitaComponent } from 'src/app/modals/cambiocita/cambiocita.component';
 import { TrazaComponent } from 'src/app/modals/traza/traza.component';
@@ -66,7 +66,10 @@ export class CitasconsultaComponent implements OnInit {
     filtroCitas: FormGroup;
     pageEvent: PageEvent;
     page : number = 0;
+    pageSize = 10;
+    length = 150;
     options: any;
+    currentTime: number;
     date = new Date();
     fechaFin = new Date();
     msjExp: boolean;
@@ -117,6 +120,7 @@ export class CitasconsultaComponent implements OnInit {
     resultados: any;
     valor: any;
     metodo: any;
+    @ViewChild('paginatorCitas', { read: MatPaginator }) paginatorCitas: MatPaginator;
 
     constructor(private fb: FormBuilder,
         public dialog: MatDialog,
@@ -148,7 +152,7 @@ export class CitasconsultaComponent implements OnInit {
         this.setLists();
         this.fechaHoy = new Date();
         this.fechaHoy1 = this.fechaHoy.getDate() + '-' + (this.fechaHoy.getMonth() + 1) + '-' + this.fechaHoy.getFullYear();
-
+        this.filters = [];
        
         this.horaHoy = this.fechaHoy.getHours() + ":" + this.fechaHoy.getMinutes() + 'Hrs.';
         this.filtroCitas = this.fb.group({
@@ -182,6 +186,8 @@ export class CitasconsultaComponent implements OnInit {
         if(localStorage.getItem('lock')){
             this.bloqueoService.unLockAll()
         }
+        this.bloqueoService.getCurrentTime().subscribe(time => {this.currentTime = time.time;});
+
         this.metodo = this.bloqueoService.search('userInfoPrueba', this.dataLock.DateActive).subscribe(data => {
             this.unSubcribeFirebase()
             if(data.length){
@@ -236,6 +242,8 @@ export class CitasconsultaComponent implements OnInit {
                   });
                 }
             } else {
+
+
                 this.valor = this.bloqueoService.lock(this.dataLock, 'userInfoPrueba');
                 localStorage.setItem('lock', this.valor.key);
                 this.timer = setInterval(() => { this.alertUnlock(); }, this.counter * 1200000);
@@ -373,7 +381,7 @@ export class CitasconsultaComponent implements OnInit {
     setPageSizeOptionsCitas(setPageSizeOptionsInput: any) {
         this.page = this.page + 1;
         // Comentada ya que aumenta el rendimiento de la pagina
-        //this.filters = null;
+        this.filters = null;
         this.consulta.getCitas(this.filtroCitas.getRawValue(), this.conveniosLista, this.page)
             .subscribe((data: any) => {
                 this.filters = data;
@@ -384,6 +392,7 @@ export class CitasconsultaComponent implements OnInit {
     clear() {
         this.listConvenios = new Filtrocitasconvenios();
         this.conveniosLista = [];
+        this.filters = [];
         document.body.scrollTop = document.documentElement.scrollTop = 0;
         this.fechaHoy = new Date();
         this.fechaHoy1 = this.fechaHoy.getDate() + '-' + (this.fechaHoy.getMonth() + 1) + '-' + this.fechaHoy.getFullYear();

@@ -257,28 +257,35 @@
                         </div>
                     </div>
                 </div>
+                <ng-container *ngIf="!filters">
+                    <br>
+                    <mat-spinner style="margin: auto" [diameter]="60"></mat-spinner>
+                    <br>
+                </ng-container>
                 <div class="col-sm-12 col-md-12 col-lg-12" *ngFor="let filter of filters | paginate: {itemsPerPage: 10, totalPages: 100, currentPage: pageActual} ">
                     <mat-card class="card mt-2 pt-2 pb-0 pl-1 pr-3">
                         <div class="row">
                             <div class="col-sm-2 col-md-2 col-lg-2">
                                 <button mat-fab class="bg-blue text-white" *ngIf="filter.estadoCita">
-                    {{ getSigla(filter?.estadoCita) }}
-                  </button>
+                                    {{ getSigla(filter?.estadoCita) }}
+                                </button>
                             </div>
                             <div class="col-sm-5 col-md-5 col-lg-5 pl-0">
                                 <p class="mb-0"> <b class="text-primary f-2">{{ filter?.nombreCompleto }}</b> <br>
                                     <span>{{ filter?.tipTipIDav }}:
-                      {{ filter?.numDocId }}</span></p>
-                                <p class="mb-0 font-bold"><span *ngIf="filter.estadoCita"> ESTADO:
-                      {{ filter?.estadoCita }}
-                    </span></p>
-                                <p class="mb-0"><span>
-                      {{ filter?.fechaCita }} - {{ filter?.horaCita }}
-                    </span></p>
-                                <p class="mb-0"><span>Ubicacion de la sede: {{ filter?.ubicacionSede }}</span></p>
-                                <p class="f-1 text-primary">
-                                    <mat-icon>trending_flat</mat-icon> {{ filter?.prestacion }}
+                                        {{ filter?.numDocId }}
+                                    </span></p>
+                                <p class="mb-0 font-bold">
+                                    <span *ngIf="filter.estadoCita"> ESTADO:
+                                        {{ filter?.estadoCita }}
+                                    </span>
                                 </p>
+                                <p class="mb-0"><span>
+                                    {{ filter?.fechaCita }} - {{ filter?.horaCita }}
+                                    </span>
+                                </p>
+                                <p class="mb-0"><span>Ubicacion de la sede: {{ filter?.ubicacionSede }}</span></p>
+                                <p class="f-1 text-primary"><mat-icon>trending_flat</mat-icon> {{ filter?.prestacion }}</p>
                             </div>
                             <div class="col-sm-4 col-md-4 col-lg-4 p-0">
                                 <p class="m-0 p-0"><span>{{ filter?.convenio }}</span></p>
@@ -317,13 +324,13 @@
                 </div>
             </div>
             <!-- <mat-card class="card mt-2 pt-2 pb-0 pl-1 pr-3" *ngIf="filters"> --> 
-                <mat-paginator #paginatorCitasPorAutorizar2 [pageSizeOptions]="pageSizeOptions" *ngIf="filters"
+                <mat-paginator #paginatorCitas [pageSizeOptions]="pageSizeOptions" *ngIf="filters"
                     [pageSize]="pageSize" 
-                    [pageIndex]="page"
-                    [length]="100"
-                    [pageSizeOptions]="[5, 10, 20]"
+                    [length]="length"
+                    [pageSizeOptions]="[10]"
                     (page)=setPageSizeOptionsCitas($event)
                     showFirstLastButtons></mat-paginator>
+            
                     <!-- <pagination-controls (pageChange)=setPageSizeOptionsCitas($event)></pagination-controls>
             </mat-card> -->
         </div>
