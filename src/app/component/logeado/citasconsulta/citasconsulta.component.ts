@@ -179,8 +179,9 @@ export class CitasconsultaComponent implements OnInit {
     }
 
     openDialog(datoCambio): void {
+        console.log('datoCambio: ', datoCambio.pacNum + ',' + datoCambio.fechaCita + datoCambio.horaCita);
         this.dataLock.UserActive = new Userlock();
-        this.dataLock.DateActive = datoCambio.pacNum
+        this.dataLock.DateActive = datoCambio.pacNum + ',' + datoCambio.fechaCita + datoCambio.horaCita
         this.dataLock.UserActive.Documento = this.user.uid;
         this.dataLock.UserActive.Nombre = this.user.cn;
         if(localStorage.getItem('lock')){
@@ -242,8 +243,6 @@ export class CitasconsultaComponent implements OnInit {
                   });
                 }
             } else {
-
-
                 this.valor = this.bloqueoService.lock(this.dataLock, 'userInfoPrueba');
                 localStorage.setItem('lock', this.valor.key);
                 this.timer = setInterval(() => { this.alertUnlock(); }, this.counter * 1200000);

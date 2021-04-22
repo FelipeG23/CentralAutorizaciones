@@ -13,7 +13,7 @@ import { CaGestionAutorizacionCitaWS } from 'src/app/models/orden-medica/CaGesti
   providedIn: 'root'
 })
 export class DetalleCitaService {
-
+  idCita:any;
   constructor(private http: HttpClient) { }
 
  
@@ -48,4 +48,21 @@ export class DetalleCitaService {
   consultarDetalleCita(filtroDetalleCita: FiltroDetalleCita): Observable<DetalleCita> {
     return this.http.post<DetalleCita>(environment.url + '/CentralAutorizav2/rest/ClienteCita/consultarDetalleCitaPaciente', filtroDetalleCita);
   }
+
+
+  cambioConvenio(caGestionAutorizacion:any) {
+    console.log('gestion auth: ',caGestionAutorizacion);
+    console.log('id cita llega: ',this.idCita);
+    let params;
+    //idCita set at autorizar.componeent
+    params = {
+      idCita: this.idCita,
+      idConvenio: caGestionAutorizacion.IdConvenios
+    }
+    return this.http.post<any>(environment.url + '/fsfb-apiWeb/citas/cambioconvenio', params);
+  }
+  setIdCita(cita:any){
+    this.idCita=cita;
+  }
+
 }

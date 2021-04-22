@@ -218,7 +218,9 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
       caGestionAutorizacion.nombrePaciente = this.data.datoCita.ordenMedica.nombreCompletoPaciente;
       caGestionAutorizacion.centroAtencion = this.data.datoCita.sedes[0].descripcion;
       this.spinnerService.show();
-
+      this.detalleCitaService.cambioConvenio(caGestionAutorizacion).subscribe(data => {
+        console.log(data);
+      })
       this.ordenService.registrarAutorizacion(caGestionAutorizacion).subscribe(
         (data: boolean) => {
           this.spinnerService.hide();
@@ -274,6 +276,10 @@ export class RegistrarautorizacionCitaComponent implements OnInit {
       console.log(caGestionAutorizacionCita);
 
       this.spinnerService.show();
+
+      this.detalleCitaService.cambioConvenio(caGestionAutorizacionCita).subscribe(data => {
+        console.log(data);
+      })
 
       this.detalleCitaService.registrarAutorizacion(caGestionAutorizacionCita).subscribe(
         (data: boolean) => {

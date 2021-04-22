@@ -24,6 +24,7 @@ import { BloqueoService } from 'src/app/service/firebase/bloqueo.service';
 import { Bloqueo } from 'src/app/models/firebase/bloqueo';
 import { Userlock } from 'src/app/models/firebase/userlock';
 import { stringify } from 'querystring';
+import { DetalleCitaService } from '../../../service/citas/detalle-cita.service';
 
 export const MY_FORMATS = {
     parse: {
@@ -129,6 +130,7 @@ export class AutorizarComponent implements OnInit {
         private tipodocService: TipodocService,
         private renderer: Renderer2,
         private bloqueoService: BloqueoService,
+        public detalleCitaService: DetalleCitaService,
         private ordenService: OrdenService) {
         this.options = tipodocService.getTipoDoc();
         this.user = cookie.get('cenAuth');
@@ -601,7 +603,7 @@ export class AutorizarComponent implements OnInit {
         if (localStorage.getItem('lock')) {
             this.bloqueoService.unLockAll();
         }
-
+        this.detalleCitaService.setIdCita(datoCita.idCita);
         this.bloqueoService.getCurrentTime().subscribe(time => {this.currentTime = time.time;});
 
         this.metodo = this.bloqueoService.search('lockAutorizacionPrueba', this.dataLock.DateActive).subscribe(data => {
