@@ -179,9 +179,8 @@ export class CitasconsultaComponent implements OnInit {
     }
 
     openDialog(datoCambio): void {
-        console.log('datoCambio: ', datoCambio.pacNum + ',' + datoCambio.fechaCita + datoCambio.horaCita);
         this.dataLock.UserActive = new Userlock();
-        this.dataLock.DateActive = datoCambio.pacNum + ',' + datoCambio.fechaCita + datoCambio.horaCita
+        this.dataLock.DateActive = datoCambio.pacNum + '  -  ' + datoCambio.fechaCita + '  ' +  datoCambio.horaCita
         this.dataLock.UserActive.Documento = this.user.uid;
         this.dataLock.UserActive.Nombre = this.user.cn;
         if(localStorage.getItem('lock')){
