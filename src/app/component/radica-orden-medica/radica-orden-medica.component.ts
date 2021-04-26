@@ -354,11 +354,29 @@ export class RadicaOrdenMedicaComponent implements OnInit {
                   if (this.ordenMedica.caPrestacionesOrdMed.filter(p => p.prePreCodigo === data.prePreCodigo).length === 0) {
                     this.ordenMedica.caPrestacionesOrdMed.push(data);
                   } else {
+                      swal({
+                        title: "La prestación ya está asociada a la derivación",
+                        text: "¿Desea agregar nuevamente la prestación?",
+                        icon: "warning",
+                        buttons:  ["Agregar", "No agregar"],
+                        dangerMode: true,
+                      })
+                      .then((willDelete) => {
+                        if (willDelete) {
+                          swal("Poof! Your imaginary file has been deleted!", {
+                            icon: "success",
+                          });
+                        } else {
+                          swal("Your imaginary file is safe!");
+                        }
+                      });
+                    /*
                     swal({
                       title: 'Error',
                       text: 'La prestación ya está asociada a la derivación',
                       icon: 'warning',
-                    });
+                    });}
+                    */
                   }
                 }
               });
@@ -372,11 +390,32 @@ export class RadicaOrdenMedicaComponent implements OnInit {
                   if (this.ordenMedica.caPrestacionesOrdMed.filter(p => p.prePreCodigo === data.prePreCodigo).length === 0) {
                     this.ordenMedica.caPrestacionesOrdMed.push(data);
                   } else {
+                      swal({
+                        title: "La prestación ya está asociada a la derivación",
+                        text: "¿Desea agregar nuevamente la prestación?",
+                        icon: "warning",
+                        buttons:  ["Aceptar", "Cancelar"],
+                        dangerMode: true,
+                      })
+                      .then((willDelete) => {
+                        if (willDelete) {
+                          swal("No se agregó la prestación", {
+                            icon: "success",
+                          });
+                        } else {
+                          this.ordenMedica.caPrestacionesOrdMed.push(data);
+                          swal("Se agregó la prestación", {
+                            icon: "success",
+                          });
+                        }
+                      });
+                    /*
                     swal({
                       title: 'Error',
                       text: 'La prestación ya está asociada a la derivación',
                       icon: 'warning',
                     });
+                    */
                   }
                 }
               });
