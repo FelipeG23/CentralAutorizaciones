@@ -27,4 +27,5 @@ export class CaGestionAutorizacionCitaWS {
 	nroFormulario: string;
 	codigoPrestacion: string;
 	codConvenio: string;
+	nombreConvenio: string;
 }
